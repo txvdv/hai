@@ -1,0 +1,66 @@
+name: Deploy Hai local
+
+on: [push]
+
+env:
+  BRANCH_NAME: ${{ github.ref_name }}
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repository Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: npm ci
+
+      # GitHub Action which sets the base and head SHAs required for the nx affected commands in CI
+      # See https://github.com/marketplace/actions/nx-set-shas
+      - name: Set SHAs
+        uses: nrwl/nx-set-shas@v4
+
+      # GitHub Action for determining affected projects using Nx affected
+      # This helps identify and run tasks only for impacted projects in the monorepo, improving CI efficiency
+      # see https://github.com/2coo/action-nx-affected/tree/main
+      - name: Check affected projects
+        uses: 2coo/action-nx-affected@v2
+        id: checkForAffected
+
+      # Prepend any command with "nx-cloud record --" to record its logs to Nx Cloud
+      # - run: pnpm exec nx-cloud record -- echo Hello World
+      # Nx Affected runs only tasks affected by the changes in this PR/commit.
+      # https://nx.dev/ci/features/affected
+      - name: Build affected apps
+        if: steps.checkForAffected.outputs.hasAffectedApps == 'true'
+        run: npx nx affected -t build
+
+      - name: Install Netlify CLI
+        if: contains(steps.checkForAffected.outputs.affectedApps, '@hai/pwa')
+        run: npm install netlify-cli@17.10.1 -g
+
+      # Deploy Action
+      # Depends on if apps are affected
+      # Sets the Netlify --prod flag when pushing to main branch
+      # If not pushed to main branch, Netlify will generate a preview
+      # See https://cli.netlify.com/commands/deploy/
+      - name: Deploy to Netlify
+        if: contains(steps.checkForAffected.outputs.affectedApps, '@hai/pwa')
+        id: netlify_deploy
+        run: |
+          prod_flag=""
+          if [ "$BRANCH_NAME" = "main" ]; then prod_flag="--prod"; fi
+          netlify deploy \
+            --dir apps/pwa-offline/dist \
+            --filter @hai/pwa-offline \
+            --site ${{ secrets.NETLIFY_SITE_ID }} \
+            --auth ${{ secrets.NETLIFY_SITE_TOKEN }} \
+            $prod_flag
