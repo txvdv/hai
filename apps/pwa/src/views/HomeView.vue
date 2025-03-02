@@ -1,9 +1,7 @@
-<script setup lang="ts">
-import NxWelcome from '../app/NxWelcome.vue';
-</script>
-
 <template>
-  <main>
-    <NxWelcome title="pwa" />
-  </main>
+  <div>
+    <h1>Home Hai</h1>
+  </div>
 </template>
+<script setup lang="ts">
+</script>
