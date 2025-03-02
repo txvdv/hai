@@ -22,26 +22,26 @@
 Helpful scripts to commit straight to the trunk.  
 See below for references and the contributing docs for more links about TBD.
 
-- `tools/env-check.sh` will make sure correct node version is used
-- `tools/tbd-pull` will do a git pull --rebase running npm ci, calling `tools/env-check.sh`
-- `tools/tbd-push` will do a git push, calling `tools/tbd-pull.sh` and `tools/env-check.sh`
+- `tools/env-check` will make sure correct node version is used
+- `tools/tbd-pull` will do a git pull --rebase running npm ci, calling `tools/env-check`
+- `tools/tbd-push` will do a git push, calling `tools/tbd-pull` and `tools/env-check`
 
 These are not required, but helpful for commit cadence. To use them:
 1. Make those scripts executable:
    ```shell
-   chmod +x tools/env-check.sh
-   chmod +x tools/tbd-pull.sh
-   chmod +x tools/tbd-push.sh
+   chmod +x tools/env-check
+   chmod +x tools/tbd-pull
+   chmod +x tools/tbd-push
    ```
 2. Run them from the terminal depending on the situation
    ```shell
-   tools/env-check.sh
+   tools/env-check
    ```
    ```shell
-   tools/tbd-pull.sh
+   tools/tbd-pull
    ```
    ```shell
-   tools/tbd-push.sh
+   tools/tbd-push
    ```
 
 To make these feel more git-like, you can add them as git [alias] commands
