@@ -1,0 +1,15 @@
+#!/bin/sh
+set -euo pipefail
+# This script ships code, replacing `git push`
+
+tools/tbd/pull
+#npm run test
+#npm run lint
+
+if [[ -n $(git status --porcelain) ]]; then
+  printf "\n\nAborted.\n"
+  printf "There are changed files in the Git repository.\n"
+  exit 1
+fi
+
+git push
