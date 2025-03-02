@@ -1,0 +1,8 @@
+/.vscode
+/.idea
+/.fleet
+/.github
+
+# Ignore artifacts:
+build
+coverage

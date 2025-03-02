@@ -8,3 +8,6 @@
 *.ntvs*
 *.njsproj
 *.sln
+
+# Node
+node_modules
