@@ -8,6 +8,6 @@ nvm use || { printf "Failed to switch Node.js version with nvm\n"; exit 1; }
 # Check if the output indicates packages would be changed
 output=$(npm install --dry-run 2>&1)
 if printf "%s" "$output" | grep -q 'added\|removed\|updated'; then
-    printf "Run npm install.\n"
+    printf "error: run npm install.\n"
     exit 1
 fi
