@@ -18,6 +18,7 @@ node_modules
 # Nx
 .nx/cache
 .nx/workspace-data
+dist
 
 # Vite (from Nx)
 vite.config.*.timestamp*
