@@ -22,26 +22,26 @@
 Helpful scripts to commit straight to the trunk.  
 See below for references and the contributing docs for more links about TBD.
 
-- `tools/env/check.sh` will make sure correct node version is used
-- `tools/tbd/pull` will do a git pull --rebase running npm ci, calling `tools/env/check.sh`
-- `tools/tbd/push` will do a git push, calling `tools/tbd/pull.sh` and `tools/env/check.sh`
+- `tools/env-check.sh` will make sure correct node version is used
+- `tools/tbd-pull` will do a git pull --rebase running npm ci, calling `tools/env-check.sh`
+- `tools/tbd-push` will do a git push, calling `tools/tbd-pull.sh` and `tools/env-check.sh`
 
 These are not required, but helpful for commit cadence. To use them:
 1. Make those scripts executable:
    ```shell
-   chmod +x tools/env/check.sh
-   chmod +x tools/tbd/pull.sh
-   chmod +x tools/tbd/push.sh
+   chmod +x tools/env-check.sh
+   chmod +x tools/tbd-pull.sh
+   chmod +x tools/tbd-push.sh
    ```
 2. Run them from the terminal depending on the situation
    ```shell
-   tools/env/check.sh
+   tools/env-check.sh
    ```
    ```shell
-   tools/tbd/pull.sh
+   tools/tbd-pull.sh
    ```
    ```shell
-   tools/tbd/push.sh
+   tools/tbd-push.sh
    ```
 
 To make these feel more git-like, you can add them as git [alias] commands
@@ -49,8 +49,8 @@ To make these feel more git-like, you can add them as git [alias] commands
    For example:
    ```txt
    [alias]
-   shipit = "!sh tools/tbd/push"
-   tbd-pull = "!sh tools/tbd/pull"
+   shipit = "!sh tools/tbd-push"
+   tbd-pull = "!sh tools/tbd-pull"
    ```
 2. Configure your local repo copy to use the .gitconfig
    ```shell
