@@ -11,3 +11,6 @@
 
 # Node
 node_modules
+
+# In case shell scripts want to be git aliased
+.gitconfig
