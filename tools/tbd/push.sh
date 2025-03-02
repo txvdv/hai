@@ -2,7 +2,7 @@
 set -euo pipefail
 # This script ships code, replacing `git push`
 
-tools/tbd/pull
+tools/tbd/pull.sh
 #npm run test
 #npm run lint
 
