@@ -2,6 +2,10 @@
   "name": "@hai/source",
   "version": "0.0.0",
   "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "devDependencies": {
     "prettier": "3.5.2"
   }
