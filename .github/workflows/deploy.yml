@@ -40,11 +40,11 @@ jobs:
       # Nx Affected runs only tasks affected by the changes in this PR/commit.
       # https://nx.dev/ci/features/affected
       - name: Build affected apps
-        if: steps.checkForAffected.outputs.hasAffectedApps == 'true'
+#        if: steps.checkForAffected.outputs.hasAffectedApps == 'true'
         run: npx nx affected -t build
 
       - name: Install Netlify CLI
-        if: contains(steps.checkForAffected.outputs.affectedApps, '@hai/pwa')
+#        if: contains(steps.checkForAffected.outputs.affectedApps, '@hai/pwa')
         run: npm install netlify-cli@17.10.1 -g
 
       # Deploy Action
@@ -53,7 +53,7 @@ jobs:
       # If not pushed to main branch, Netlify will generate a preview
       # See https://cli.netlify.com/commands/deploy/
       - name: Deploy to Netlify
-        if: contains(steps.checkForAffected.outputs.affectedApps, '@hai/pwa')
+#        if: contains(steps.checkForAffected.outputs.affectedApps, '@hai/pwa')
         id: netlify_deploy
         run: |
           prod_flag=""
