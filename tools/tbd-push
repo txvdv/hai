@@ -3,7 +3,7 @@ set -euo pipefail
 # This script ships code, replacing `git push`
 
 tools/tbd-pull
-#npm run test
+npm run test:affected
 #npm run lint
 
 if [[ -n $(git status --porcelain) ]]; then
