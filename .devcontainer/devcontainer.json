@@ -1,0 +1,25 @@
+{
+  "name": "HaiDevContainer",
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        // https://marketplace.visualstudio.com/items?itemName=nrwl.angular-console
+        "nrwl.angular-console",
+        // https://marketplace.visualstudio.com/items?itemName=firsttris.vscode-jest-runner
+        "firsttris.vscode-jest-runner",
+        // https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens
+        "eamodio.gitlens",
+        // https://marketplace.visualstudio.com/items?itemName=mhutchie.git-graph
+        "mhutchie.git-graph",
+        // https://marketplace.visualstudio.com/items?itemName=mutantdino.resourcemonitor
+        "mutantdino.resourcemonitor", // to monitor cpu, memory usage from the dev container
+        // https://marketplace.visualstudio.com/items?itemName=Vue.volar
+        "Vue.volar"
+      ],
+      "settings": {
+        "debug.javascript.autoAttachFilter": "disabled" // workaround for that issue: https://github.com/microsoft/vscode-js-debug/issues/374#issuecomment-622239998
+      }
+    }
+  }
+}
