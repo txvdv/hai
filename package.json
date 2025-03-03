@@ -2,6 +2,11 @@
   "name": "@hai/source",
   "version": "0.0.0",
   "private": true,
+  "scripts": {
+    "test": "nx run-many -t test",
+    "e2e": "nx run-many -t e2e",
+    "test:affected": "nx affected -t test e2e"
+  },
   "workspaces": [
     "apps/*",
     "packages/*"
