@@ -1,10 +1,19 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "../../dist/out-tsc",
-    "types": ["vite/client"]
+    "outDir": "out-tsc/pwa",
+    "types": ["vite/client"],
+    "rootDir": "src",
+    "jsx": "preserve",
+    "jsxImportSource": "vue",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "tsBuildInfoFile": "out-tsc/pwa/tsconfig.app.tsbuildinfo"
   },
   "exclude": [
+    "out-tsc",
+    "dist",
     "src/**/*.spec.ts",
     "src/**/*.test.ts",
     "src/**/*.spec.vue",

@@ -1,25 +1,48 @@
-# OS
-.DS_Store
+# See http://help.github.com/ignore-files/ for more about ignoring files.
 
-# IDE
-.idea
-.vscode
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
+# compiled output
+dist
+tmp
+out-tsc
 
-# Node
+# dependencies
 node_modules
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+
+# System Files
+.DS_Store
+Thumbs.db
+
+.nx/cache
+.nx/workspace-data
 
 # In case shell scripts want to be git aliased
 .gitconfig
-
-# Nx
-.nx/cache
-.nx/workspace-data
-dist
-
-# Vite (from Nx)
 vite.config.*.timestamp*
 vitest.config.*.timestamp*
+test-output
