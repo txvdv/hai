@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Button from "primevue/button"
 </script>
 
 <template>
@@ -9,6 +10,8 @@
       <li><a href="#">Link 2</a></li>
       <li><a href="#">Link 3</a></li>
     </ul>
+
+    <Button label="Button" />
   </footer>
 </template>
 
