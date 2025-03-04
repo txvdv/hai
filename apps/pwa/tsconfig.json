@@ -4,6 +4,9 @@
   "include": [],
   "references": [
     {
+      "path": "../../packages/document-service"
+    },
+    {
       "path": "./tsconfig.app.json"
     },
     {

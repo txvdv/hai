@@ -2,7 +2,7 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "out-tsc/pwa",
-    "types": ["vite/client"],
+    "types": ["vite/client", "dom"],
     "rootDir": "src",
     "jsx": "preserve",
     "jsxImportSource": "vue",
@@ -29,5 +29,10 @@
     "src/**/*.test.jsx",
     "src/**/*.spec.jsx"
   ],
-  "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.vue"]
+  "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.vue"],
+  "references": [
+    {
+      "path": "../../packages/document-service/tsconfig.lib.json"
+    }
+  ]
 }

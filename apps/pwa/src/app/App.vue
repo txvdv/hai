@@ -6,6 +6,7 @@ import { RouterLink, RouterView } from 'vue-router';
   <header>
     <nav>
       <RouterLink to="/">Home</RouterLink>
+      <RouterLink to="/documents">Documents</RouterLink>
       <RouterLink to="/about">About</RouterLink>
     </nav>
   </header>
@@ -27,7 +28,6 @@ nav > a {
   header {
     display: flex;
     place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
     margin-left: auto;
     margin-right: auto;
     max-width: 768px;
