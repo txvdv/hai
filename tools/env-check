@@ -5,6 +5,7 @@ set -euo pipefail
 . "$HOME/.nvm/nvm.sh" || { printf "Failed to load nvm\n"; exit 1; }
 nvm use || { printf "Failed to switch Node.js version with nvm\n"; exit 1; }
 
+# Force install dependencies
 npm install
 
 # Check if the output indicates packages would be changed
