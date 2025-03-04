@@ -4,5 +4,8 @@
   "private": true,
   "nx": {
     "name": "pwa-e2e"
+  },
+  "devDependencies": {
+    "@hai/pwa": "*"
   }
 }
