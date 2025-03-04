@@ -11,6 +11,9 @@
     },
     {
       "path": "./packages/document-service"
+    },
+    {
+      "path": "./packages/feature-flags"
     }
   ]
 }
