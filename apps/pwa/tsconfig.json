@@ -4,6 +4,9 @@
   "include": [],
   "references": [
     {
+      "path": "../../packages/vue-components"
+    },
+    {
       "path": "../../packages/document-service"
     },
     {

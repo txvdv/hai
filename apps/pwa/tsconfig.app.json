@@ -32,6 +32,9 @@
   "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.vue"],
   "references": [
     {
+      "path": "../../packages/vue-components/tsconfig.lib.json"
+    },
+    {
       "path": "../../packages/document-service/tsconfig.lib.json"
     }
   ]

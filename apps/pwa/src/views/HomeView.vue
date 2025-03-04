@@ -1,6 +1,11 @@
+<script setup lang="ts">
+import {Footer} from '@hai/vue-components'
+</script>
+
 <template>
   <div class="home">
     <h1>Home</h1>
+    <Footer/>
   </div>
 </template>
 
@@ -14,5 +19,3 @@
   }
 }
 </style>
-<script setup lang="ts">
-</script>
