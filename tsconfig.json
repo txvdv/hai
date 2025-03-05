@@ -16,9 +16,6 @@
       "path": "./packages/feature-flags"
     },
     {
-      "path": "./packages/vue-components"
-    },
-    {
       "path": "./packages/ui-vue-library"
     }
   ],
