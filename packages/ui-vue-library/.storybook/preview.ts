@@ -7,6 +7,7 @@ import {
   DefaultTheme
 } from '../src'
 import '../src/styles/style.css'
+import router from './vue-router'
 
 const preview: Preview = {
   // Enables auto-generated documentation for all stories
@@ -27,6 +28,7 @@ const preview: Preview = {
 }
 
 setup((app) => {
+  app.use(router);
   app.use(PrimeVueConfig, {
     theme: DefaultTheme
   });
