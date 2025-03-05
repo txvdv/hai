@@ -17,6 +17,9 @@
     },
     {
       "path": "./packages/vue-components"
+    },
+    {
+      "path": "./packages/ui-vue-library"
     }
   ],
   "ts-node": {
