@@ -2,12 +2,11 @@ import {setup} from "@storybook/vue3"
 import type {Preview} from "@storybook/vue3"
 import {themes} from '@storybook/theming';
 
-// App theming
-import '../src/style.css'
 import {
   PrimeVueConfig,
   DefaultTheme
 } from '../src'
+import '../src/style.css'
 
 const preview: Preview = {
   // Enables auto-generated documentation for all stories

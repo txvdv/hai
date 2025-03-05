@@ -3,6 +3,8 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import dts from 'vite-plugin-dts';
 import * as path from 'path';
+// @ts-ignore see https://github.com/tailwindlabs/tailwindcss/discussions/16250
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   root: __dirname,
@@ -13,6 +15,7 @@ export default defineConfig({
       entryRoot: 'src',
       tsconfigPath: path.join(__dirname, 'tsconfig.lib.json'),
     }),
+    tailwindcss(),
   ],
   // Uncomment this if you are using workers.
   // worker: {
@@ -38,7 +41,10 @@ export default defineConfig({
     },
     rollupOptions: {
       // External packages that should not be bundled into your library.
-      external: [],
+      external: [
+        'vue',
+        'primevue',
+      ],
     },
   },
 });
