@@ -1,7 +1,8 @@
-# ui-vue-library
+# UI component library
 
-This library was generated with [Nx](https://nx.dev).
-
-## Running unit tests
-
-Run `nx test ui-vue-library` to execute the unit tests via [Vitest](https://vitest.dev/).
+## Resources
+- [Vue](https://vuejs.org/)
+- [PrimeVue](https://primevue.org/)
+- [Tailwind](https://tailwindcss.com/)
+- [Atomic design](https://bradfrost.com/blog/post/atomic-web-design/)
+- [Storybook](https://storybook.js.org/)
