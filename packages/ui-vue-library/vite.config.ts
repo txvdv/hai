@@ -44,6 +44,7 @@ export default defineConfig({
       // External packages that should not be bundled into the library.
       external: [
         'vue',
+        'vue-router',
         'primevue',
       ],
     },
