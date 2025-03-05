@@ -2,14 +2,13 @@ import './styles.css';
 import router from './router';
 import { createApp } from 'vue';
 import App from './app/App.vue';
-import PrimeVue from 'primevue/config';
-import Aura from '@primeuix/themes/aura';
+import {PrimeVueConfig, DefaultTheme} from "@hai/vue-components"
 
 const app = createApp(App);
 app.use(router);
-app.use(PrimeVue, {
+app.use(PrimeVueConfig, {
   theme: {
-    preset: Aura
+    preset: DefaultTheme
   }
 });
 app.mount('#root');

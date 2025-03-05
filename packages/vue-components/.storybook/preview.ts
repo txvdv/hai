@@ -1,8 +1,8 @@
 import {setup} from "@storybook/vue3"
 import type {Preview} from "@storybook/vue3"
 import {themes} from '@storybook/theming';
-import PrimeVue from 'primevue/config';
-import Aura from '@primeuix/themes/aura';
+import '../src/style/styles.css'
+import {PrimeVueConfig, DefaultTheme} from "../src"
 
 const preview: Preview = {
   // Enables auto-generated documentation for all stories
@@ -23,10 +23,8 @@ const preview: Preview = {
 }
 
 setup((app) => {
-  app.use(PrimeVue, {
-    theme: {
-      preset: Aura
-    }
+  app.use(PrimeVueConfig, {
+    theme: DefaultTheme
   })
 })
 
