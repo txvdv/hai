@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { computed, reactive } from 'vue';
 import Button from 'primevue/button';
 
 const layoutConfig = reactive({
@@ -19,11 +19,19 @@ const executeDarkModeToggle = () => {
   document.documentElement.classList.toggle('dark');
 };
 
+const toggleIcon = computed(() => {
+  if (layoutConfig.darkTheme) {
+    return 'pi pi-moon';
+  } else {
+    return 'pi pi-sun';
+  }
+})
+
 </script>
 
 <template>
   <div class="flex">
-    <Button icon="pi pi-sun"
+    <Button :icon="toggleIcon"
             rounded
             variant="outlined"
             aria-label="Toggle theme"
