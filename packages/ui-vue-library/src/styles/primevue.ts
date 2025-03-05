@@ -2,6 +2,10 @@ import PrimeVue from "primevue/config";
 import Aura from '@primeuix/themes/aura';
 import { definePreset } from '@primeuix/themes';
 
+/**
+ * Aura components and preset fields
+ * https://github.com/primefaces/primeuix/blob/c12c2b3/packages/themes/src/presets/aura/index.ts
+ */
 const AuraTealPreset = definePreset(Aura, {
   semantic: {
     primary: {
