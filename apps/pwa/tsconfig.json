@@ -4,10 +4,10 @@
   "include": [],
   "references": [
     {
-      "path": "../../packages/vue-components"
+      "path": "../../packages/document-service"
     },
     {
-      "path": "../../packages/document-service"
+      "path": "../../packages/ui-vue-library"
     },
     {
       "path": "./tsconfig.app.json"

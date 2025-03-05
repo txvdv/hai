@@ -38,3 +38,5 @@ const AuraTheme = {
 
 export {PrimeVue as PrimeVueConfig}
 export {AuraTheme as DefaultTheme}
+
+export {default as Footer} from './organisms/footer/Footer.vue'

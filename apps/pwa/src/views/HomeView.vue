@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import {Footer} from '@hai/vue-components'
+// import {Footer} from '@hai/vue-components'
+import {Footer} from '@hai/ui-vue-library'
 </script>
 
 <template>
