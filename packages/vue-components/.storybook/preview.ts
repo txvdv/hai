@@ -2,7 +2,7 @@ import {setup} from "@storybook/vue3"
 import type {Preview} from "@storybook/vue3"
 import {themes} from '@storybook/theming';
 import '../src/style/styles.css'
-import {PrimeVueConfig, AuraTheme} from "../src"
+import {PrimeVueConfig, DefaultTheme} from "../src"
 
 const preview: Preview = {
   // Enables auto-generated documentation for all stories
@@ -24,7 +24,7 @@ const preview: Preview = {
 
 setup((app) => {
   app.use(PrimeVueConfig, {
-    theme: AuraTheme
+    theme: DefaultTheme
   })
 })
 

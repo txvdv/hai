@@ -1,4 +1,6 @@
 @import "./variables.css";
+@import "tailwindcss";
+@import "tailwindcss-primeui";
 
 html {
     -webkit-text-size-adjust: 100%;

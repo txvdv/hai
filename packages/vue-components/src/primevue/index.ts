@@ -2,7 +2,7 @@ import PrimeVue from "primevue/config";
 import Aura from '@primeuix/themes/aura';
 import { definePreset } from '@primeuix/themes';
 
-const AuraIndigo = definePreset(Aura, {
+const AuraIndigoPreset = definePreset(Aura, {
   semantic: {
     primary: {
       50: '{indigo.50}',
@@ -20,17 +20,21 @@ const AuraIndigo = definePreset(Aura, {
   }
 });
 
-const AuraPreset = {
-  preset: AuraIndigo,
+const AuraTheme = {
+  preset: AuraIndigoPreset,
   options: {
     // cssLayer: true,
     // cssLayer: {
     //   name: "primevue",
     //   order: "base, primevue",
     // },
+    cssLayer: {
+      name: 'primevue',
+      order: 'base, primevue'
+    },
     darkModeSelector: '.dark',
   }
 }
 
 export {PrimeVue as PrimeVueConfig}
-export {AuraPreset as AuraTheme}
+export {AuraTheme as DefaultTheme}

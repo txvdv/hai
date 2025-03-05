@@ -11,6 +11,8 @@ import Button from "primevue/button"
       <li><a href="#">Link 3</a></li>
     </ul>
 
+    <p class="font-bold">This is a footer</p>
+
     <Button label="Button" />
   </footer>
 </template>
