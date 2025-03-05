@@ -24,13 +24,13 @@ const AuraPreset = {
   preset: AuraIndigo,
   options: {
     // cssLayer: true,
-    cssLayer: {
-      name: "primevue",
-      order: "base, primevue",
-    },
+    // cssLayer: {
+    //   name: "primevue",
+    //   order: "base, primevue",
+    // },
     darkModeSelector: '.dark',
   }
 }
 
 export {PrimeVue as PrimeVueConfig}
-export {AuraPreset as DefaultTheme}
+export {AuraPreset as AuraTheme}
