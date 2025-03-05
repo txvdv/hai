@@ -18,5 +18,5 @@
     "src/**/*.tsx",
     "src/**/*.vue"
   ],
-  "exclude": []
+  "exclude": ["**/*.stories.ts", "**/*.stories.js"]
 }
