@@ -2,6 +2,10 @@
   "name": "@hai/ui-vue-library",
   "version": "0.0.1",
   "private": true,
+  "scripts": {
+    "dev": "storybook dev",
+    "build": "vite build"
+  },
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -12,6 +16,7 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "default": "./dist/index.js"
-    }
+    },
+    "./style.css": "./dist/style.css"
   }
 }

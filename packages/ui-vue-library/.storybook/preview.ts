@@ -6,7 +6,7 @@ import {
   PrimeVueConfig,
   DefaultTheme
 } from '../src'
-import '../src/style.css'
+import '../src/styles/style.css'
 
 const preview: Preview = {
   // Enables auto-generated documentation for all stories

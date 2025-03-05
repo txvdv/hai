@@ -2,7 +2,6 @@ import './styles.css';
 import router from './router';
 import { createApp } from 'vue';
 import App from './app/App.vue';
-// import {PrimeVueConfig, DefaultTheme} from "@hai/vue-components"
 import {PrimeVueConfig, DefaultTheme} from "@hai/ui-vue-library"
 
 const app = createApp(App);

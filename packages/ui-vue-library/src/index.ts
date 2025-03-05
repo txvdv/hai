@@ -1,6 +1,7 @@
 import PrimeVue from "primevue/config";
 import Aura from '@primeuix/themes/aura';
 import { definePreset } from '@primeuix/themes';
+import './styles/style.css'
 
 const AuraIndigoPreset = definePreset(Aura, {
   semantic: {
@@ -23,11 +24,6 @@ const AuraIndigoPreset = definePreset(Aura, {
 const AuraTheme = {
   preset: AuraIndigoPreset,
   options: {
-    // cssLayer: true,
-    // cssLayer: {
-    //   name: "primevue",
-    //   order: "base, primevue",
-    // },
     cssLayer: {
       name: 'primevue',
       order: 'base, primevue'
@@ -38,5 +34,4 @@ const AuraTheme = {
 
 export {PrimeVue as PrimeVueConfig}
 export {AuraTheme as DefaultTheme}
-
 export {default as Footer} from './organisms/footer/Footer.vue'

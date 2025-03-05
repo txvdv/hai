@@ -3,7 +3,8 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import dts from 'vite-plugin-dts';
 import * as path from 'path';
-// @ts-ignore see https://github.com/tailwindlabs/tailwindcss/discussions/16250
+// @ts-ignore
+// see https://github.com/tailwindlabs/tailwindcss/discussions/16250
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
@@ -40,7 +41,7 @@ export default defineConfig({
       formats: ['es'],
     },
     rollupOptions: {
-      // External packages that should not be bundled into your library.
+      // External packages that should not be bundled into the library.
       external: [
         'vue',
         'primevue',
