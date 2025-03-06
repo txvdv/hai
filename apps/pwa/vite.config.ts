@@ -1,6 +1,7 @@
 /// <reference types='vitest' />
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
+import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
   root: __dirname,
@@ -15,6 +16,50 @@ export default defineConfig({
   },
   plugins: [
     vue(),
+    VitePWA({
+      registerType: 'autoUpdate',
+      mode: 'development',
+      base: '/',
+      includeAssets: ['favicon.svg'],
+      manifest: {
+        name: 'Human accepted interaction',
+        short_name: 'Hai',
+        theme_color: '#ffffff',
+        icons: [
+          {
+            src: 'pwa-192x192.png',
+            sizes: '192x192',
+            type: 'image/png'
+          },
+          {
+            src: 'pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png'
+          },
+          {
+            src: 'pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: 'pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable'
+          }
+        ],
+      },
+      srcDir: 'src',
+      strategies: 'injectManifest',
+      filename: 'claims-sw.ts',
+      devOptions: {
+        enabled: true,
+        type: 'module',
+        navigateFallback: 'index.html',
+        suppressWarnings: true,
+      }
+    })
   ],
   // Uncomment this if you are using workers.
   // worker: {
