@@ -12,7 +12,7 @@ const goToDashboard = () => {
   <div class="hero">
     <div class="text-center">
       <div class="hero__caption">POWERED BY YOU</div>
-      <div class="hero__title">Human Accepted Interaction</div>
+      <h1 class="hero__title">Human Accepted Interaction</h1>
       <div class="hero__subtitle">A place to write and help your fellow human.</div>
       <Button label="Get Started" @click="goToDashboard" />
     </div>
