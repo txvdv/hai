@@ -52,7 +52,7 @@ export default defineConfig({
       },
       srcDir: 'src',
       strategies: 'injectManifest',
-      filename: 'claims-sw.ts',
+      filename: 'service-worker.ts',
       devOptions: {
         enabled: true,
         type: 'module',
