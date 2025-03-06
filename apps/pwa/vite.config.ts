@@ -17,6 +17,7 @@ export default defineConfig({
   plugins: [
     vue(),
     VitePWA({
+      injectRegister: false,
       registerType: 'autoUpdate',
       mode: 'development',
       base: '/',

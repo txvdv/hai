@@ -1,54 +1,30 @@
 <script setup lang="ts">
-import { onBeforeMount, ref } from 'vue'
-// import MyWorker from '../worker?worker'
+import { ref } from 'vue'
 import { DocumentService } from '../service/document-service';
 
-const pong = ref(null)
-// const worker = new MyWorker()
+// Create a reactive variable for documents
+const docs = ref<string[]>([])
 
-async function runWorker() {
-  // worker.postMessage('ping')
-  const docs = await DocumentService.getDocuments()
-  console.log(docs);
+// Fetch documents and update the `docs` array
+async function getDocuments() {
+  try {
+    const serviceDocs = await DocumentService.getDocuments()
+    console.log("serviceDocs", serviceDocs);
+    docs.value = serviceDocs
+    console.log(docs.value)
+  } catch (error) {
+    console.error("Error fetching documents:", error)
+  }
 }
-async function resetMessage() {
-  // worker.postMessage('clear')
-}
-async function messageFromWorker(msg: any) {
-  pong.value = msg.data.msg
-}
-
-onBeforeMount(() => {
-  // worker.addEventListener('message', messageFromWorker)
-})
-
 </script>
 
 <template>
-  <br>
-  <router-view />
-  <br>
-  <br>
-  <button @click="runWorker">
+  <button @click="getDocuments">
     Get documents
   </button>
-  <button v-if="false" @click="resetMessage">
-    Reset message
-  </button>
-  <br>
-  <br>
-  <template v-if="pong">
-    Response from web worker: <span> Message: {{ pong }} </span>
-  </template>
+  <ul>
+    <li v-for="(doc, index) in docs" :key="index">
+      {{ doc }}
+    </li>
+  </ul>
 </template>
-
-<style>
-@media (min-width: 768px) {
-  .home {
-    max-width: 768px;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 0 1rem;
-  }
-}
-</style>
