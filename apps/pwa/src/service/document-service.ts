@@ -9,7 +9,7 @@ import {
 } from '../message-interface';
 
 export class DocumentService {
-  static async createDocument(content: string) {
+  async createDocument(content: string) {
     const req: DocumentCreateMessage = buildMessage('Document.Create', {
         payload: {
           content
@@ -22,7 +22,7 @@ export class DocumentService {
     >(req);
   }
 
-  static async deleteDocument(id: string) {
+  async deleteDocument(id: string) {
     const req: DocumentDeleteMessage = buildMessage('Document.Delete', {
         payload: {
           id
@@ -36,7 +36,7 @@ export class DocumentService {
     >(req);
   }
 
-  static async getDocuments(): Promise<Array<{ id: string, content: string }>> {
+  async getDocuments(): Promise<Array<{ id: string, content: string }>> {
     const req: DocumentListMessage = buildMessage('Document.List');
     const res = await sendAndAwaitServiceWorker<
       DocumentListMessage,
@@ -52,7 +52,7 @@ export class DocumentService {
     }
   }
 
-  static async updateDocument(id: string, content: string): Promise<DocumentUpdateResponseMessage> {
+  async updateDocument(id: string, content: string): Promise<DocumentUpdateResponseMessage> {
     const req: DocumentUpdateMessage = buildMessage('Document.Update', {
         payload: {
           id,

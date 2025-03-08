@@ -1,11 +1,14 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
-import { DocumentService } from '../service/document-service';
+import { inject, onMounted, ref } from 'vue';
+// import { DocumentService } from '../service/document-service';
+import { ClientCore } from '../main';
 
 type ExistingDocument = {
   id: string;
   content: string;
 }
+
+const core = inject('core') as ClientCore
 
 const doc = ref<ExistingDocument>({
   id: '',
@@ -16,7 +19,7 @@ const docs = ref<ExistingDocument[]>([]);
 
 async function deleteDocument(id: string) {
   try {
-    await DocumentService.deleteDocument(id);
+    await core.documentService.deleteDocument(id);
     if (doc.value.id === id) resetDocument()
     await getDocuments();
   } catch (error) {
@@ -33,7 +36,7 @@ async function editDocument(id: string) {
 
 async function getDocuments() {
   try {
-    docs.value = await DocumentService.getDocuments();
+    docs.value = await core.documentService.getDocuments();
   } catch (error) {
     console.error('Error fetching documents:', error);
   }
@@ -42,7 +45,7 @@ async function getDocuments() {
 async function newDocument() {
   const {id, content} = doc.value;
   if (id) {
-    await DocumentService.updateDocument(id, content);
+    await core.documentService.updateDocument(id, content);
   }
   resetDocument()
 }
@@ -50,9 +53,9 @@ async function newDocument() {
 async function saveDocument() {
   const {id, content} = doc.value;
   if (id) {
-    await DocumentService.updateDocument(id, content);
+    await core.documentService.updateDocument(id, content);
   } else {
-    await DocumentService.createDocument(content);
+    await core.documentService.createDocument(content);
   }
   await getDocuments()
 }
