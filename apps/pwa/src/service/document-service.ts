@@ -1,67 +1,58 @@
 import {
-  ApiResponse,
-  buildMessage, DocumentDeleteMessage, DocumentUpdateMessage, DocumentUpdateResponseMessage, MessageEnvelope
+  assertApiSuccess,
+  buildMessage, DocumentCreateMessage, DocumentCreateResponseMessage,
+  DocumentDeleteMessage, DocumentDeleteResponseMessage,
+  DocumentListMessage, DocumentListResponseMessage,
+  DocumentUpdateMessage,
+  DocumentUpdateResponseMessage,
+  MessageEnvelope
 } from '../message-interface';
 
 export class DocumentService {
-  static async getDocuments(): Promise<Array<{ id: string, content: string }>> {
-    if (!navigator.serviceWorker.controller) {
-      throw new Error('Service Worker controller not found');
-    }
-
-    const message = buildMessage('Document.List');
-
-    return new Promise((resolve, reject) => {
-      const messageChannel = new MessageChannel();
-      messageChannel.port1.onmessage = (event) => {
-        console.log('Message received from service worker', event);
-        const resMsg = event.data;
-        if (resMsg && resMsg.type === 'Document.List.Response') {
-          resolve(event.data.payload.documents);
-        } else {
-          reject(new Error('Unexpected message received'));
-        }
-      };
-
-      navigator.serviceWorker?.controller?.postMessage(
-        message,
-        [messageChannel.port2]
-      );
-    });
-  }
-
-  static async createDocument(): Promise<Array<string>> {
-    if (!navigator.serviceWorker.controller) {
-      throw new Error('Service Worker controller not found');
-    }
-
-    const message = buildMessage('Document.Create', {
+  static async createDocument() {
+    const req: DocumentCreateMessage = buildMessage('Document.Create', {
         payload: {
           content: 'Hello World'
         }
       }
     );
-
-    return new Promise((resolve, reject) => {
-      const messageChannel = new MessageChannel();
-      messageChannel.port1.onmessage = (event) => {
-        const resMsg = event.data;
-        console.log('Message received from service worker', event);
-        if (resMsg && resMsg.type === 'Document.Create.Response') {
-          resolve(resMsg.payload);
-        } else {
-          reject(new Error('Unexpected message received'));
-        }
-      };
-
-      navigator.serviceWorker?.controller?.postMessage(
-        message,
-        [messageChannel.port2]
-      );
-    });
+    await sendAndAwaitServiceWorker<
+      DocumentCreateMessage,
+      DocumentCreateResponseMessage
+    >(req);
   }
 
-  static async updateDocument(id: string, content: string): Promise<ApiResponse<DocumentUpdateResponseMessage>> {
+  static async deleteDocument(id: string) {
+    const req: DocumentDeleteMessage = buildMessage('Document.Delete', {
+        payload: {
+          id
+        }
+      }
+    );
+
+    await sendAndAwaitServiceWorker<
+      DocumentDeleteMessage,
+      DocumentDeleteResponseMessage
+    >(req);
+  }
+
+  static async getDocuments(): Promise<Array<{ id: string, content: string }>> {
+    const req: DocumentListMessage = buildMessage('Document.List');
+    const res = await sendAndAwaitServiceWorker<
+      DocumentListMessage,
+      DocumentListResponseMessage
+    >(req);
+
+    if (assertApiSuccess(res)) {
+      console.log(res.payload.documents);
+      return res.payload.documents;
+    } else {
+      console.log(res.payload.errors);
+      throw new Error('Error');
+    }
+  }
+
+  static async updateDocument(id: string, content: string): Promise<DocumentUpdateResponseMessage> {
     const req: DocumentUpdateMessage = buildMessage('Document.Update', {
         payload: {
           id,
@@ -75,24 +66,12 @@ export class DocumentService {
       DocumentUpdateResponseMessage
     >(req);
   }
-
-  static async deleteDocument(id: string) {
-    const req: DocumentDeleteMessage = buildMessage('Document.Delete', {
-        payload: {
-          id
-        }
-      }
-    );
-
-    const res = await sendAndAwaitServiceWorker(req);
-    console.log('Response from service worker', res);
-  }
 }
 
 async function sendAndAwaitServiceWorker<ReqType extends MessageEnvelope, ResType>(
   message: ReqType,
   timeoutInMs = 5000
-): Promise<ApiResponse<ResType>> {
+): Promise<ResType> {
   if (!navigator.serviceWorker.controller) {
     // TODO: better format for UI response
     // build a Problem Details and issue a popup
