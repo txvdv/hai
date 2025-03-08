@@ -7,18 +7,7 @@ const docs = ref<Array<{ id: string, content: string }>>([]);
 
 async function createDocument() {
   try {
-    const doc = await DocumentService.createDocument();
-    console.log('doc', doc);
-    await getDocuments();
-  } catch (error) {
-    console.error('Error creating document:', error);
-  }
-}
-
-async function updateDocument(id: string, content: string) {
-  try {
-    const doc = await DocumentService.updateDocument(id, content + ' updated');
-    console.log('doc', doc);
+    await DocumentService.createDocument();
     await getDocuments();
   } catch (error) {
     console.error('Error creating document:', error);
@@ -27,8 +16,7 @@ async function updateDocument(id: string, content: string) {
 
 async function deleteDocument(id: string) {
   try {
-    const doc = await DocumentService.deleteDocument(id);
-    console.log('doc', doc);
+    await DocumentService.deleteDocument(id);
     await getDocuments();
   } catch (error) {
     console.error('Error creating document:', error);
@@ -37,12 +25,18 @@ async function deleteDocument(id: string) {
 
 async function getDocuments() {
   try {
-    const serviceDocs = await DocumentService.getDocuments();
-    console.log('serviceDocs', serviceDocs);
-    docs.value = serviceDocs;
-    console.log(docs.value);
+    docs.value = await DocumentService.getDocuments();
   } catch (error) {
     console.error('Error fetching documents:', error);
+  }
+}
+
+async function updateDocument(id: string, content: string) {
+  try {
+    await DocumentService.updateDocument(id, content + ' updated');
+    await getDocuments();
+  } catch (error) {
+    console.error('Error creating document:', error);
   }
 }
 </script>
