@@ -56,7 +56,7 @@ export default defineConfig({
       strategies: 'injectManifest',
       filename: 'service-worker.ts',
       devOptions: {
-        enabled: true,
+        enabled: false,
         type: 'module',
         navigateFallback: 'index.html',
         suppressWarnings: true,
