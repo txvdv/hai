@@ -8,7 +8,8 @@ if ('serviceWorker' in navigator) {
   window.addEventListener('load', async () => {
     try {
       const registration = await navigator.serviceWorker.register(
-        import.meta.env.MODE === 'production' ? '/service-worker.js' : '/service-worker.js?service-worker'
+        import.meta.env.MODE === 'production' ? '/sw.js' : '/dev-sw.js?dev-sw',
+        { type: import.meta.env.MODE === 'production' ? 'classic' : 'module' }
       );
       console.log('Service Worker registered successfully with scope:', registration.scope);
     } catch (error) {

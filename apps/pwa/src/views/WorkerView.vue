@@ -19,7 +19,10 @@ async function getDocuments() {
 </script>
 
 <template>
-  <button @click="getDocuments">
+  <button
+    @click="getDocuments"
+    style="text-decoration: underline; cursor: pointer;"
+  >
     Get documents
   </button>
   <ul>

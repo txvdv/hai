@@ -17,10 +17,11 @@ export default defineConfig({
   plugins: [
     vue(),
     VitePWA({
-      injectRegister: false,
+      injectRegister: null,
       registerType: 'autoUpdate',
       mode: 'development',
       base: '/',
+      scope: '/',
       includeAssets: ['favicon.svg'],
       manifest: {
         name: 'Human accepted interaction',
