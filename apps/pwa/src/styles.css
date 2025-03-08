@@ -1,1 +1,5 @@
+/* Fine to add tailwind again regardless of the ui library using it */
+/* vite will only add the utilities used in here */
+/* although always best to check the final css file has not dramatically increased in size */
+@import "tailwindcss";
 @import "@hai/ui-vue-library/style.css";

@@ -2,6 +2,7 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { VitePWA } from 'vite-plugin-pwa'
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   root: __dirname,
@@ -15,6 +16,7 @@ export default defineConfig({
     host: 'localhost',
   },
   plugins: [
+    tailwindcss(),
     vue(),
     VitePWA({
       injectRegister: null,
