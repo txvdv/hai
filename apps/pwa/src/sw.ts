@@ -6,6 +6,7 @@ import { NavigationRoute, registerRoute } from 'workbox-routing'
 
 import { DocumentService } from '@hai/document-service';
 import {
+  buildApiResponse,
   buildResponse, DocumentDeleteResponseMessage, DocumentUpdateResponseMessage
 } from './message-interface';
 
@@ -83,50 +84,47 @@ function createBackendMessageHandler(service: DocumentService) {
 
     // TODO: move this into a router, which then invokes a controller
     if (req.type === 'Document.List') {
-      /**
-       * This is done by a controller function, which would
-       * - check the payload
-       * - transform the payload to objects used in the service
-       * - call one or more services
-       * - if, correlation ID is provided, respond back
-       */
-      // controller start
       const documents = await service.getDocuments();
-      // const res = {foo: "bar"}
-      const res = buildResponse(
+      const {correlationId} = req.metadata;
+      if (!event.source) {
+        console.error('event.source is null. Unable to respond to the message.');
+        return; // Stop execution if event.source is null
+      }
+      const res = buildApiResponse(
         'Document.List.Response', 'success', {
-          payload: { documents }
+          payload: { documents },
+          correlationId
         }
       );
-      // controller end
-      // back here in web worker
-      event.ports[0].postMessage(res);
+      event.source.postMessage(res);
     } else if (req.type === 'Document.Create') {
-      const document = await service.createDocument(req.payload.content);
-      const res = buildResponse(
-        'Document.Create.Response', 'success', {
-          payload: document
-        }
-      )
-      event.ports[0].postMessage(res);
-    } else if (req.type === 'Document.Update') {
-      const {id, content} = req.payload;
-      await service.updateDocument(id, content);
-
-      // const res = buildResponse(
-      //   'Document.Update.Response', 'success'
-      // );
-      // event.ports[0].postMessage(res);
-
-      const {correlationId} = req.metadata;
-
       if (!event.source) {
         console.error('event.source is null. Unable to respond to the message.');
         return; // Stop execution if event.source is null
       }
 
-      const res: DocumentUpdateResponseMessage = buildResponse(
+      const {content} = req.payload;
+      const {correlationId} = req.metadata;
+      const document = await service.createDocument(content);
+      const res = buildResponse(
+        'Document.Create.Response', 'success', {
+          payload: document,
+          correlationId
+        }
+      )
+      event.source.postMessage(res);
+    } else if (req.type === 'Document.Update') {
+      const {id, content} = req.payload;
+      await service.updateDocument(id, content);
+      const {correlationId} = req.metadata;
+      if (!event.source) {
+        console.error('event.source is null. Unable to respond to the message.');
+        return; // Stop execution if event.source is null
+      }
+
+      const res: DocumentUpdateResponseMessage = buildApiResponse(
         'Document.Update.Response', 'success', {
+          payload: { id, content },
           correlationId
         }
       )
@@ -137,7 +135,6 @@ function createBackendMessageHandler(service: DocumentService) {
     else if (req.type === 'Document.Delete') {
       const {id} = req.payload;
       await service.deleteDocument(id);
-
       const {correlationId} = req.metadata;
 
       if (!event.source) {
@@ -145,8 +142,9 @@ function createBackendMessageHandler(service: DocumentService) {
         return; // Stop execution if event.source is null
       }
 
-      const res: DocumentDeleteResponseMessage = buildResponse(
+      const res: DocumentDeleteResponseMessage = buildApiResponse(
         "Document.Delete.Response", "success", {
+          payload: { id },
           correlationId
         }
       )
