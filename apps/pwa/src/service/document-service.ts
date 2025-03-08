@@ -9,10 +9,10 @@ import {
 } from '../message-interface';
 
 export class DocumentService {
-  static async createDocument() {
+  static async createDocument(content: string) {
     const req: DocumentCreateMessage = buildMessage('Document.Create', {
         payload: {
-          content: 'Hello World'
+          content
         }
       }
     );
