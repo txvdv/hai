@@ -1,4 +1,5 @@
 /// <reference lib="webworker" />
+// https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API
 import { cleanupOutdatedCaches, createHandlerBoundToURL, precacheAndRoute } from 'workbox-precaching'
 import { clientsClaim } from 'workbox-core'
 import { NavigationRoute, registerRoute } from 'workbox-routing'
