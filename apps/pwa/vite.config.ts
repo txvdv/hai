@@ -54,7 +54,7 @@ export default defineConfig({
       },
       srcDir: 'src',
       strategies: 'injectManifest',
-      filename: 'service-worker.ts',
+      filename: 'sw.ts',
       devOptions: {
         enabled: process.env.SW_DEV === 'true',
         type: 'module',
