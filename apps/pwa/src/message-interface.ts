@@ -80,8 +80,6 @@ export interface ProblemDetails {
   }>;
 }
 
-export type ApiResponse<T = any> = ResponseEnvelope<T | ProblemDetails>;
-
 export function buildResponse<T extends string, P>(
   type: T,
   status: 'success' | 'error',
@@ -104,69 +102,115 @@ export function buildResponse<T extends string, P>(
   };
 }
 
+export type ApiResponse<T> = ResponseEnvelope<T> & (
+  | { status: 'success'; payload: T }
+  | { status: 'error'; payload: ProblemDetails }
+  );
+
+export function assertApiSuccess<T>(
+  response: ApiResponse<T>
+): response is ApiResponse<T> & { status: 'success'; payload: T } {
+  return response.status === 'success';
+}
+
+export function buildApiResponse<T extends string, P>(
+  type: T,
+  status: 'success' | 'error',
+  config: {
+    context?: { userId?: string; [key: string]: any };
+    payload: P | ProblemDetails;
+    correlationId?: string;
+  }
+): { type: T } & (ApiResponse<P> & { status: 'success'; payload: P } | ApiResponse<P> & { status: 'error'; payload: ProblemDetails }) {
+  if (status === 'success') {
+    return {
+      type,
+      status,
+      context: config.context,
+      metadata: {
+        messageId: generateUniqueId(),
+        correlationId: config.correlationId,
+        timestamp: new Date().toISOString(),
+      },
+      payload: config.payload as P, // Narrow payload type
+    } as { type: T } & ApiResponse<P> & { status: 'success'; payload: P };
+  } else {
+    return {
+      type,
+      status,
+      context: config.context,
+      metadata: {
+        messageId: generateUniqueId(),
+        correlationId: config.correlationId,
+        timestamp: new Date().toISOString(),
+      },
+      payload: config.payload as ProblemDetails, // Narrow payload type
+    } as { type: T } & ApiResponse<P> & { status: 'error'; payload: ProblemDetails };
+  }
+}
+
 /**
  * Document Messaging API
  */
-
-export interface DocumentCreateMessage extends MessageEnvelope<DocumentCreatePayload> {
+export type DocumentCreateMessage = MessageEnvelope<DocumentCreatePayload> & {
   type: 'Document.Create';
 }
 
-export interface DocumentCreatePayload {
+export type DocumentCreatePayload = {
   content: string;
 }
 
-export interface DocumentCreateResponseMessage extends ApiResponse<DocumentCreateResponsePayload> {
+export type DocumentCreateResponseMessage = ApiResponse<DocumentCreateResponsePayload> & {
   type: 'Document.Create.Response';
 }
 
-export interface DocumentCreateResponsePayload {
+export type DocumentCreateResponsePayload = {
   id: string;
   content: string;
 }
 
-export interface DocumentListMessage extends MessageEnvelope<undefined> {
+export type DocumentListMessage = MessageEnvelope<undefined> & {
   type: 'Document.List';
 }
 
-export interface DocumentListResponseMessage extends ApiResponse<DocumentListResponsePayload> {
+export type DocumentListResponseMessage = ApiResponse<DocumentListResponsePayload> & {
   type: 'Document.List.Response';
 }
 
-export interface DocumentListResponsePayload {
+export type DocumentListResponsePayload = {
   documents: Array<{ id: string, content: string }>;
 }
 
-export interface DocumentUpdateMessage extends MessageEnvelope<DocumentUpdatePayload> {
+export type DocumentUpdateMessage = MessageEnvelope<DocumentUpdatePayload> & {
   type: 'Document.Update';
 }
 
-export interface DocumentUpdatePayload {
+export type DocumentUpdatePayload = {
   id: string;
   content: string;
 }
 
-export interface DocumentUpdateResponseMessage extends ApiResponse<DocumentUpdateResponsePayload> {
+export type DocumentUpdateResponseMessage = ApiResponse<DocumentUpdateResponsePayload> & {
   type: 'Document.Update.Response';
 }
 
-export interface DocumentUpdateResponsePayload {
+export type DocumentUpdateResponsePayload = {
   id: string;
   content: string;
 }
 
-export interface DocumentDeleteMessage extends MessageEnvelope<DocumentDeletePayload> {
+export type DocumentDeleteMessage = MessageEnvelope<DocumentDeletePayload> & {
   type: 'Document.Delete';
 }
 
-export interface DocumentDeletePayload {
+export type DocumentDeletePayload = {
   id: string;
 }
 
-export interface DocumentDeleteResponseMessage extends ApiResponse<DocumentDeleteResponsePayload> {
+export type DocumentDeleteResponseMessage = ApiResponse<DocumentDeleteResponsePayload> & {
   type: 'Document.Delete.Response';
 }
 
-export interface DocumentDeleteResponsePayload {
+export type DocumentDeleteResponsePayload = {
   id: string;
 }
