@@ -1,4 +1,5 @@
 import { MessageResponse, MessageEnvelope, buildMessageResponse } from '@hai/app-messaging';
+import { DocumentService } from '@hai/document-service';
 
 export function getAppService(): AppService {
   return AppServiceImpl.getInstance();
@@ -22,9 +23,11 @@ class AppServiceImpl implements AppService {
   private static instance: AppServiceImpl | null = null;
   private started: boolean = false;
   private readonly config: AppServiceConfig;
+  private readonly documentService: DocumentService;
 
   private constructor(config: AppServiceConfig = {}) {
     this.config = config;
+    this.documentService = new DocumentService();
   }
 
   public static getInstance(config: AppServiceConfig = {}): AppServiceImpl {
@@ -50,12 +53,63 @@ class AppServiceImpl implements AppService {
       throw new Error('correlationId must be provided.');
     }
 
-    const res: PingResponseMessage = buildMessageResponse(
-      'App.Pong', 'success', {
-        payload: 'pong',
-        correlationId
-      }
-    )
+    let res: MessageResponse<any>
+
+    if (msg.type === 'App.Ping') {
+      res = buildMessageResponse(
+        'App.Pong', 'success', {
+          payload: 'pong',
+          correlationId
+        }
+      )
+    } else if (msg.type === 'Document.List') {
+      const documents = await this.documentService.getDocuments();
+      res = buildMessageResponse(
+        'Document.List.Response', 'success', {
+          payload: { documents },
+          correlationId
+        }
+      );
+    } else if (msg.type === 'Document.Create') {
+      const {content} = msg.payload;
+      const document = await this.documentService.createDocument(content);
+      res = buildMessageResponse(
+        'Document.Create.Response', 'success', {
+          payload: document,
+          correlationId
+        }
+      )
+    } else if (msg.type === 'Document.Update') {
+      const {id, content} = msg.payload;
+      await this.documentService.updateDocument(id, content);
+      const {correlationId} = msg.metadata;
+      res = buildMessageResponse(
+        'Document.Update.Response', 'success', {
+          payload: { id, content },
+          correlationId
+        }
+      )
+    }
+
+    else if (msg.type === 'Document.Delete') {
+      const {id} = msg.payload;
+      await this.documentService.deleteDocument(id);
+      res = buildMessageResponse(
+        "Document.Delete.Response", "success", {
+          payload: { id },
+          correlationId
+        }
+      )
+    } else {
+      res = buildMessageResponse(
+        'App.Error', 'error', {
+          payload: {
+            type: 'App.UnknownMessageTypeError',
+            title: `Unknown message type: ${msg.type}`,
+          },
+        }
+      )
+    }
 
     return res;
   }
