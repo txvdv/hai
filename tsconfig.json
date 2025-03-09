@@ -29,6 +29,9 @@
     },
     {
       "path": "./packages/service-core"
+    },
+    {
+      "path": "./packages/service-persistence"
     }
   ],
   "ts-node": {
