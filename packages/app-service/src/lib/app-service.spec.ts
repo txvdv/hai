@@ -1,5 +1,5 @@
 import { AppService, getAppService } from './app-service.js';
-import { buildMessage, MessageEnvelope } from './app-message-interface.js';
+import { buildMessage, MessageEnvelope } from '@hai/app-messaging';
 
 describe('App Service', () => {
   let appService: AppService;

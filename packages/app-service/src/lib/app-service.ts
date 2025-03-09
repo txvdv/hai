@@ -1,4 +1,4 @@
-import { MessageResponse, MessageEnvelope, buildMessageResponse } from './app-message-interface.js';
+import { MessageResponse, MessageEnvelope, buildMessageResponse } from '@hai/app-messaging';
 
 export function getAppService(): AppService {
   return AppServiceImpl.getInstance();
