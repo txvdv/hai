@@ -1,5 +1,4 @@
 import { createUUID } from '@hai/shared-utils';
-import { UnitOfWork } from '../lib/app.types.js';
 
 export type Document = {
   id: string
@@ -8,14 +7,11 @@ export type Document = {
 
 export class DocumentService {
   private documentRepository: DocumentRepository;
-  private uow: UnitOfWork
 
   constructor(deps: {
-    documentRepository: DocumentRepository,
-    uow: UnitOfWork
+    documentRepository: DocumentRepository
   }) {
     this.documentRepository = deps.documentRepository;
-    this.uow = deps.uow;
   }
 
   async getDocument(id: string) {
@@ -31,9 +27,7 @@ export class DocumentService {
       id: createUUID(),
       content
     };
-    this.uow.start()
     this.documentRepository.save(document);
-    await this.uow.commit()
     return document;
   }
 
@@ -41,16 +35,12 @@ export class DocumentService {
     const document = await this.documentRepository.getDocument(id)
     if (document) {
       document.content = content;
-      this.uow.start()
       this.documentRepository.save(document);
-      await this.uow.commit()
     }
   }
 
   async deleteDocument(id: string) {
-    this.uow.start()
     this.documentRepository.deleteDocument(id);
-    await this.uow.commit()
   }
 }
 
