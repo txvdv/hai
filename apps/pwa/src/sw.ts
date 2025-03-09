@@ -5,11 +5,6 @@ import { clientsClaim } from 'workbox-core'
 import { NavigationRoute, registerRoute } from 'workbox-routing'
 import type {AppService} from '@hai/app-service';
 import {getAppService} from '@hai/app-service';
-import { DocumentService } from '@hai/document-service';
-// import {
-//   buildApiResponse,
-//   buildResponse, DocumentDeleteResponseMessage, DocumentUpdateResponseMessage
-// } from './message-interface';
 
 declare let self: ServiceWorkerGlobalScope
 
@@ -76,13 +71,12 @@ async function startServiceRoot() {
   // const db = await initializeDatabase(); // e.g., lovefield or custom IndexedDB abstraction
   // const repository = new MyRepository(db);
   // const service = new MyBackendService(repository); // Backend service depends on repository
-  const service = new DocumentService();
   return {
-    handleMessage: createBackendMessageHandler(service)
+    handleMessage: createBackendMessageHandler()
   };
 }
 
-function createBackendMessageHandler(service: DocumentService) {
+function createBackendMessageHandler() {
   return async (event: ExtendableMessageEvent) => {
     if (appService === null) {
       console.error('App Service not running. Unable to respond to the message.');
