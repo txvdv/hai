@@ -76,11 +76,11 @@ test.describe('/composer route tests', () => {
     // Check that clicking on the navigation links works as expected
 
     // Click the "Dashboard" link
-    await page.locator('a > span:has-text("Dashboard")').click();
+    await page.locator('.navigation a > span:has-text("Dashboard")').click();
     await expect(page).toHaveURL('/dashboard');
 
     // Click the "Composer" link to navigate back
-    await page.locator('a > span:has-text("Composer")').click();
+    await page.locator('.navigation a > span:has-text("Composer")').click();
     await expect(page).toHaveURL('/composer');
   });
 });
