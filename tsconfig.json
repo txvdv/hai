@@ -4,10 +4,13 @@
   "files": [],
   "references": [
     {
+      "path": "./apps/pwa"
+    },
+    {
       "path": "./apps/pwa-e2e"
     },
     {
-      "path": "./apps/pwa"
+      "path": "./packages/app-service"
     },
     {
       "path": "./packages/document-service"

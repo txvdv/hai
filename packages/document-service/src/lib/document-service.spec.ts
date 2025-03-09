@@ -9,7 +9,7 @@ describe('DocumentService', () => {
 
   describe('getDocument', () => {
     it('should return a document by its ID', async () => {
-      const document = await service.createDocument('Sample Content');
+      const document = await service.createDocument('Sample Document');
       const fetchedDocument = await service.getDocument(document.id);
 
       expect(fetchedDocument).toEqual(document);
