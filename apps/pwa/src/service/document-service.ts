@@ -1,11 +1,11 @@
 import {
-  assertApiSuccess,
-  buildMessage, DocumentCreateMessage, DocumentCreateResponseMessage,
+  DocumentCreateMessage, DocumentCreateResponseMessage,
   DocumentDeleteMessage, DocumentDeleteResponseMessage,
   DocumentListMessage, DocumentListResponseMessage,
   DocumentUpdateMessage,
   DocumentUpdateResponseMessage
-} from '../message-interface';
+} from '@hai/document-service';
+import { assertApiSuccess, buildMessage } from '@hai/app-messaging';
 import { sendAndAwaitServiceWorker } from './app-service';
 
 export class DocumentService {
