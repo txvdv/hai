@@ -4,5 +4,6 @@ export {
 
 export type {
   AppService,
-  PingMessage
+  PingMessage,
+  PingResponseMessage
 } from './lib/app-service.js';

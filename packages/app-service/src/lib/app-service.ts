@@ -81,6 +81,6 @@ export type PingMessage = MessageEnvelope<string> & {
   type: 'App.Ping';
 }
 
-type PingResponseMessage = MessageResponse<string> & {
+export type PingResponseMessage = MessageResponse<string> & {
   type: 'App.Pong';
 }
