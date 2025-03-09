@@ -6,10 +6,10 @@ import { NavigationRoute, registerRoute } from 'workbox-routing'
 import type {AppService} from '@hai/app-service';
 import {getAppService} from '@hai/app-service';
 import { DocumentService } from '@hai/document-service';
-import {
-  buildApiResponse,
-  buildResponse, DocumentDeleteResponseMessage, DocumentUpdateResponseMessage
-} from './message-interface';
+// import {
+//   buildApiResponse,
+//   buildResponse, DocumentDeleteResponseMessage, DocumentUpdateResponseMessage
+// } from './message-interface';
 
 declare let self: ServiceWorkerGlobalScope
 
@@ -84,85 +84,21 @@ async function startServiceRoot() {
 
 function createBackendMessageHandler(service: DocumentService) {
   return async (event: ExtendableMessageEvent) => {
-    console.log('Handling message:', event.data);
-
-    const req = event.data;
-
-    if (req.type === 'App.Ping' && appService !== null) {
-      const res = await appService.handleMessageAsync(event.data);
-      if (!event.source) {
-        console.error('event.source is null. Unable to respond to the message.');
-        return; // Stop execution if event.source is null
-      }
-      event.source.postMessage(res);
-    } else if (req.type === 'Document.List') {
-      const documents = await service.getDocuments();
-      const {correlationId} = req.metadata;
-      if (!event.source) {
-        console.error('event.source is null. Unable to respond to the message.');
-        return; // Stop execution if event.source is null
-      }
-      const res = buildApiResponse(
-        'Document.List.Response', 'success', {
-          payload: { documents },
-          correlationId
-        }
-      );
-      event.source.postMessage(res);
-    } else if (req.type === 'Document.Create') {
-      if (!event.source) {
-        console.error('event.source is null. Unable to respond to the message.');
-        return; // Stop execution if event.source is null
-      }
-
-      const {content} = req.payload;
-      const {correlationId} = req.metadata;
-      const document = await service.createDocument(content);
-      const res = buildResponse(
-        'Document.Create.Response', 'success', {
-          payload: document,
-          correlationId
-        }
-      )
-      event.source.postMessage(res);
-    } else if (req.type === 'Document.Update') {
-      const {id, content} = req.payload;
-      await service.updateDocument(id, content);
-      const {correlationId} = req.metadata;
-      if (!event.source) {
-        console.error('event.source is null. Unable to respond to the message.');
-        return; // Stop execution if event.source is null
-      }
-
-      const res: DocumentUpdateResponseMessage = buildApiResponse(
-        'Document.Update.Response', 'success', {
-          payload: { id, content },
-          correlationId
-        }
-      )
-      // Post the response back to the client
-      event.source.postMessage(res);
+    if (appService === null) {
+      console.error('App Service not running. Unable to respond to the message.');
+      return; // Stop execution if event.source is null
     }
 
-    else if (req.type === 'Document.Delete') {
-      const {id} = req.payload;
-      await service.deleteDocument(id);
-      const {correlationId} = req.metadata;
-
-      if (!event.source) {
-        console.error('event.source is null. Unable to respond to the message.');
-        return; // Stop execution if event.source is null
-      }
-
-      const res: DocumentDeleteResponseMessage = buildApiResponse(
-        "Document.Delete.Response", "success", {
-          payload: { id },
-          correlationId
-        }
-      )
-      // Post the response back to the client
-      event.source.postMessage(res);
+    if (!event.source) {
+      console.error('event.source is null. Unable to respond to the message.');
+      return; // Stop execution if event.source is null
     }
+
+    const msg = event.data;
+    console.log('Message:', msg);
+    const resMsg = await appService.handleMessageAsync(msg);
+    console.log('Message Response:', resMsg);
+    event.source.postMessage(resMsg);
   };
 }
 
