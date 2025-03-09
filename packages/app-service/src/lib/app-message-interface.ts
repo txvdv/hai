@@ -150,7 +150,18 @@ export function buildMessageResponse<T extends string, P>(
 }
 
 /**
- * Document Messaging API
+ * Ping Pong
+ */
+export type PingMessage = MessageEnvelope<string> & {
+  type: 'App.Ping';
+}
+
+export type PingResponseMessage = MessageResponse<string> & {
+  type: 'App.Pong';
+}
+
+/**
+ * Document Messaging
  */
 export type DocumentCreateMessage = MessageEnvelope<DocumentCreatePayload> & {
   type: 'Document.Create';
