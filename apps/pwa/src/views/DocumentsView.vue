@@ -87,7 +87,7 @@ onMounted(() => {
   <div class="flex flex-wrap">
     <div class="w-full md:w-1/2 lg:w-1/3 p-4">
       <textarea v-model="doc.content" id="message" rows="20" class="document-textarea" placeholder="Write here..."></textarea>
-      <button type="button"  @click="saveDocument" class="btn-light">Save</button>
+      <button type="button" @click="saveDocument" class="btn-light">Save</button>
     </div>
     <div class="w-full md:w-1/2 lg:w-1/3 p-4">
       <button
@@ -98,14 +98,14 @@ onMounted(() => {
       <ul>
         <li v-for="doc in docs" :key="doc.id" class="mb-4">
           <div>{{ doc.content }}</div>
-          <span @click="editDocument(doc.id)"
-                class="btn-link">
-        edit
-      </span> -
-          <span @click="deleteDocument(doc.id)"
-                class="btn-link">
-        delete
-      </span>
+          <button type="button"
+                @click="editDocument(doc.id)"
+                aria-label="Edit Document"
+                class="btn-link">edit</button> -
+          <button type="button"
+                  @click="deleteDocument(doc.id)"
+                  aria-label="Delete Document"
+                  class="btn-link">delete</button>
         </li>
       </ul>
     </div>
