@@ -1,0 +1,9 @@
+{
+  "name": "@hai/service-core",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/service-core/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project @hai/service-core --web",
+  "targets": {}
+}

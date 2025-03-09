@@ -26,6 +26,9 @@
     },
     {
       "path": "./packages/shared-utils"
+    },
+    {
+      "path": "./packages/service-core"
     }
   ],
   "ts-node": {
