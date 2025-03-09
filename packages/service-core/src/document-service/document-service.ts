@@ -45,31 +45,33 @@ export class DocumentService {
 }
 
 export interface DocumentRepository {
-  getDocument(id: string): Promise<Document | undefined>;
+  getDocument(id: string): Promise<Document | null>;
 
   getDocuments(): Promise<Document[]>;
 
-  save(doc: Document): Promise<void>;
+  save(doc: Document): void;
 
-  deleteDocument(id: string): Promise<void>;
+  deleteDocument(id: string): void;
 }
 
 export class InMemoryDocumentRepository implements DocumentRepository {
   documents: Document[] = [];
 
   async getDocument(id: string) {
-    return this.documents.find(doc => doc.id === id);
+    const doc = this.documents.find(doc => doc.id === id);
+    if (!doc) return null;
+    return doc;
   }
 
   async getDocuments() {
     return this.documents;
   }
 
-  async save(doc: Document) {
+  save(doc: Document) {
     this.documents.push(doc);
   }
 
-  async deleteDocument(id: string) {
+  deleteDocument(id: string) {
     this.documents = this.documents.filter(doc => doc.id !== id);
   }
 }
