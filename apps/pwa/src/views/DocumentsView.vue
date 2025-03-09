@@ -76,9 +76,9 @@ function resetDocument() {
 }
 
 onMounted(() => {
-  setTimeout(() => {
+  // setTimeout(() => {
     getDocuments();
-  }, 5000);
+  // }, 5000);
 })
 </script>
 

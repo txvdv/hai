@@ -27,7 +27,10 @@ describe('WorkerView', () => {
           core: {
             documentService: documentService
           }
-        }
+        },
+        stubs: {
+          'router-link': true, // Stub the router-link
+        },
       }
     });
     await flushPromises();
