@@ -20,6 +20,9 @@
     },
     {
       "path": "./packages/ui-vue-library"
+    },
+    {
+      "path": "./packages/app-messaging"
     }
   ],
   "ts-node": {
