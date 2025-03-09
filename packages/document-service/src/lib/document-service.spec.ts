@@ -1,10 +1,13 @@
-import { DocumentService } from './document-service.js';
+import { InMemoryDocumentRepository, DocumentService } from './document-service.js';
 
 describe('DocumentService', () => {
   let service: DocumentService;
 
   beforeEach(() => {
-    service = new DocumentService();
+    const documentRepository = new InMemoryDocumentRepository();
+    service = new DocumentService({
+      documentRepository
+    });
   });
 
   describe('getDocument', () => {
@@ -90,3 +93,4 @@ describe('DocumentService', () => {
     });
   });
 });
+

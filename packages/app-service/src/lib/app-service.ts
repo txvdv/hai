@@ -1,5 +1,5 @@
 import { MessageResponse, MessageEnvelope, buildMessageResponse } from '@hai/app-messaging';
-import { DocumentService } from '@hai/document-service';
+import { DocumentService, InMemoryDocumentRepository } from '@hai/document-service';
 
 export function getAppService(): AppService {
   return AppServiceImpl.getInstance();
@@ -27,7 +27,8 @@ class AppServiceImpl implements AppService {
 
   private constructor(config: AppServiceConfig = {}) {
     this.config = config;
-    this.documentService = new DocumentService();
+    const documentRepository = new InMemoryDocumentRepository();
+    this.documentService = new DocumentService({documentRepository});
   }
 
   public static getInstance(config: AppServiceConfig = {}): AppServiceImpl {
