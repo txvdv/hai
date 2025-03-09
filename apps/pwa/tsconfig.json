@@ -10,6 +10,9 @@
       "path": "../../packages/app-service"
     },
     {
+      "path": "../../packages/app-messaging"
+    },
+    {
       "path": "../../packages/ui-vue-library"
     },
     {
