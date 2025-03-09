@@ -72,13 +72,13 @@ describe('DocumentService', () => {
     });
   });
 
-  describe.skip('deleteDocument', () => {
+  describe('deleteDocument', () => {
     it('should delete a document by its ID', async () => {
       const document = await service.createDocument('Content to delete');
       await service.deleteDocument(document.id);
 
       const deletedDocument = await service.getDocument(document.id);
-      expect(deletedDocument).toBeUndefined();
+      expect(deletedDocument).toBeNull();
 
       const documents = await service.getDocuments();
       expect(documents).toEqual([]);

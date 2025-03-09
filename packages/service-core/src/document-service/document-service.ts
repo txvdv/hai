@@ -27,7 +27,7 @@ export class DocumentService {
       id: createUUID(),
       content
     };
-    await this.documentRepository.save(document);
+    this.documentRepository.save(document);
     return document;
   }
 
@@ -35,7 +35,7 @@ export class DocumentService {
     const document = await this.documentRepository.getDocument(id)
     if (document) {
       document.content = content;
-      await this.documentRepository.save(document);
+      this.documentRepository.save(document);
     }
   }
 
