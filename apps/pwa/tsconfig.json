@@ -13,6 +13,9 @@
       "path": "../../packages/app-messaging"
     },
     {
+      "path": "../../packages/shared-utils"
+    },
+    {
       "path": "../../packages/ui-vue-library"
     },
     {

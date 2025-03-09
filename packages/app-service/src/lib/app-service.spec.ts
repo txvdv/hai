@@ -1,4 +1,5 @@
 import { AppService, getAppService } from './app-service.js';
+import { createUUID } from '@hai/shared-utils'
 import { buildMessage, MessageEnvelope } from '@hai/app-messaging';
 
 describe('App Service', () => {
@@ -40,13 +41,6 @@ describe('App Service', () => {
 
 function testMessage(): MessageEnvelope {
   return buildMessage('App.Ping', {
-    correlationId: generateUniqueId()
+    correlationId: createUUID()
   })
-}
-
-/**
- * Helper function to generate a unique message ID (example implementation)
- */
-function generateUniqueId(): string {
-  return [...Array(9)].map(() => Math.random().toString(36)[2]).join('');
 }

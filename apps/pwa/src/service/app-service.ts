@@ -1,3 +1,4 @@
+import { createUUID } from '@hai/shared-utils'
 import {buildMessage, MessageEnvelope} from '@hai/app-messaging';
 import { PingMessage, PingResponseMessage } from '@hai/app-service';
 
@@ -24,7 +25,7 @@ export async function sendAndAwaitServiceWorker<ReqType extends MessageEnvelope,
     throw new Error('Service worker controller not available.');
   }
 
-  const correlationId = generateUniqueId();
+  const correlationId = createUUID();
   const messageWithCorrelationId = {
     ...message,
     metadata: {
@@ -56,11 +57,6 @@ export async function sendAndAwaitServiceWorker<ReqType extends MessageEnvelope,
     // Post the message to the service worker
     navigator!.serviceWorker!.controller!.postMessage(messageWithCorrelationId);
   });
-}
-
-// Utility function: Create a unique correlationId
-function generateUniqueId() {
-  return [...Array(9)].map(() => Math.random().toString(36)[2]).join('');
 }
 
 // // TODO: WORKS, but disabled until a good usecase is found

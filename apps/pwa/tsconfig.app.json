@@ -41,6 +41,9 @@
       "path": "../../packages/app-messaging/tsconfig.lib.json"
     },
     {
+      "path": "../../packages/shared-utils/tsconfig.lib.json"
+    },
+    {
       "path": "../../packages/ui-vue-library/tsconfig.lib.json"
     }
   ]

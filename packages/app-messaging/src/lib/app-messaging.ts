@@ -1,3 +1,5 @@
+import { createUUID } from '@hai/shared-utils'
+
 export function appMessaging(): string {
   return 'app-messaging';
 }
@@ -29,19 +31,12 @@ export function buildMessage<T, M extends string>(
     type,
     context: config.context,
     metadata: {
-      messageId: generateUniqueId(),
+      messageId: createUUID(),
       correlationId: config.correlationId,
       timestamp: new Date().toISOString()
     },
     payload: config.payload
   };
-}
-
-/**
- * Helper function to generate a unique message ID (example implementation)
- */
-function generateUniqueId(): string {
-  return [...Array(9)].map(() => Math.random().toString(36)[2]).join('');
 }
 
 export interface ResponseEnvelope<T = any> extends MessageEnvelope<T> {
@@ -98,7 +93,7 @@ export function buildResponse<T extends string, P>(
     status,
     context: config.context,
     metadata: {
-      messageId: generateUniqueId(),
+      messageId: createUUID(),
       correlationId: config.correlationId,
       timestamp: new Date().toISOString()
     },
@@ -132,7 +127,7 @@ export function buildMessageResponse<T extends string, P>(
       status,
       context: config.context,
       metadata: {
-        messageId: generateUniqueId(),
+        messageId: createUUID(),
         correlationId: config.correlationId,
         timestamp: new Date().toISOString(),
       },
@@ -144,7 +139,7 @@ export function buildMessageResponse<T extends string, P>(
       status,
       context: config.context,
       metadata: {
-        messageId: generateUniqueId(),
+        messageId: createUUID(),
         correlationId: config.correlationId,
         timestamp: new Date().toISOString(),
       },
