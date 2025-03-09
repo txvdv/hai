@@ -102,18 +102,18 @@ export function buildResponse<T extends string, P>(
   };
 }
 
-export type ApiResponse<T> = ResponseEnvelope<T> & (
+export type MessageResponse<T> = ResponseEnvelope<T> & (
   | { status: 'success'; payload: T }
   | { status: 'error'; payload: ProblemDetails }
   );
 
 export function assertApiSuccess<T>(
-  response: ApiResponse<T>
-): response is ApiResponse<T> & { status: 'success'; payload: T } {
+  response: MessageResponse<T>
+): response is MessageResponse<T> & { status: 'success'; payload: T } {
   return response.status === 'success';
 }
 
-export function buildApiResponse<T extends string, P>(
+export function buildMessageResponse<T extends string, P>(
   type: T,
   status: 'success' | 'error',
   config: {
@@ -121,7 +121,7 @@ export function buildApiResponse<T extends string, P>(
     payload: P | ProblemDetails;
     correlationId?: string;
   }
-): { type: T } & (ApiResponse<P> & { status: 'success'; payload: P } | ApiResponse<P> & { status: 'error'; payload: ProblemDetails }) {
+): { type: T } & (MessageResponse<P> & { status: 'success'; payload: P } | MessageResponse<P> & { status: 'error'; payload: ProblemDetails }) {
   if (status === 'success') {
     return {
       type,
@@ -133,7 +133,7 @@ export function buildApiResponse<T extends string, P>(
         timestamp: new Date().toISOString(),
       },
       payload: config.payload as P, // Narrow payload type
-    } as { type: T } & ApiResponse<P> & { status: 'success'; payload: P };
+    } as { type: T } & MessageResponse<P> & { status: 'success'; payload: P };
   } else {
     return {
       type,
@@ -145,7 +145,7 @@ export function buildApiResponse<T extends string, P>(
         timestamp: new Date().toISOString(),
       },
       payload: config.payload as ProblemDetails, // Narrow payload type
-    } as { type: T } & ApiResponse<P> & { status: 'error'; payload: ProblemDetails };
+    } as { type: T } & MessageResponse<P> & { status: 'error'; payload: ProblemDetails };
   }
 }
 
@@ -160,7 +160,7 @@ export type DocumentCreatePayload = {
   content: string;
 }
 
-export type DocumentCreateResponseMessage = ApiResponse<DocumentCreateResponsePayload> & {
+export type DocumentCreateResponseMessage = MessageResponse<DocumentCreateResponsePayload> & {
   type: 'Document.Create.Response';
 }
 
@@ -173,7 +173,7 @@ export type DocumentListMessage = MessageEnvelope<undefined> & {
   type: 'Document.List';
 }
 
-export type DocumentListResponseMessage = ApiResponse<DocumentListResponsePayload> & {
+export type DocumentListResponseMessage = MessageResponse<DocumentListResponsePayload> & {
   type: 'Document.List.Response';
 }
 
@@ -190,7 +190,7 @@ export type DocumentUpdatePayload = {
   content: string;
 }
 
-export type DocumentUpdateResponseMessage = ApiResponse<DocumentUpdateResponsePayload> & {
+export type DocumentUpdateResponseMessage = MessageResponse<DocumentUpdateResponsePayload> & {
   type: 'Document.Update.Response';
 }
 
@@ -207,7 +207,7 @@ export type DocumentDeletePayload = {
   id: string;
 }
 
-export type DocumentDeleteResponseMessage = ApiResponse<DocumentDeleteResponsePayload> & {
+export type DocumentDeleteResponseMessage = MessageResponse<DocumentDeleteResponsePayload> & {
   type: 'Document.Delete.Response';
 }
 

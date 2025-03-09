@@ -1,9 +1,13 @@
+import { MessageResponse, MessageEnvelope, buildMessageResponse } from './app-message-interface.js';
+
 export function getAppService(): AppService {
   return AppServiceImpl.getInstance();
 }
 
-interface AppService {
-  handleMessage(msg: string): Promise<string>;
+export interface AppService {
+  handleMessage(msg: MessageEnvelope): void;
+
+  handleMessageAsync(msg: MessageEnvelope): Promise<MessageResponse<any>>;
 
   startup(): Promise<void>;
 
@@ -19,12 +23,10 @@ class AppServiceImpl implements AppService {
   private started: boolean = false;
   private readonly config: AppServiceConfig;
 
-  // Private constructor, now configurable
   private constructor(config: AppServiceConfig = {}) {
     this.config = config;
   }
 
-  // Static method to get (or create) the singleton instance
   public static getInstance(config: AppServiceConfig = {}): AppServiceImpl {
     if (this.instance === null) {
       this.instance = new AppServiceImpl(config);
@@ -32,12 +34,30 @@ class AppServiceImpl implements AppService {
     return this.instance;
   }
 
-  async handleMessage(msg: string): Promise<string> {
+  handleMessage(msg: MessageEnvelope): void {
+    if (!this.started) {
+      throw new Error('AppService not started.');
+    }
+  }
+
+  async handleMessageAsync(msg: MessageEnvelope): Promise<MessageResponse<any>> {
     if (!this.started) {
       throw new Error('AppService not started.');
     }
 
-    return `${msg} + app-service`;
+    const {correlationId} = msg.metadata;
+    if (!correlationId) {
+      throw new Error('correlationId must be provided.');
+    }
+
+    const res = buildMessageResponse(
+      'Message.Response', 'success', {
+        payload: 'pong',
+        correlationId
+      }
+    )
+
+    return res;
   }
 
   async startup(): Promise<void> {

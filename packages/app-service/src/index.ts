@@ -1,1 +1,1 @@
-export * from './lib/app-service.js';
+export {getAppService} from './lib/app-service.js';
