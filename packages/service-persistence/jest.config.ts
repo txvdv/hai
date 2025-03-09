@@ -12,7 +12,7 @@ swcJestConfig.swcrc = false;
 export default {
   displayName: '@hai/service-persistence',
   preset: '../../jest.preset.js',
-  testEnvironment: 'node',
+  testEnvironment: 'jsdom',
   transform: {
     '^.+\\.[tj]s$': ['@swc/jest', swcJestConfig],
   },

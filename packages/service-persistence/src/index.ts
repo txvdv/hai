@@ -1,1 +1,1 @@
-export * from './lib/service-persistence.js';
+export * from './lovefield/service-persistence.js';
