@@ -35,6 +35,9 @@
       "path": "../../packages/document-service/tsconfig.lib.json"
     },
     {
+      "path": "../../packages/app-service/tsconfig.lib.json"
+    },
+    {
       "path": "../../packages/ui-vue-library/tsconfig.lib.json"
     }
   ]

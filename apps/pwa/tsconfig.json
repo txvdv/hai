@@ -7,6 +7,9 @@
       "path": "../../packages/document-service"
     },
     {
+      "path": "../../packages/app-service"
+    },
+    {
       "path": "../../packages/ui-vue-library"
     },
     {

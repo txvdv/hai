@@ -3,7 +3,8 @@
 import { cleanupOutdatedCaches, createHandlerBoundToURL, precacheAndRoute } from 'workbox-precaching'
 import { clientsClaim } from 'workbox-core'
 import { NavigationRoute, registerRoute } from 'workbox-routing'
-
+import type {AppService} from '@hai/app-service';
+import {getAppService} from '@hai/app-service';
 import { DocumentService } from '@hai/document-service';
 import {
   buildApiResponse,
@@ -31,15 +32,19 @@ registerRoute(new NavigationRoute(
 self.skipWaiting()
 clientsClaim()
 
+let serviceRoot: MessageHandler | null = null;
 interface MessageHandler {
   handleMessage(event: ExtendableMessageEvent): Promise<void>;
 }
 
-let serviceRoot: MessageHandler | null = null;
+let appService: AppService | null = null;
 
 self.addEventListener('activate', async (event) => {
   console.log('Service Worker activating...');
   const preload = async () => {
+    appService = getAppService();
+    await appService.startup()
+
     serviceRoot = await startServiceRoot();
     console.log('Service composition root preloaded during activation.');
   };
@@ -53,9 +58,10 @@ self.addEventListener('message', async (event: ExtendableMessageEvent) => {
 
   if ((event.data.type === "SetupNotificationChannel" || event.data.type === "KeepAlive")) return;
 
-  if (serviceRoot) {
+  if (appService && serviceRoot) {
     console.log('Service Worker serviceRoot detected. Handling message...');
     try {
+      // return await appService.handleMessageAsync(event.data);
       return await serviceRoot.handleMessage(event);
     } catch (error) {
       console.error(error);
@@ -82,8 +88,14 @@ function createBackendMessageHandler(service: DocumentService) {
 
     const req = event.data;
 
-    // TODO: move this into a router, which then invokes a controller
-    if (req.type === 'Document.List') {
+    if (req.type === 'App.Ping' && appService !== null) {
+      const res = await appService.handleMessageAsync(event.data);
+      if (!event.source) {
+        console.error('event.source is null. Unable to respond to the message.');
+        return; // Stop execution if event.source is null
+      }
+      event.source.postMessage(res);
+    } else if (req.type === 'Document.List') {
       const documents = await service.getDocuments();
       const {correlationId} = req.metadata;
       if (!event.source) {
