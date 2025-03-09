@@ -50,8 +50,8 @@ class AppServiceImpl implements AppService {
       throw new Error('correlationId must be provided.');
     }
 
-    const res = buildMessageResponse(
-      'Message.Response', 'success', {
+    const res: PingResponseMessage = buildMessageResponse(
+      'App.Pong', 'success', {
         payload: 'pong',
         correlationId
       }
@@ -72,4 +72,15 @@ class AppServiceImpl implements AppService {
     AppServiceImpl.instance = null;
     console.log('Service has been torn down and instance reset.');
   }
+}
+
+/**
+ * Ping Pong
+ */
+export type PingMessage = MessageEnvelope<string> & {
+  type: 'App.Ping';
+}
+
+type PingResponseMessage = MessageResponse<string> & {
+  type: 'App.Pong';
 }
