@@ -1,5 +1,5 @@
 import { MessageResponse, MessageEnvelope, buildMessageResponse } from '@hai/app-messaging';
-import { DocumentService, InMemoryDocumentRepository } from '@hai/document-service';
+import { DocumentService, InMemoryDocumentRepository } from '@hai/service-core';
 
 export function getAppService(): AppService {
   return AppServiceImpl.getInstance();

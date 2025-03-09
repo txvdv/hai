@@ -4,7 +4,7 @@
   "include": [],
   "references": [
     {
-      "path": "../../packages/document-service"
+      "path": "../../packages/service-core"
     },
     {
       "path": "../../packages/app-service"

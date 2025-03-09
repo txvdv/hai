@@ -32,7 +32,7 @@
   "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.vue"],
   "references": [
     {
-      "path": "../../packages/document-service/tsconfig.lib.json"
+      "path": "../../packages/service-core/tsconfig.lib.json"
     },
     {
       "path": "../../packages/app-service/tsconfig.lib.json"
