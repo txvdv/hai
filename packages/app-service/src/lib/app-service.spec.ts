@@ -39,7 +39,7 @@ describe('App Service', () => {
 });
 
 function testMessage(): MessageEnvelope {
-  return buildMessage('Message', {
+  return buildMessage('App.Ping', {
     correlationId: generateUniqueId()
   })
 }
