@@ -2,12 +2,12 @@ import {buildMessage, MessageEnvelope} from '@hai/app-messaging';
 import { PingMessage, PingResponseMessage } from '@hai/app-service';
 
 export class AppService {
-  async pingPong(content: string) {
+  async pingPong(message: string) {
     const req: PingMessage = buildMessage('App.Ping', {
-        payload: 'ping'
+        payload: message
       }
     );
-    await sendAndAwaitServiceWorker<
+    return await sendAndAwaitServiceWorker<
       PingMessage,
       PingResponseMessage
     >(req);

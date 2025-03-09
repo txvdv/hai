@@ -21,6 +21,11 @@ type ExistingDocument = {
 
 const core = inject('core') as ClientCore
 
+async function doPingPong() {
+  const res = await core.appService.pingPong('ping')
+  console.log(res)
+}
+
 const doc = ref<ExistingDocument>({
   id: '',
   content: ''
@@ -91,6 +96,10 @@ onMounted(() => {
     </div>
     <div class="w-full md:w-1/2 lg:w-1/3 p-4">
       <button
+        @click="doPingPong"
+        class="mb-8 btn-link">
+        Ping
+      </button> - <button
         @click="newDocument"
         class="mb-8 btn-link">
         New document
