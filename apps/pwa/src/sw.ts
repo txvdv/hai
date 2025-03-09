@@ -51,7 +51,7 @@ self.addEventListener('message', async (event: ExtendableMessageEvent) => {
 
   if (!event.data || !event.data.type) return;
 
-  // if ((event.data.type === "SetupNotificationChannel" || event.data.type === "KeepAlive")) return;
+  if ((event.data.type === "SetupNotificationChannel" || event.data.type === "KeepAlive")) return;
 
   if (serviceRoot) {
     console.log('Service Worker serviceRoot detected. Handling message...');
