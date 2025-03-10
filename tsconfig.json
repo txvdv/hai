@@ -22,9 +22,6 @@
       "path": "./packages/service-core"
     },
     {
-      "path": "./packages/service-persistence"
-    },
-    {
       "path": "./service/infrastructure/service-infra"
     },
     {
