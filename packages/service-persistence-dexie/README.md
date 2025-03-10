@@ -1,11 +1,58 @@
-# service-persistence-dexie
+I am using repositories
 
-This library was generated with [Nx](https://nx.dev).
+```typescript
+class DocumentRepository {
+  constructor(
+    private db: DxDatabase) {
+  }
 
-## Building
+  save(doc: Document): void {
+    throw new Error('Method not implemented.');
+  }
 
-Run `nx build service-persistence-dexie` to build the library.
+  deleteDocument(id: string): void {
+    throw new Error('Method not implemented.');
+  }
+}
+```
 
-## Running unit tests
+Here is a service using the UnitOfWork
 
-Run `nx test service-persistence-dexie` to execute the unit tests via [Vitest](https://vitest.dev/).
+```typescript
+class SomeService {
+  repo: DocumentRepository
+  uow: UnitOfWork
+  async someUseCase() {
+    uow.start()
+    await uow.commit(
+      this.repo.deleteDocument(),
+      this.repo.save(),
+    )
+  }
+}
+```
+
+The UnitOfWork should already have access to the database at the time of using it in the class
+The uow must be started, and there cannot be already another one running
+
+---
+
+Issues with the implementation 
+
+There can be multiple repositories, so the commit function must detect which repositories it needs to use
+In addition, the operations are not async, but are wrapper functions that are executed async during commit
+
+```typescript
+class SomeService {
+  docRepo: DocumentRepository
+  userRepo: UserRepository
+  uow: UnitOfWork
+  async someUseCase() {
+    uow.start()
+    await uow.commit(
+      this.userRepo.update(),
+      this.docRepo.save(),
+    )
+  }
+}
+```
