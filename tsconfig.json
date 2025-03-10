@@ -44,6 +44,9 @@
     },
     {
       "path": "./service/core/core-service"
+    },
+    {
+      "path": "./shared/feature-toggles"
     }
   ],
   "ts-node": {

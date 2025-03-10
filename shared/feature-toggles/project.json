@@ -1,0 +1,9 @@
+{
+  "name": "@hai/feature-toggles",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "shared/feature-toggles/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project @hai/feature-toggles --web",
+  "targets": {}
+}
