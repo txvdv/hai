@@ -13,15 +13,19 @@ export interface ClientCore {
   documentService: DocumentService
 }
 
-const core:ClientCore = {
-  appService: new AppService(),
-  documentService: new DocumentService()
-}
+navigator.serviceWorker.ready.then(() => {
+  console.log('Service Worker ready. Initializing app...');
 
-const app = createApp(App);
-app.use(router);
-app.use(PrimeVueConfig, {
-  theme: DefaultTheme
+  const core:ClientCore = {
+    appService: new AppService(),
+    documentService: new DocumentService()
+  }
+
+  const app = createApp(App);
+  app.use(router);
+  app.use(PrimeVueConfig, {
+    theme: DefaultTheme
+  });
+  app.provide('core', core);
+  app.mount('#root');
 });
-app.provide('core', core);
-app.mount('#root');
