@@ -4,6 +4,9 @@
   "include": [],
   "references": [
     {
+      "path": "../../service/adapter/service-web"
+    },
+    {
       "path": "../../packages/service-core"
     },
     {

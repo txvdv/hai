@@ -3,8 +3,8 @@
 import { cleanupOutdatedCaches, createHandlerBoundToURL, precacheAndRoute } from 'workbox-precaching'
 import { clientsClaim } from 'workbox-core'
 import { NavigationRoute, registerRoute } from 'workbox-routing'
-import type {AppService} from '@hai/app-service';
-import {getAppService} from '@hai/app-service';
+import type {AppService} from '@hai/service-web';
+import {getAppService} from '@hai/service-web';
 
 declare let self: ServiceWorkerGlobalScope
 

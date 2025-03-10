@@ -32,6 +32,18 @@
     },
     {
       "path": "./packages/service-persistence-dexie"
+    },
+    {
+      "path": "./service/infrastructure/service-infra"
+    },
+    {
+      "path": "./service/adapter/service-web"
+    },
+    {
+      "path": "./shared/common-utils"
+    },
+    {
+      "path": "./service/core/core-service"
     }
   ],
   "ts-node": {
