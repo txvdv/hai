@@ -68,7 +68,12 @@ export class InMemoryDocumentRepository implements DocumentRepository {
   }
 
   save(doc: Document) {
-    this.documents.push(doc);
+    const existingIndex = this.documents.findIndex(existingDoc => existingDoc.id === doc.id);
+    if (existingIndex !== -1) {
+      this.documents[existingIndex] = doc;
+    } else {
+      this.documents.push(doc);
+    }
   }
 
   deleteDocument(id: string) {

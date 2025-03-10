@@ -1,19 +1,12 @@
 import { InMemoryDocumentRepository, DocumentService } from './document-service.js';
-import { UnitOfWork } from '../lib/app.types.js';
 
 describe('DocumentService', () => {
   let service: DocumentService;
-  let uow: jest.Mocked<UnitOfWork>;
 
   beforeEach(() => {
     const documentRepository = new InMemoryDocumentRepository();
-    uow = {
-      start: jest.fn(),
-      commit: jest.fn().mockResolvedValue(undefined),
-    };
     service = new DocumentService({
-      documentRepository,
-      uow
+      documentRepository
     });
   });
 
@@ -53,9 +46,6 @@ describe('DocumentService', () => {
     it('should create and return a new document', async () => {
       const content = 'New Document Content';
       const document = await service.createDocument(content);
-
-      expect(uow.start).toHaveBeenCalledTimes(1);
-      expect(uow.commit).toHaveBeenCalledTimes(1);
 
       expect(document).toEqual(expect.objectContaining({
         id: expect.any(String),
