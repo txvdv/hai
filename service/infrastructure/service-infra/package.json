@@ -14,5 +14,10 @@
       "default": "./dist/index.js"
     }
   },
-  "dependencies": {}
+  "dependencies": {
+    "dexie": "4.0.11"
+  },
+  "devDependencies": {
+    "fake-indexeddb": "^6.0.0"
+  }
 }

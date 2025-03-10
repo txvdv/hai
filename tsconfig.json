@@ -25,9 +25,6 @@
       "path": "./packages/service-persistence"
     },
     {
-      "path": "./packages/service-persistence-dexie"
-    },
-    {
       "path": "./service/infrastructure/service-infra"
     },
     {
