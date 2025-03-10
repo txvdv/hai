@@ -12,6 +12,12 @@
   "include": ["src/**/*.ts"],
   "references": [
     {
+      "path": "../../core/core-service/tsconfig.lib.json"
+    },
+    {
+      "path": "../../../packages/app-messaging/tsconfig.lib.json"
+    },
+    {
       "path": "../../infrastructure/service-infra/tsconfig.lib.json"
     },
     {
