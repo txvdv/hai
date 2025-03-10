@@ -68,7 +68,7 @@
   ],
   "targetDefaults": {
     "test": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build", "^build"]
     },
     "e2e-ci--**/*": {
       "dependsOn": ["^build"]

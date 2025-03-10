@@ -29,6 +29,9 @@
     },
     {
       "path": "./packages/service-persistence"
+    },
+    {
+      "path": "./packages/service-persistence-dexie"
     }
   ],
   "ts-node": {
