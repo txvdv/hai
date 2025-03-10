@@ -7,9 +7,6 @@
       "path": "../../core/core-service"
     },
     {
-      "path": "../../../packages/app-messaging"
-    },
-    {
       "path": "../../infrastructure/service-infra"
     },
     {

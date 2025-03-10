@@ -32,19 +32,13 @@
   "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.vue"],
   "references": [
     {
+      "path": "../../service/core/core-service/tsconfig.lib.json"
+    },
+    {
       "path": "../../service/adapter/service-web/tsconfig.lib.json"
     },
     {
-      "path": "../../packages/service-core/tsconfig.lib.json"
-    },
-    {
-      "path": "../../packages/app-service/tsconfig.lib.json"
-    },
-    {
-      "path": "../../packages/app-messaging/tsconfig.lib.json"
-    },
-    {
-      "path": "../../packages/shared-utils/tsconfig.lib.json"
+      "path": "../../shared/common-utils/tsconfig.lib.json"
     },
     {
       "path": "../../packages/ui-vue-library/tsconfig.lib.json"

@@ -1,6 +1,6 @@
 import { buildMessageResponse } from './app-messaging.js';
+import { MessageEnvelope, MessageResponse } from './app-messaging.js';
 import { DxDatabase, DxDocumentRepository, UnitOfWork } from '@hai/service-infra';
-import { MessageEnvelope, MessageResponse } from '@hai/app-messaging';
 import { DocumentService } from '@hai/core-service';
 
 export function getAppService(): AppService {
@@ -136,4 +136,15 @@ class AppServiceImpl implements AppService {
     AppServiceImpl.instance = null;
     console.log('Service has been torn down and instance reset.');
   }
+}
+
+/**
+ * Ping Pong
+ */
+export type PingMessage = MessageEnvelope<string> & {
+  type: 'App.Ping';
+}
+
+export type PingResponseMessage = MessageResponse<string> & {
+  type: 'App.Pong';
 }

@@ -4,8 +4,8 @@ import {
   DocumentListMessage, DocumentListResponseMessage,
   DocumentUpdateMessage,
   DocumentUpdateResponseMessage
-} from '@hai/service-core';
-import { assertApiSuccess, buildMessage } from '@hai/app-messaging';
+} from '@hai/core-service';
+import { assertApiSuccess, buildMessage } from '@hai/service-web';
 import { sendAndAwaitServiceWorker } from './app-service';
 
 export class DocumentService {

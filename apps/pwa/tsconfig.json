@@ -4,19 +4,13 @@
   "include": [],
   "references": [
     {
+      "path": "../../service/core/core-service"
+    },
+    {
       "path": "../../service/adapter/service-web"
     },
     {
-      "path": "../../packages/service-core"
-    },
-    {
-      "path": "../../packages/app-service"
-    },
-    {
-      "path": "../../packages/app-messaging"
-    },
-    {
-      "path": "../../packages/shared-utils"
+      "path": "../../shared/common-utils"
     },
     {
       "path": "../../packages/ui-vue-library"

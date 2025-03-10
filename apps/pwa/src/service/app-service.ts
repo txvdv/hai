@@ -1,6 +1,6 @@
-import { createUUID } from '@hai/shared-utils'
-import {buildMessage, MessageEnvelope} from '@hai/app-messaging';
-import { PingMessage, PingResponseMessage } from '@hai/app-service';
+import { createUUID } from '@hai/common-utils'
+import {buildMessage, MessageEnvelope} from '@hai/service-web';
+import { PingMessage, PingResponseMessage } from '@hai/service-web';
 
 export class AppService {
   async pingPong(message: string) {

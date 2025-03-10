@@ -3,7 +3,9 @@ export {
 } from './app-service.js';
 
 export type {
-  AppService
+  AppService,
+  PingMessage,
+  PingResponseMessage
 } from './app-service.js';
 
 export * from './app-messaging.js';
