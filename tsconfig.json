@@ -13,9 +13,6 @@
       "path": "./packages/ui-vue-library"
     },
     {
-      "path": "./packages/shared-utils"
-    },
-    {
       "path": "./service/infrastructure/service-infra"
     },
     {
