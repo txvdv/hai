@@ -11,7 +11,14 @@
     "module": "esnext"
   },
   "include": ["src/**/*.ts"],
-  "references": [],
+  "references": [
+    {
+      "path": "../../../shared/common-utils/tsconfig.lib.json"
+    },
+    {
+      "path": "../../core/core-service/tsconfig.lib.json"
+    }
+  ],
   "exclude": [
     "vite.config.ts",
     "vite.config.mts",
