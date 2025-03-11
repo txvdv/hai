@@ -14,15 +14,12 @@ test.describe('/composer route tests', () => {
     await expect(navLinks.nth(1)).toHaveText('Dashboard');
     await expect(navLinks.nth(2)).toHaveText('Composer');
 
-    // Verify textarea, buttons, and the document list
-    await expect(page.locator('textarea.document-textarea')).toBeVisible();
-    await expect(page.locator('button:has-text("New document")')).toBeVisible();
-    await expect(page.locator('button:has-text("Save")')).toBeVisible();
+    await expect(page.locator('button:has-text("Create your first document")')).toBeVisible();
   });
 
   test('can create a new document', async ({ page }) => {
     // Click the 'New document' button
-    await page.locator('button:has-text("New document")').click();
+    await page.locator('button:has-text("Create your first document")').click();
 
     // Input text into the textarea
     const textarea = page.locator('textarea.document-textarea');
@@ -35,12 +32,14 @@ test.describe('/composer route tests', () => {
     await expect(page.getByText('This is a new document.')).toBeVisible();
   });
 
-  // TODO: find solution for chromium fail
-  test.skip('can edit a document', async ({ page }) => {
+  test('can edit a document', async ({ page }) => {
     // Create a test document
+    await page.locator('button:has-text("Create your first document")').click();
     const textarea = page.locator('textarea.document-textarea');
     await textarea.fill('Document to change.');
     await page.locator('button:has-text("Save")').click();
+
+    await flushPromises();
 
     await page.waitForSelector('role=button[name="Edit Document"]');
     const editButton = page.getByRole('button', { name: 'Edit Document' }).first();
@@ -56,9 +55,9 @@ test.describe('/composer route tests', () => {
     await expect(page.getByText('Updated document content.')).toBeVisible();
   });
 
-  // TODO: find solution for chromium fail
-  test.skip('can delete a document', async ({ page }) => {
+  test('can delete a document', async ({ page }) => {
     // Create a test document
+    await page.locator('button:has-text("Create your first document")').click();
     const textarea = page.locator('textarea.document-textarea');
     await textarea.fill('Document.');
     await page.locator('button:has-text("Save")').click();

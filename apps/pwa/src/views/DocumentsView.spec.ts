@@ -1,7 +1,8 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { mount, VueWrapper, createWrapperError, DOMWrapper } from '@vue/test-utils';
+import { describe, it, expect, beforeEach } from 'vitest';
+import { mount, VueWrapper, createWrapperError, DOMWrapper, ComponentMountingOptions } from '@vue/test-utils';
 import DocumentsView from './DocumentsView.vue';
-import * as mod from '../service/document-service';
+import { MockProxy, mock } from 'vitest-mock-extended';
+import {DocumentService} from '../service/document-service';
 
 // Set up the initial state
 let mockDocuments = [
@@ -14,135 +15,134 @@ let mockDocuments = [
     content: 'Document 2',
   },
 ];
-const DocumentServiceMock = vi.fn();
-DocumentServiceMock.prototype.getDocuments = vi.fn().mockResolvedValue(mockDocuments);
-DocumentServiceMock.prototype.createDocument = vi.fn().mockResolvedValue({
-  id: '789',
-  content: 'New Document',
-});
-DocumentServiceMock.prototype.updateDocument = vi.fn().mockResolvedValue({
-  id: '123',
-  content: 'Updated Document 1',
-});
-DocumentServiceMock.prototype.deleteDocument = vi
-  .fn()
-  .mockResolvedValue(undefined);
-
-vi.spyOn(mod, 'DocumentService').mockImplementation(DocumentServiceMock);
 
 describe('DocumentsView', () => {
-  let documentService: mod.DocumentService;
+  let mockServiceWorkerController: MockProxy<ServiceWorker>;
+  let mockServiceWorker: MockProxy<ServiceWorkerContainer>;
+  let mockDocService: MockProxy<DocumentService>;
   let wrapper: VueWrapper<typeof DocumentsView>;
+  let mountOptions: ComponentMountingOptions<typeof DocumentsView>
 
-  const doDeleteDocument = (id: string) => {
-    wrapper.vm.deleteDocument(id);
-  };
-  const doEditDocument = (id: string) => {
-    wrapper.vm.editDocument(id);
-  };
-  const domDocumentInput = () => {
-    return wrapper.find('textarea');
-  };
-  const domSave = () => {
-    return wrapper.find('button.btn-light');
-  };
-  const domText = () => {
-    return wrapper.text();
-  };
+  // delayed do mount due to service call onMount
+  const doMount = async () => {
+    wrapper = mount(DocumentsView, mountOptions);
+    await flushPromises();
+  }
 
   beforeEach(async () => {
-    documentService = new DocumentServiceMock();
-    wrapper = mount(DocumentsView, {
+    mockDocService = mock<DocumentService>();
+    mockDocService.getDocuments.mockResolvedValue([])
+
+    mockServiceWorkerController = mock<ServiceWorker>();
+    mockServiceWorker = mock<ServiceWorkerContainer>();
+    Object.defineProperty(mockServiceWorker, 'controller', {
+      value: mockServiceWorkerController,
+      writable: true,
+    });
+    Object.defineProperty(mockServiceWorker, 'ready', {
+      value: Promise.resolve(),
+      writable: true,
+    });
+    Object.defineProperty(navigator, 'serviceWorker', {
+      value: mockServiceWorker,
+      writable: true,
+    });
+
+    mountOptions = {
       global: {
         provide: {
           core: {
-            documentService: documentService,
+            documentService: mockDocService,
           },
         },
         stubs: {
           'router-link': true, // Stub the router-link
         },
       },
-    });
-    // await flushPromises();
+    }
+  });
+
+  it('fetches the document on mount', async () => {
+    await doMount()
+    expect(mockDocService.getDocuments).toHaveBeenCalled();
+  });
+
+  it('shows a message when there is no content yet created', async () => {
+    await doMount()
+    expect(wrapper.text()).toContain('Create your first document');
+  });
+
+  it('shows the textarea when create a document is clicked', async () => {
+    await doMount()
+    const createBtn = wrapper.find('button[aria-label="Create Document"]');
+    await createBtn.trigger('click');
+    expect(wrapper.find('#document').isVisible()).toBe(true);
+    const saveBtn = wrapper.find('button[aria-label="Save Document"]');
+    expect (saveBtn.attributes('disabled')).toBe('')
+  });
+
+  it('saves new content', async () => {
+    await doMount()
+    const createBtn = wrapper.find('button[aria-label="Create Document"]');
+    await createBtn.trigger('click');
+    await wrapper.find('textarea').setValue('New Document');
+    const saveBtn = wrapper.find('button[aria-label="Save Document"]');
+    await saveBtn.trigger('click')
+    expect(mockDocService.createDocument).toHaveBeenCalledWith('New Document');
+    expect(mockDocService.getDocuments).toHaveBeenCalled();
+  })
+
+  it('updates a document', async () => {
+    mockDocService.getDocuments.mockResolvedValue(mockDocuments);
+
+    await doMount();
+
+    const editBtn = wrapper.findAll(`button[aria-label="Edit Document"]`).at(0);
+    if (!editBtn) throw new Error('Edit button not found');
+    await editBtn.trigger('click');
+
+    const textarea = wrapper.find('textarea');
+    expect(textarea.exists()).toBe(true);
+
+    await textarea.setValue('Updated Document 123');
+    const saveBtn = wrapper.find('button[aria-label="Save Document"]');
+    await saveBtn.trigger('click');
+
+    expect(mockDocService.updateDocument).toHaveBeenCalledWith(
+      '123',
+      'Updated Document 123'
+    );
+    expect(mockDocService.getDocuments).toHaveBeenCalled();
+  });
+
+  it('removes a document from the rendered list after deletion', async () => {
+    mockDocService.getDocuments.mockResolvedValue(mockDocuments);
+
+    await doMount();
+
+    expect(wrapper.text()).toContain('Document 1');
+    expect(wrapper.text()).toContain('Document 2');
+
+    mockDocService.getDocuments.mockResolvedValue([mockDocuments[0]]);
+
+    const deleteBtn = wrapper.findAll(`button[aria-label="Delete Document"]`).at(1);
+    if (!deleteBtn) throw new Error('Delete button not found');
+    await deleteBtn.trigger('click');
+
+    expect(mockDocService.deleteDocument).toHaveBeenCalledWith('456');
+    expect(mockDocService.getDocuments).toHaveBeenCalledTimes(2); // Once during mount, and once after delete
+    expect(wrapper.text()).not.toContain('Document 2');
+    expect(wrapper.text()).toContain('Document 1');
   });
 
   it('renders a list of documents', async () => {
-    expect(documentService.getDocuments).toHaveBeenCalled();
-    expect(domText()).toContain('Document 1');
-    expect(domText()).toContain('Document 2');
-  });
+    mockDocService.getDocuments.mockResolvedValue(mockDocuments);
 
-  it('creates a new document', async () => {
-    await domDocumentInput().setValue('New Document');
-    await domSave().trigger('click');
+    await doMount()
 
-    expect(documentService.createDocument).toHaveBeenCalledWith('New Document');
-    expect(documentService.getDocuments).toHaveBeenCalled();
-  });
-
-  it('updates an existing document', async () => {
-    doEditDocument('123');
-    await flushPromises();
-    expect(domDocumentInput().element.value).toBe('Document 1');
-    await domDocumentInput().setValue('Updated Document 1');
-
-    await domSave().trigger('click');
-
-    expect(documentService.updateDocument).toHaveBeenCalledWith(
-      '123',
-      'Updated Document 1'
-    );
-    expect(documentService.getDocuments).toHaveBeenCalled();
-  });
-
-  it('deletes a document', async () => {
-    doDeleteDocument('123');
-    await flushPromises();
-
-    expect(documentService.deleteDocument).toHaveBeenCalledWith('123');
-    expect(documentService.getDocuments).toHaveBeenCalled();
-  });
-
-  it('resets the document when creating a new one', async () => {
-    const vmDoc = () => wrapper.vm.doc;
-
-    wrapper.vm.editDocument('123');
-    await flushPromises();
-    expect(vmDoc().id).toBe('123');
-    expect(vmDoc().content).toBe('Document 1');
-
-    wrapper.vm.newDocument();
-    await flushPromises();
-    expect(vmDoc().id).toBe('');
-    expect(vmDoc().content).toBe('');
-  });
-
-  it('handles editing a document', async () => {
-    wrapper.vm.editDocument('456');
-    await flushPromises();
-
-    const doc = wrapper.vm.doc;
-    expect(doc.id).toBe('456');
-    expect(doc.content).toBe('Document 2');
-  });
-
-  it('renders correctly after deleting a document', async () => {
-    // Mock the `getDocuments` method to return the current state
-    documentService.getDocuments = vi
-      .fn()
-      .mockImplementation(() => Promise.resolve(mockDocuments));
-
-    // Mock the `deleteDocument` method to update the state dynamically
-    documentService.deleteDocument = vi.fn().mockImplementation((id) => {
-      mockDocuments = mockDocuments.filter((doc) => doc.id !== id); // Remove the deleted document
-      return Promise.resolve();
-    });
-
-    wrapper.vm.deleteDocument('456');
-    await flushPromises();
-    expect(documentService.deleteDocument).toHaveBeenCalledWith('456');
-    expect(domText()).not.toContain('Document 2');
+    expect(mockDocService.getDocuments).toHaveBeenCalled();
+    expect(wrapper.text()).toContain('Document 1');
+    expect(wrapper.text()).toContain('Document 2');
   });
 });
 
