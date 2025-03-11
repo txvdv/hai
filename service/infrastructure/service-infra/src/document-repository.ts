@@ -24,7 +24,7 @@ export class DxDocumentRepository implements DocumentRepository {
 
   save(doc: Document): void {
     this.db.addOperation(this.db.documents, async () => {
-      await this.db.documents.add(mapToDocumentEntity(doc)); // Add the document
+      await this.db.documents.put(mapToDocumentEntity(doc));
     });
   }
 
