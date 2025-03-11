@@ -1,23 +1,54 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { mount , VueWrapper } from '@vue/test-utils';
+import { mount, VueWrapper, createWrapperError, DOMWrapper } from '@vue/test-utils';
 import DocumentsView from './DocumentsView.vue';
 import * as mod from '../service/document-service';
 
+// Set up the initial state
+let mockDocuments = [
+  {
+    id: '123',
+    content: 'Document 1',
+  },
+  {
+    id: '456',
+    content: 'Document 2',
+  },
+];
 const DocumentServiceMock = vi.fn();
-
-DocumentServiceMock.prototype.getDocuments = vi.fn().mockResolvedValue([
-  { id: '123', content: 'Document 1' },
-  { id: '456', content: 'Document 2' }
-]);
-DocumentServiceMock.prototype.createDocument = vi.fn().mockResolvedValue({ id: '789', content: 'New Document' });
-DocumentServiceMock.prototype.updateDocument = vi.fn().mockResolvedValue({ id: '123', content: 'Updated Document 1' });
-DocumentServiceMock.prototype.deleteDocument = vi.fn().mockResolvedValue(undefined);
+DocumentServiceMock.prototype.getDocuments = vi.fn().mockResolvedValue(mockDocuments);
+DocumentServiceMock.prototype.createDocument = vi.fn().mockResolvedValue({
+  id: '789',
+  content: 'New Document',
+});
+DocumentServiceMock.prototype.updateDocument = vi.fn().mockResolvedValue({
+  id: '123',
+  content: 'Updated Document 1',
+});
+DocumentServiceMock.prototype.deleteDocument = vi
+  .fn()
+  .mockResolvedValue(undefined);
 
 vi.spyOn(mod, 'DocumentService').mockImplementation(DocumentServiceMock);
 
-describe('WorkerView', () => {
+describe('DocumentsView', () => {
   let documentService: mod.DocumentService;
   let wrapper: VueWrapper<typeof DocumentsView>;
+
+  const doDeleteDocument = (id: string) => {
+    wrapper.vm.deleteDocument(id);
+  };
+  const doEditDocument = (id: string) => {
+    wrapper.vm.editDocument(id);
+  };
+  const domDocumentInput = () => {
+    return wrapper.find('textarea');
+  };
+  const domSave = () => {
+    return wrapper.find('button.btn-light');
+  };
+  const domText = () => {
+    return wrapper.text();
+  };
 
   beforeEach(async () => {
     documentService = new DocumentServiceMock();
@@ -25,49 +56,48 @@ describe('WorkerView', () => {
       global: {
         provide: {
           core: {
-            documentService: documentService
-          }
+            documentService: documentService,
+          },
         },
         stubs: {
           'router-link': true, // Stub the router-link
         },
-      }
+      },
     });
-    await flushPromises();
+    // await flushPromises();
   });
 
   it('renders a list of documents', async () => {
     expect(documentService.getDocuments).toHaveBeenCalled();
-    expect(wrapper.text()).toContain('Document 1');
-    expect(wrapper.text()).toContain('Document 2');
+    expect(domText()).toContain('Document 1');
+    expect(domText()).toContain('Document 2');
   });
 
   it('creates a new document', async () => {
-    const textarea = wrapper.find('textarea');
-    await textarea.setValue('New Document');
-    const saveButton = wrapper.find('button.btn-light');
-    await saveButton.trigger('click');
+    await domDocumentInput().setValue('New Document');
+    await domSave().trigger('click');
 
     expect(documentService.createDocument).toHaveBeenCalledWith('New Document');
     expect(documentService.getDocuments).toHaveBeenCalled();
   });
 
   it('updates an existing document', async () => {
-    wrapper.vm.editDocument('123');
+    doEditDocument('123');
     await flushPromises();
-    const textarea = wrapper.find('textarea');
-    expect(textarea.element.value).toBe('Document 1');
-    await textarea.setValue('Updated Document 1');
+    expect(domDocumentInput().element.value).toBe('Document 1');
+    await domDocumentInput().setValue('Updated Document 1');
 
-    const saveButton = wrapper.find('button.btn-light');
-    await saveButton.trigger('click');
+    await domSave().trigger('click');
 
-    expect(documentService.updateDocument).toHaveBeenCalledWith('123', 'Updated Document 1');
+    expect(documentService.updateDocument).toHaveBeenCalledWith(
+      '123',
+      'Updated Document 1'
+    );
     expect(documentService.getDocuments).toHaveBeenCalled();
   });
 
   it('deletes a document', async () => {
-    wrapper.vm.deleteDocument('123');
+    doDeleteDocument('123');
     await flushPromises();
 
     expect(documentService.deleteDocument).toHaveBeenCalledWith('123');
@@ -98,14 +128,10 @@ describe('WorkerView', () => {
   });
 
   it('renders correctly after deleting a document', async () => {
-    // Set up the initial state
-    let mockDocuments = [
-      { id: '123', content: 'Document 1' },
-      { id: '456', content: 'Document 2' }
-    ];
-
     // Mock the `getDocuments` method to return the current state
-    documentService.getDocuments = vi.fn().mockImplementation(() => Promise.resolve(mockDocuments));
+    documentService.getDocuments = vi
+      .fn()
+      .mockImplementation(() => Promise.resolve(mockDocuments));
 
     // Mock the `deleteDocument` method to update the state dynamically
     documentService.deleteDocument = vi.fn().mockImplementation((id) => {
@@ -116,11 +142,41 @@ describe('WorkerView', () => {
     wrapper.vm.deleteDocument('456');
     await flushPromises();
     expect(documentService.deleteDocument).toHaveBeenCalledWith('456');
-    expect(wrapper.text()).not.toContain('Document 2');
+    expect(domText()).not.toContain('Document 2');
   });
 });
 
 // Utility function to wait for promises to resolve
 export function flushPromises(): Promise<void> {
   return new Promise(setImmediate);
+}
+
+// Get all elements with the given text.
+const getAllByText = (wrapper:VueWrapper, text: string) => {
+  return wrapper.findAll("*").filter(node => node.text() === text)
+}
+
+// Get the first element that has the given text.
+// @ts-ignore
+function getByText(wrapper:VueWrapper, text: string) {
+  const results = getAllByText(wrapper, text)
+  if (results.length === 0) {
+    throw new Error(`getByText() found no element with the text: "${text}".`)
+  }
+  return results.at(0)
+}
+
+// @ts-ignore
+function findByText(wrapper: VueWrapper, str: string, selector = '*'): DOMWrapper<any> {
+  const items = wrapper.findAll(selector);
+
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i];
+
+    if (item.text().trim() === str.trim()) {
+      return item;
+    }
+  }
+
+  return createWrapperError('DOMWrapper');
 }

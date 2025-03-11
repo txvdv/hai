@@ -86,6 +86,9 @@ onMounted(() => {
   <Navigation :items="navItems" />
   <div class="flex flex-wrap">
     <div class="w-full md:w-1/2 lg:w-1/3 p-4">
+      <p v-if="docs.length === 0">Create your first document</p>
+    </div>
+    <div class="w-full md:w-1/2 lg:w-1/3 p-4">
       <textarea v-model="doc.content" id="message" rows="20" class="document-textarea" placeholder="Write here..."></textarea>
       <button type="button" @click="saveDocument" class="btn-light">Save</button>
     </div>
