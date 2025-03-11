@@ -36,6 +36,7 @@ export default defineConfig({
       entry: 'src/index.ts',
       name: '@hai/ui-vue-library',
       fileName: 'index',
+      cssFileName: 'style',
       // Change this to the formats you want to support.
       // Don't forget to update your package.json as well.
       formats: ['es'],
