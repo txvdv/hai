@@ -1,4 +1,4 @@
-import PrimeVue from "primevue/config";
+import PrimeVue from 'primevue/config';
 import Aura from '@primeuix/themes/aura';
 import { definePreset } from '@primeuix/themes';
 
@@ -9,42 +9,42 @@ import { definePreset } from '@primeuix/themes';
 const AuraTealPreset = definePreset(Aura, {
   semantic: {
     primary: {
-      50: '{teal.50}',
-      100: '{teal.100}',
-      200: '{teal.200}',
-      300: '{teal.300}',
-      400: '{teal.400}',
-      500: '{teal.500}',
-      600: '{teal.600}',
-      700: '{teal.700}',
-      800: '{teal.800}',
-      900: '{teal.900}',
-      950: '{teal.950}'
+      50: '{blue.50}',
+      100: '{blue.100}',
+      200: '{blue.200}',
+      300: '{blue.300}',
+      400: '{blue.400}',
+      500: '{blue.500}',
+      600: '{blue.600}',
+      700: '{blue.700}',
+      800: '{blue.800}',
+      900: '{blue.900}',
+      950: '{blue.950}',
     },
     formField: {
-      paddingX: "0.75rem",
-      paddingY: "0.5rem",
+      paddingX: '0.75rem',
+      paddingY: '0.5rem',
       sm: {
-        fontSize: "0.875rem",
-        paddingX: "0.625rem",
-        paddingY: "0.375rem"
+        fontSize: '0.875rem',
+        paddingX: '0.625rem',
+        paddingY: '0.375rem',
       },
       lg: {
-        fontSize: "1.125rem",
-        paddingX: "0.875rem",
-        paddingY: "0.625rem"
+        fontSize: '1.125rem',
+        paddingX: '0.875rem',
+        paddingY: '0.625rem',
       },
-      borderRadius: "{border.radius.sm}",
+      borderRadius: '{border.radius.sm}',
       focusRing: {
-        width: "0",
-        style: "none",
-        color: "transparent",
-        offset: "0",
-        shadow: "none"
+        width: '0',
+        style: 'none',
+        color: 'transparent',
+        offset: '0',
+        shadow: 'none',
       },
-      transitionDuration: "{transition.duration}"
+      transitionDuration: '{transition.duration}',
     },
-  }
+  },
 });
 
 const AuraTheme = {
@@ -52,11 +52,11 @@ const AuraTheme = {
   options: {
     cssLayer: {
       name: 'primevue',
-      order: 'base, primevue'
+      order: 'base, primevue',
     },
     darkModeSelector: '.dark',
-  }
-}
+  },
+};
 
-export {PrimeVue as PrimeVueConfig}
-export {AuraTheme as DefaultTheme}
+export { PrimeVue as PrimeVueConfig };
+export { AuraTheme as DefaultTheme };
