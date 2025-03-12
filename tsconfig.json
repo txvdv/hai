@@ -10,9 +10,6 @@
       "path": "./apps/pwa-e2e"
     },
     {
-      "path": "./packages/ui-vue-library"
-    },
-    {
       "path": "./service/infrastructure/service-infra"
     },
     {
