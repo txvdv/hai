@@ -3,8 +3,8 @@ import {
   HomePage,
   DashboardPage,
   // ComposerPage
-} from "@hai/ui-vue-library"
-import DocumentsView from '../views/DocumentsView.vue'
+} from '@hai/ui-library';
+import DocumentsView from '../views/DocumentsView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

@@ -41,7 +41,7 @@
       "path": "../../shared/common-utils/tsconfig.lib.json"
     },
     {
-      "path": "../../packages/ui-vue-library/tsconfig.lib.json"
+      "path": "../../client/interface/ui-library/tsconfig.lib.json"
     }
   ]
 }

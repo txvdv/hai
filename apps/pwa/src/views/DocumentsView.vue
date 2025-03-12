@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Navigation } from '@hai/ui-vue-library';
+import { Navigation } from '@hai/ui-library';
 import Dialog from './Dialog.vue';
 import { computed, inject, onMounted, ref, nextTick } from 'vue';
 import { ClientCore } from '../main';

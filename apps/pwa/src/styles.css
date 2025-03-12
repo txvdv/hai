@@ -2,4 +2,4 @@
 /* vite will only add the utilities used in here */
 /* although always best to check the final css file has not dramatically increased in size */
 @import "tailwindcss";
-@import "@hai/ui-vue-library/style.css";
+@import "@hai/ui-library/style.css";

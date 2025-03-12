@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import {Footer} from '@hai/ui-vue-library'
+import { Footer } from '@hai/ui-library';
 </script>
 
 <template>
   <div class="home">
     <h1>Home</h1>
-    <Footer/>
+    <Footer />
   </div>
 </template>
 
