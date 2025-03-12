@@ -26,6 +26,9 @@
     },
     {
       "path": "./shared/feature-toggles"
+    },
+    {
+      "path": "./client/interface/ui-library"
     }
   ],
   "ts-node": {
