@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Navigation } from '@hai/ui-vue-library';
-import { computed, inject, onMounted, ref } from 'vue';
+import Dialog from './Dialog.vue';
+import { computed, inject, onMounted, ref, nextTick } from 'vue';
 import { ClientCore } from '../main';
 import { waitForServiceWorkerController } from '../service/app-service';
 
@@ -25,10 +26,15 @@ type ExistingDocument = {
 };
 
 const core = inject('core') as ClientCore;
-
+const isDialogVisible = ref(false);
+const textareaRef = ref<HTMLTextAreaElement | null>(null);
 const textareaVisible = ref(false);
 function showTextarea() {
   textareaVisible.value = true;
+  // Add a small delay to ensure the textarea is rendered in the DOM
+  nextTick(() => {
+    textareaRef.value?.focus();
+  });
 }
 function hideTextarea() {
   textareaVisible.value = false;
@@ -38,13 +44,33 @@ const doc = ref<ExistingDocument>({
   id: '',
   content: '',
 });
-// Create a reactive variable for documents
+
+let docCache: ExistingDocument | null = null;
+
 const docs = ref<ExistingDocument[]>([]);
 
+function createDocument() {
+  if (
+    textareaVisible.value &&
+    doc.value.id === '' &&
+    doc.value.content === ''
+  ) {
+    return;
+  }
+
+  if (docCache && docCache.content !== doc.value.content) {
+    isDialogVisible.value = true;
+    return;
+  }
+
+  showTextarea();
+}
+
 const createDocumentText = computed(() => {
-  // if (!docs.value.length) return
-  return docs.value.length === 0 ? 'Create your first document' : 'Create a new document';
-})
+  return docs.value.length === 0
+    ? 'Create your first document'
+    : 'Create a new document';
+});
 
 async function deleteDocument(id: string) {
   try {
@@ -57,10 +83,11 @@ async function deleteDocument(id: string) {
 }
 
 async function editDocument(id: string) {
-  showTextarea()
+  showTextarea();
   const selectedDoc = docs.value.find((document) => document.id === id);
   if (selectedDoc) {
     doc.value = { ...selectedDoc };
+    docCache = selectedDoc;
   }
 }
 
@@ -79,7 +106,8 @@ async function saveDocument() {
   } else {
     await core.documentService.createDocument(content);
   }
-  hideTextarea()
+  hideTextarea();
+  docCache = null;
   await getDocuments();
 }
 
@@ -88,6 +116,25 @@ function resetDocument() {
     id: '',
     content: '',
   };
+  docCache = null;
+}
+
+async function onDialogConfirm() {
+  const { id, content } = doc.value;
+  await core.documentService.updateDocument(id, content);
+  await getDocuments();
+  isDialogVisible.value = false;
+  resetDocument();
+}
+
+function onDialogClose() {
+  isDialogVisible.value = false;
+  resetDocument();
+}
+
+function customCancelAction() {
+  isDialogVisible.value = false;
+  resetDocument();
 }
 
 onMounted(async () => {
@@ -98,14 +145,51 @@ onMounted(async () => {
 
 <template>
   <Navigation :items="navItems" />
+
+  <Dialog
+    v-model="isDialogVisible"
+    @confirm="onDialogConfirm"
+    @close="onDialogClose"
+  >
+    <!-- Providing custom title using slot -->
+    <template #title> Unsaved Changes </template>
+
+    <!-- Providing custom body using slot -->
+    <template #body>
+      <p>Do you want to save your changes?</p>
+    </template>
+
+    <!-- Custom actions using slot -->
+    <template #actions>
+      <button
+        type="button"
+        class="dialog__button dialog__button--confirm"
+        @click="onDialogConfirm"
+        aria-label="Confirm Action"
+      >
+        Save
+      </button>
+      <button
+        type="button"
+        class="dialog__button dialog__button--cancel"
+        @click="customCancelAction"
+        aria-label="Cancel Action"
+      >
+        Cancel
+      </button>
+    </template>
+  </Dialog>
+
   <div class="flex flex-wrap">
     <div class="w-full md:w-1/2 lg:w-1/3 p-4">
       <button
         type="button"
-        @click="showTextarea"
+        @click="createDocument"
         aria-label="Create Document"
-        class="btn-link"
-      >{{createDocumentText}}</button>
+        class="btn-link mb-4"
+      >
+        {{ createDocumentText }}
+      </button>
 
       <ul>
         <li v-for="doc in docs" :key="doc.id" class="mb-4">
@@ -134,12 +218,19 @@ onMounted(async () => {
       <div v-if="textareaVisible">
         <textarea
           v-model="doc.content"
+          ref="textareaRef"
           id="document"
           rows="20"
           class="document-textarea"
           placeholder="Write here..."
         ></textarea>
-        <button type="button" aria-label="Save Document" @click="saveDocument" class="btn-light" :disabled="doc.content === ''">
+        <button
+          type="button"
+          aria-label="Save Document"
+          @click="saveDocument"
+          class="btn-light"
+          :disabled="doc.content === ''"
+        >
           Save
         </button>
       </div>
