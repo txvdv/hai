@@ -95,7 +95,10 @@ async function editDocument(id: string) {
 
 async function getDocuments() {
   try {
-    docs.value = await documentService.getDocuments();
+    const composedDocs = await documentService.getDocuments();
+    if (composedDocs.status === 'success') {
+      docs.value = composedDocs.payload.documents;
+    }
   } catch (error) {
     console.error('Error fetching documents:', error);
   }
