@@ -24,3 +24,5 @@ export class UiCore {
 }
 
 export { DocumentService };
+export { DocumentBrowserViewModel };
+export type { DocumentBrowserViewState } from './document-browser/view-model.js';
