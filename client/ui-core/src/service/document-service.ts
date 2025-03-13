@@ -1,55 +1,82 @@
 import {
-  assertApiSuccess,
   buildMessage,
   DocumentCreateMessage,
+  DocumentCreateResponseMessage,
+  DocumentCreateResponsePayload,
   DocumentDeleteMessage,
+  DocumentDeleteResponseMessage,
+  DocumentDeleteResponsePayload,
   DocumentListMessage,
+  DocumentListResponseMessage,
+  DocumentListResponsePayload,
   DocumentUpdateMessage,
+  DocumentUpdateResponseMessage,
+  DocumentUpdateResponsePayload,
 } from '@hai/service-web';
-import { Client } from './client.js';
+import {
+  Client,
+  asSimpleResponseMessage,
+  SimpleMessageResponse,
+} from './client.js';
 
 export class DocumentService {
   constructor(private readonly client: Client) {}
 
-  async createDocument(content: string) {
+  async createDocument(
+    content: string
+  ): Promise<SimpleMessageResponse<DocumentCreateResponsePayload>> {
     const req: DocumentCreateMessage = buildMessage('Document.Create', {
       payload: {
         content,
       },
     });
-    await this.client.sendAndWait(req);
+    const res = await this.client.sendAndWait<
+      DocumentCreateMessage,
+      DocumentCreateResponseMessage
+    >(req);
+    return asSimpleResponseMessage(res);
   }
 
-  async deleteDocument(id: string) {
+  async deleteDocument(
+    id: string
+  ): Promise<SimpleMessageResponse<DocumentDeleteResponsePayload>> {
     const req: DocumentDeleteMessage = buildMessage('Document.Delete', {
       payload: {
         id,
       },
     });
-
-    await this.client.sendAndWait(req);
+    const res = await this.client.sendAndWait<
+      DocumentDeleteMessage,
+      DocumentDeleteResponseMessage
+    >(req);
+    return asSimpleResponseMessage(res);
   }
 
-  async getDocuments(): Promise<Array<{ id: string; content: string }>> {
+  async getDocuments(): Promise<
+    SimpleMessageResponse<DocumentListResponsePayload>
+  > {
     const req: DocumentListMessage = buildMessage('Document.List');
-    const res = await this.client.sendAndWait(req);
-
-    if (assertApiSuccess(res)) {
-      console.log(res.payload.documents);
-      return res.payload.documents;
-    } else {
-      console.log(res.payload.errors);
-      throw new Error('Error');
-    }
+    const res = await this.client.sendAndWait<
+      DocumentListMessage,
+      DocumentListResponseMessage
+    >(req);
+    return asSimpleResponseMessage(res);
   }
 
-  async updateDocument(id: string, content: string) {
+  async updateDocument(
+    id: string,
+    content: string
+  ): Promise<SimpleMessageResponse<DocumentUpdateResponsePayload>> {
     const req: DocumentUpdateMessage = buildMessage('Document.Update', {
       payload: {
         id,
         content,
       },
     });
-    return this.client.sendAndWait(req);
+    const res = await this.client.sendAndWait<
+      DocumentUpdateMessage,
+      DocumentUpdateResponseMessage
+    >(req);
+    return asSimpleResponseMessage(res);
   }
 }

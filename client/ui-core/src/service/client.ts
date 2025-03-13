@@ -1,12 +1,43 @@
-import { MessageEnvelope, MessageResponse } from '@hai/service-web';
+import {
+  MessageEnvelope,
+  MessageResponse,
+  ProblemDetails,
+} from '@hai/service-web';
 import { createUUID } from '@hai/common-utils';
 
 export class Client {
-  async sendAndWait(msg: MessageEnvelope): Promise<MessageResponse<any>> {
-    return await sendAndAwaitServiceWorker<
-      MessageEnvelope,
-      MessageResponse<any>
-    >(msg);
+  async sendAndWait<ReqType extends MessageEnvelope, ResType = any>(
+    msg: ReqType,
+    timeoutInMs = 5000
+  ): Promise<ResType> {
+    try {
+      return await sendAndAwaitServiceWorker<ReqType, ResType>(
+        msg,
+        timeoutInMs
+      );
+    } catch (err) {
+      throw new Error(err instanceof Error ? err.message : String(err));
+    }
+  }
+}
+
+export type SimpleMessageResponse<T> =
+  | { status: 'success'; payload: T }
+  | { status: 'error'; payload: ProblemDetails };
+
+export function asSimpleResponseMessage<T>(
+  response: MessageResponse<T>
+): SimpleMessageResponse<T> {
+  if (response.status === 'success') {
+    return {
+      status: 'success',
+      payload: response.payload as T, // Explicitly cast payload to type T
+    };
+  } else {
+    return {
+      status: 'error',
+      payload: response.payload as ProblemDetails, // Explicitly cast payload to ProblemDetails
+    };
   }
 }
 
