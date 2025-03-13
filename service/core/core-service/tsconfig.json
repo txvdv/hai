@@ -7,9 +7,6 @@
       "path": "../../../shared/common-utils"
     },
     {
-      "path": "../../adapter/service-web"
-    },
-    {
       "path": "./tsconfig.lib.json"
     },
     {
