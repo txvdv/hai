@@ -1,0 +1,9 @@
+{
+  "name": "@hai/ui-core",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "client/ui-core/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project @hai/ui-core --web",
+  "targets": {}
+}

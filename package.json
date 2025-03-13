@@ -15,7 +15,8 @@
     "service/adapter/*",
     "service/core/*",
     "service/infrastructure/*",
-    "shared/*"
+    "shared/*",
+    "client/*"
   ],
   "devDependencies": {
     "@eslint/js": "^9.8.0",

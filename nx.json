@@ -30,7 +30,8 @@
           "buildDepsName": "build-deps",
           "watchDepsName": "watch-deps"
         }
-      }
+      },
+      "exclude": ["client/ui-core/*"]
     },
     {
       "plugin": "@nx/vite/plugin",
@@ -72,11 +73,20 @@
       "options": {
         "targetName": "lint"
       }
+    },
+    {
+      "plugin": "@nx/js/typescript",
+      "include": ["client/ui-core/*"],
+      "options": {
+        "typecheck": {
+          "targetName": "typecheck"
+        }
+      }
     }
   ],
   "targetDefaults": {
     "test": {
-      "dependsOn": ["^build", "^build"]
+      "dependsOn": ["^build", "^build", "^build"]
     },
     "e2e-ci--**/*": {
       "dependsOn": ["^build"]

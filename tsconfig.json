@@ -26,6 +26,9 @@
     },
     {
       "path": "./client/interface/ui-library"
+    },
+    {
+      "path": "./client/ui-core"
     }
   ],
   "ts-node": {
