@@ -32,9 +32,6 @@
   "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.vue"],
   "references": [
     {
-      "path": "../../service/core/core-service/tsconfig.lib.json"
-    },
-    {
       "path": "../../service/adapter/service-web/tsconfig.lib.json"
     },
     {

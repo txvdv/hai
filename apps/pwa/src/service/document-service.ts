@@ -1,21 +1,24 @@
 import {
-  DocumentCreateMessage, DocumentCreateResponseMessage,
-  DocumentDeleteMessage, DocumentDeleteResponseMessage,
-  DocumentListMessage, DocumentListResponseMessage,
+  assertApiSuccess,
+  buildMessage,
+  DocumentCreateMessage,
+  DocumentCreateResponseMessage,
+  DocumentDeleteMessage,
+  DocumentDeleteResponseMessage,
+  DocumentListMessage,
+  DocumentListResponseMessage,
   DocumentUpdateMessage,
-  DocumentUpdateResponseMessage
-} from '@hai/core-service';
-import { assertApiSuccess, buildMessage } from '@hai/service-web';
+  DocumentUpdateResponseMessage,
+} from '@hai/service-web';
 import { sendAndAwaitServiceWorker } from './app-service';
 
 export class DocumentService {
   async createDocument(content: string) {
     const req: DocumentCreateMessage = buildMessage('Document.Create', {
-        payload: {
-          content
-        }
-      }
-    );
+      payload: {
+        content,
+      },
+    });
     await sendAndAwaitServiceWorker<
       DocumentCreateMessage,
       DocumentCreateResponseMessage
@@ -24,11 +27,10 @@ export class DocumentService {
 
   async deleteDocument(id: string) {
     const req: DocumentDeleteMessage = buildMessage('Document.Delete', {
-        payload: {
-          id
-        }
-      }
-    );
+      payload: {
+        id,
+      },
+    });
 
     await sendAndAwaitServiceWorker<
       DocumentDeleteMessage,
@@ -36,7 +38,7 @@ export class DocumentService {
     >(req);
   }
 
-  async getDocuments(): Promise<Array<{ id: string, content: string }>> {
+  async getDocuments(): Promise<Array<{ id: string; content: string }>> {
     const req: DocumentListMessage = buildMessage('Document.List');
     const res = await sendAndAwaitServiceWorker<
       DocumentListMessage,
@@ -52,14 +54,16 @@ export class DocumentService {
     }
   }
 
-  async updateDocument(id: string, content: string): Promise<DocumentUpdateResponseMessage> {
+  async updateDocument(
+    id: string,
+    content: string
+  ): Promise<DocumentUpdateResponseMessage> {
     const req: DocumentUpdateMessage = buildMessage('Document.Update', {
-        payload: {
-          id,
-          content
-        }
-      }
-    );
+      payload: {
+        id,
+        content,
+      },
+    });
 
     return await sendAndAwaitServiceWorker<
       DocumentUpdateMessage,
