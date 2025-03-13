@@ -61,10 +61,7 @@ export class DocumentBrowserViewModel extends Observable<DocumentBrowserViewStat
     const req = await this.documentService.updateDocument(id, content);
 
     if (req.status === 'success') {
-      const documents = this.getState().documents.filter(
-        (doc) => doc.id !== id
-      );
-      this.setState({ documents });
+      await this.loadDocuments();
     } else {
       this.setState({ problem: req.payload });
     }
