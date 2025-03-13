@@ -9,3 +9,4 @@ export type {
 } from './app-service.js';
 
 export * from './app-messaging.js';
+export * from './document.types.js';
