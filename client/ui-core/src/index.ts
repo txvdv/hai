@@ -22,3 +22,5 @@ export class UiCore {
     });
   }
 }
+
+export { DocumentService };

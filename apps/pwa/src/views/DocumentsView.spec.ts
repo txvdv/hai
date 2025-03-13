@@ -3,7 +3,7 @@ import { mount, VueWrapper, ComponentMountingOptions } from '@vue/test-utils';
 import { flushPromises } from '@hai/common-utils';
 import DocumentsView from './DocumentsView.vue';
 import { MockProxy, mock } from 'vitest-mock-extended';
-import { DocumentService } from '../service/document-service';
+import { DocumentService } from '@hai/ui-core';
 
 // Set up the initial state
 let mockDocuments = [
@@ -32,7 +32,12 @@ describe('DocumentsView', () => {
 
   beforeEach(async () => {
     mockDocService = mock<DocumentService>();
-    mockDocService.getDocuments.mockResolvedValue([]);
+    mockDocService.getDocuments.mockResolvedValue({
+      status: 'success',
+      payload: {
+        documents: [],
+      },
+    });
 
     mockServiceWorkerController = mock<ServiceWorker>();
     mockServiceWorker = mock<ServiceWorkerContainer>();
@@ -94,7 +99,12 @@ describe('DocumentsView', () => {
   });
 
   it('updates a document', async () => {
-    mockDocService.getDocuments.mockResolvedValue(mockDocuments);
+    mockDocService.getDocuments.mockResolvedValue({
+      status: 'success',
+      payload: {
+        documents: mockDocuments,
+      },
+    });
 
     await doMount();
 
@@ -117,7 +127,12 @@ describe('DocumentsView', () => {
   });
 
   it('shows a message when updating a document and trying to create a new one', async () => {
-    mockDocService.getDocuments.mockResolvedValue(mockDocuments);
+    mockDocService.getDocuments.mockResolvedValue({
+      status: 'success',
+      payload: {
+        documents: mockDocuments,
+      },
+    });
 
     await doMount();
 
@@ -138,7 +153,12 @@ describe('DocumentsView', () => {
   });
 
   it('saves the document when user wants to save the changes', async () => {
-    mockDocService.getDocuments.mockResolvedValue(mockDocuments);
+    mockDocService.getDocuments.mockResolvedValue({
+      status: 'success',
+      payload: {
+        documents: mockDocuments,
+      },
+    });
 
     await doMount();
 
@@ -167,14 +187,24 @@ describe('DocumentsView', () => {
   });
 
   it('removes a document from the rendered list after deletion', async () => {
-    mockDocService.getDocuments.mockResolvedValue(mockDocuments);
+    mockDocService.getDocuments.mockResolvedValue({
+      status: 'success',
+      payload: {
+        documents: mockDocuments,
+      },
+    });
 
     await doMount();
 
     expect(wrapper.text()).toContain('Document 1');
     expect(wrapper.text()).toContain('Document 2');
 
-    mockDocService.getDocuments.mockResolvedValue([mockDocuments[0]]);
+    mockDocService.getDocuments.mockResolvedValue({
+      status: 'success',
+      payload: {
+        documents: [mockDocuments[0]],
+      },
+    });
 
     const deleteBtn = wrapper
       .findAll(`button[aria-label="Delete Document"]`)
@@ -189,7 +219,12 @@ describe('DocumentsView', () => {
   });
 
   it('renders a list of documents', async () => {
-    mockDocService.getDocuments.mockResolvedValue(mockDocuments);
+    mockDocService.getDocuments.mockResolvedValue({
+      status: 'success',
+      payload: {
+        documents: mockDocuments,
+      },
+    });
 
     await doMount();
 
