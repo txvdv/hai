@@ -53,7 +53,7 @@ describe('DocumentsView', () => {
       global: {
         provide: {
           core: {
-            documentService: mockDocService,
+            getDocumentService: () => mockDocService,
           },
         },
         stubs: {

@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { Navigation } from '@hai/ui-library';
+import { UiCore } from '@hai/ui-core';
 import Dialog from './Dialog.vue';
 import { computed, inject, onMounted, ref, nextTick } from 'vue';
-import { ClientCore } from '../main';
+// import { ClientCore } from '../main';
 import { waitForServiceWorkerController } from '../service/app-service';
 
 const navItems = [
@@ -25,7 +26,9 @@ type ExistingDocument = {
   content: string;
 };
 
-const core = inject('core') as ClientCore;
+const core = inject('core') as UiCore;
+const documentService = core.getDocumentService();
+
 const isDialogVisible = ref(false);
 const textareaRef = ref<HTMLTextAreaElement | null>(null);
 const textareaVisible = ref(false);
@@ -73,7 +76,7 @@ const createDocumentText = computed(() => {
 
 async function deleteDocument(id: string) {
   try {
-    await core.documentService.deleteDocument(id);
+    await documentService.deleteDocument(id);
     if (doc.value.id === id) resetDocument();
     await getDocuments();
   } catch (error) {
@@ -92,7 +95,7 @@ async function editDocument(id: string) {
 
 async function getDocuments() {
   try {
-    docs.value = await core.documentService.getDocuments();
+    docs.value = await documentService.getDocuments();
   } catch (error) {
     console.error('Error fetching documents:', error);
   }
@@ -101,9 +104,9 @@ async function getDocuments() {
 async function saveDocument() {
   const { id, content } = doc.value;
   if (id) {
-    await core.documentService.updateDocument(id, content);
+    await documentService.updateDocument(id, content);
   } else {
-    await core.documentService.createDocument(content);
+    await documentService.createDocument(content);
   }
   hideTextarea();
   docCache = null;
@@ -120,7 +123,7 @@ function resetDocument() {
 
 async function onDialogConfirm() {
   const { id, content } = doc.value;
-  await core.documentService.updateDocument(id, content);
+  await documentService.updateDocument(id, content);
   await getDocuments();
   isDialogVisible.value = false;
   resetDocument();

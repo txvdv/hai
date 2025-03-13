@@ -3,6 +3,7 @@ import router from './router';
 import { createApp } from 'vue';
 import App from './app/App.vue';
 import { PrimeVueConfig, DefaultTheme } from '@hai/ui-library';
+import { UiCore } from '@hai/ui-core';
 import './sw-registration';
 
 import { AppService } from './service/app-service';
@@ -16,10 +17,12 @@ export interface ClientCore {
 navigator.serviceWorker.ready.then(() => {
   console.log('Service Worker ready. Initializing app...');
 
-  const core: ClientCore = {
-    appService: new AppService(),
-    documentService: new DocumentService(),
-  };
+  // const core: ClientCore = {
+  //   appService: new AppService(),
+  //   documentService: new DocumentService(),
+  // };
+
+  const core = new UiCore();
 
   const app = createApp(App);
   app.use(router);
