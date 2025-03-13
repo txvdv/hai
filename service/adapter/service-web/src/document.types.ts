@@ -1,6 +1,6 @@
 import { MessageResponse, MessageEnvelope } from './app-messaging.js';
 
-export type Document = {
+export type ComposedDocument = {
   id: string;
   content: string;
 };
@@ -18,7 +18,7 @@ export type DocumentCreateResponseMessage =
     type: 'Document.Create.Response';
   };
 
-export type DocumentCreateResponsePayload = Document;
+export type DocumentCreateResponsePayload = ComposedDocument;
 
 export type DocumentListMessage = MessageEnvelope<undefined> & {
   type: 'Document.List';
@@ -30,21 +30,21 @@ export type DocumentListResponseMessage =
   };
 
 export type DocumentListResponsePayload = {
-  documents: Document[];
+  documents: ComposedDocument[];
 };
 
 export type DocumentUpdateMessage = MessageEnvelope<DocumentUpdatePayload> & {
   type: 'Document.Update';
 };
 
-export type DocumentUpdatePayload = Document;
+export type DocumentUpdatePayload = ComposedDocument;
 
 export type DocumentUpdateResponseMessage =
   MessageResponse<DocumentUpdateResponsePayload> & {
     type: 'Document.Update.Response';
   };
 
-export type DocumentUpdateResponsePayload = Document;
+export type DocumentUpdateResponsePayload = ComposedDocument;
 
 export type DocumentDeleteMessage = MessageEnvelope<DocumentDeletePayload> & {
   type: 'Document.Delete';
