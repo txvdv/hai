@@ -2,27 +2,22 @@ import {
   assertApiSuccess,
   buildMessage,
   DocumentCreateMessage,
-  DocumentCreateResponseMessage,
   DocumentDeleteMessage,
-  DocumentDeleteResponseMessage,
   DocumentListMessage,
-  DocumentListResponseMessage,
   DocumentUpdateMessage,
-  DocumentUpdateResponseMessage,
 } from '@hai/service-web';
-import { sendAndAwaitServiceWorker } from './app-service.js';
+import { Client } from './client.js';
 
 export class DocumentService {
+  constructor(private readonly client: Client) {}
+
   async createDocument(content: string) {
     const req: DocumentCreateMessage = buildMessage('Document.Create', {
       payload: {
         content,
       },
     });
-    await sendAndAwaitServiceWorker<
-      DocumentCreateMessage,
-      DocumentCreateResponseMessage
-    >(req);
+    await this.client.sendAndWait(req);
   }
 
   async deleteDocument(id: string) {
@@ -32,18 +27,12 @@ export class DocumentService {
       },
     });
 
-    await sendAndAwaitServiceWorker<
-      DocumentDeleteMessage,
-      DocumentDeleteResponseMessage
-    >(req);
+    await this.client.sendAndWait(req);
   }
 
   async getDocuments(): Promise<Array<{ id: string; content: string }>> {
     const req: DocumentListMessage = buildMessage('Document.List');
-    const res = await sendAndAwaitServiceWorker<
-      DocumentListMessage,
-      DocumentListResponseMessage
-    >(req);
+    const res = await this.client.sendAndWait(req);
 
     if (assertApiSuccess(res)) {
       console.log(res.payload.documents);
@@ -54,20 +43,13 @@ export class DocumentService {
     }
   }
 
-  async updateDocument(
-    id: string,
-    content: string
-  ): Promise<DocumentUpdateResponseMessage> {
+  async updateDocument(id: string, content: string) {
     const req: DocumentUpdateMessage = buildMessage('Document.Update', {
       payload: {
         id,
         content,
       },
     });
-
-    return await sendAndAwaitServiceWorker<
-      DocumentUpdateMessage,
-      DocumentUpdateResponseMessage
-    >(req);
+    return this.client.sendAndWait(req);
   }
 }
