@@ -46,7 +46,6 @@ const doc = ref<ExistingDocument>({
 });
 
 let docCache: ExistingDocument | null = null;
-
 const docs = ref<ExistingDocument[]>([]);
 
 function createDocument() {

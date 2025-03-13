@@ -1,9 +1,10 @@
 // noinspection JSUnusedGlobalSymbols
 
-import type {Meta, StoryObj} from '@storybook/vue3';
+import type { Meta, StoryObj } from '@storybook/vue3';
+import { fn } from '@storybook/test';
 // @ts-ignore
 import DocumentList from './DocumentList.vue';
-import {FakeDocumentBrowserState} from "./DocumentBrowser.state";
+import { FakeDocumentBrowserState } from './DocumentBrowser.state';
 import * as DocumentListItemStories from './DocumentListItem.stories';
 
 const meta: Meta<typeof DocumentList> = {
@@ -12,11 +13,10 @@ const meta: Meta<typeof DocumentList> = {
   args: {
     ...DocumentListItemStories.ActionsData,
     documents: FakeDocumentBrowserState.documents,
-    loading: false
+    loading: false,
   },
-  argTypes: {
-  }
-}
+  argTypes: {},
+};
 export default meta;
 
 type Story = StoryObj<typeof meta>;
@@ -24,20 +24,20 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     documents: FakeDocumentBrowserState.documents,
-    loading: false
-  }
+    loading: false,
+  },
 };
 
 export const Loading: Story = {
   args: {
     documents: [],
-    loading: true
-  }
+    loading: true,
+  },
 };
 
 export const Empty: Story = {
   args: {
     ...Loading.args,
-    loading: false
-  }
+    loading: false,
+  },
 };

@@ -5,6 +5,7 @@ import { computed } from 'vue';
 import Skeleton from 'primevue/skeleton';
 import type { DocumentListItem as DocumentListItemType } from './DocumentBrowser.state';
 import DocumentListItem from './DocumentListItem.vue';
+import PrimeButton from 'primevue/button';
 
 const props = withDefaults(
   defineProps<{
@@ -17,19 +18,14 @@ const props = withDefaults(
 );
 
 const emit = defineEmits<{
-  (e: 'delete-doc', id: string): void;
-  (e: 'edit-doc', id: string): void;
+  (e: 'new-doc'): void;
   (e: 'view-doc', id: string): void;
 }>();
 
 const isEmpty = computed(() => props.documents.length === 0);
 
-const onDeleteDoc = (id: string) => {
-  emit('delete-doc', id);
-};
-
-const onEditDoc = (id: string) => {
-  emit('edit-doc', id);
+const createDoc = () => {
+  emit('new-doc');
 };
 
 const onViewDoc = (id: string) => {
@@ -38,7 +34,7 @@ const onViewDoc = (id: string) => {
 </script>
 
 <template>
-  <div>
+  <div class="w-96">
     <template v-if="loading">
       <Skeleton
         height="1rem"
@@ -53,8 +49,12 @@ const onViewDoc = (id: string) => {
       <Skeleton height="3rem" width="600px"></Skeleton>
     </template>
     <template v-else-if="isEmpty">
-      <p>No documents</p>
-      <p>Go create one</p>
+      <PrimeButton
+        @click="createDoc"
+        label="Create your first doc"
+        size="small"
+        variant="link"
+      />
     </template>
     <template v-else>
       <div class="document-list">
@@ -62,8 +62,6 @@ const onViewDoc = (id: string) => {
           v-for="document in documents"
           :key="document.id"
           :document="document"
-          @delete-doc="onDeleteDoc"
-          @edit-doc="onEditDoc"
           @view-doc="onViewDoc"
         />
       </div>
