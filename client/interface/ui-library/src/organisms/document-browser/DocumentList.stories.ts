@@ -1,7 +1,6 @@
 // noinspection JSUnusedGlobalSymbols
 
 import type { Meta, StoryObj } from '@storybook/vue3';
-import { fn } from '@storybook/test';
 // @ts-ignore
 import DocumentList from './DocumentList.vue';
 import { FakeDocumentBrowserState } from './DocumentBrowser.state';
