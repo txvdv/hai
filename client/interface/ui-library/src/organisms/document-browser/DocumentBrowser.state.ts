@@ -92,51 +92,5 @@ export const FakeDocumentBrowserState: DocumentBrowserState = {
         },
       ],
     },
-    {
-      id: '4',
-      title: 'Meeting Notes',
-      content:
-        'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Fusce quis urna magna. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.',
-      context: [
-        {
-          id: '4',
-          href: 'https://example.com/context/4',
-          rel: 'supplementary',
-          available: true,
-          tabId: 2,
-        },
-      ],
-      dateCreated: new Date('2025-01-04'),
-      dateModified: new Date(),
-      metadata: [
-        {
-          name: 'Author',
-          content: '<NAME>',
-        },
-      ],
-    },
-    {
-      id: '5',
-      title: 'Technical Specification',
-      content:
-        'Maecenas sed diam eget risus varius blandit sit amet non magna. Morbi sagittis sapien nec leo aliquam, a vehicula libero volutpat. Cras justo odio, dapibus ac facilisis in, egestas eget quam.',
-      context: [
-        {
-          id: '5',
-          href: 'https://example.com/context/5',
-          rel: 'primary',
-          available: true,
-          tabId: 3,
-        },
-      ],
-      dateCreated: new Date('2025-01-05'),
-      dateModified: new Date(),
-      metadata: [
-        {
-          name: 'Author',
-          content: '<NAME>',
-        },
-      ],
-    },
   ],
 };

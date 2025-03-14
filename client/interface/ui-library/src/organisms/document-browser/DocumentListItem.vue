@@ -17,7 +17,7 @@ const viewDoc = () => {
 
 <template>
   <div class="document">
-    <p class="document__content px-2">{{ document.content }}</p>
+    <p class="document__content">{{ document.content }}</p>
     <div class="document__actions">
       <PrimeButton @click="viewDoc" label="View" size="small" variant="link" />
     </div>
@@ -26,8 +26,4 @@ const viewDoc = () => {
 
 <style>
 @reference '../../styles/style.css';
-
-.document__title {
-  @apply text-xl font-bold;
-}
 </style>
