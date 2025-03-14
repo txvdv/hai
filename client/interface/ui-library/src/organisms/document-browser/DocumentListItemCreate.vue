@@ -2,13 +2,16 @@
 import PrimeButton from 'primevue/button';
 import { computed } from 'vue';
 
-const props = defineProps<{
+interface DocumentListItemCreateProps {
   isFirst: boolean;
-}>();
+}
 
-const emit = defineEmits<{
+interface DocumentListItemCreateEvents {
   (e: 'create-doc'): void;
-}>();
+}
+
+const props = defineProps<DocumentListItemCreateProps>();
+const emit = defineEmits<DocumentListItemCreateEvents>();
 
 const createText = computed<string>(() => {
   return props.isFirst

@@ -3,19 +3,16 @@
 import type { DocumentListItem as DocumentListItemType } from './DocumentBrowser.state';
 import DocumentListItem from './DocumentListItem.vue';
 
-withDefaults(
-  defineProps<{
-    documents: DocumentListItemType[];
-    loading?: boolean;
-  }>(),
-  {
-    loading: false,
-  }
-);
+interface DocumentListProps {
+  documents: DocumentListItemType[];
+}
 
-const emit = defineEmits<{
+interface DocumentListEvents {
   (e: 'view-doc', id: string): void;
-}>();
+}
+
+defineProps<DocumentListProps>();
+const emit = defineEmits<DocumentListEvents>();
 
 const onViewDoc = (id: string) => {
   emit('view-doc', id);

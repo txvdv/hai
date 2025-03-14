@@ -7,20 +7,20 @@ import DocumentListItemCreate from './DocumentListItemCreate.vue';
 import DocumentListItemLoading from './DocumentListItemLoading.vue';
 import DocumentList from './DocumentList.vue';
 
-const props = withDefaults(
-  defineProps<{
-    documents: DocumentListItemType[];
-    loading?: boolean;
-  }>(),
-  {
-    loading: false,
-  }
-);
+interface DocumentBrowserProps {
+  documents: DocumentListItemType[];
+  loading?: boolean;
+}
 
-const emit = defineEmits<{
+interface DocumentBrowserEvents {
   (e: 'new-doc'): void;
   (e: 'view-doc', id: string): void;
-}>();
+}
+
+const props = withDefaults(defineProps<DocumentBrowserProps>(), {
+  loading: false,
+});
+const emit = defineEmits<DocumentBrowserEvents>();
 
 const isEmpty = computed(() => props.documents.length === 0);
 

@@ -2,13 +2,16 @@
 import PrimeButton from 'primevue/button';
 import type { DocumentListItem } from './DocumentBrowser.state';
 
-const props = defineProps<{
+interface DocumentListItemProps {
   document: DocumentListItem;
-}>();
+}
 
-const emit = defineEmits<{
+interface DocumentListItemEvents {
   (e: 'view-doc', id: string): void;
-}>();
+}
+
+const props = defineProps<DocumentListItemProps>();
+const emit = defineEmits<DocumentListItemEvents>();
 
 const viewDoc = () => {
   emit('view-doc', props.document.id);
