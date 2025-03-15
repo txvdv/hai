@@ -68,7 +68,11 @@ onMounted(() => {
 <template>
   <Navigation :items="navItems" />
   <div class="editor flex items-start">
-    <DocumentTextarea v-model="doc" @update:modelValue="saveDocument" />
+    <DocumentTextarea
+      v-model="doc"
+      :debounce="500"
+      @update:modelValue="saveDocument"
+    />
     <DocumentSaveIndicator :status="status" :problems="problems" />
   </div>
 </template>
