@@ -3,26 +3,7 @@ import { inject, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import type { ProblemDetails } from '@hai/service-web';
 import { UiCore } from '@hai/ui-core';
-import {
-  DocumentSaveIndicator,
-  DocumentTextarea,
-  Navigation,
-} from '@hai/ui-library';
-
-const navItems = [
-  {
-    text: 'HAI',
-    link: '/',
-  },
-  {
-    text: 'Dashboard',
-    link: '/dashboard',
-  },
-  {
-    text: 'Composer',
-    link: '/composer',
-  },
-];
+import { DocumentSaveIndicator, DocumentTextarea } from '@hai/ui-library';
 
 const core = inject('core') as UiCore;
 const documentService = core.getDocumentService();
@@ -62,7 +43,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <Navigation :items="navItems" />
   <div class="editor flex items-start">
     <DocumentTextarea
       v-model="doc"

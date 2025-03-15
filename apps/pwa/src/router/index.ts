@@ -6,6 +6,7 @@ import {
 } from '@hai/ui-library';
 // import DocumentsView from '../views/DocumentsView.vue';
 // import DocumentsViewWithModel from '../views/DocumentsViewWithModel.vue';
+import AppLayout from '../layout/AppLayout.vue';
 import DashboardPage from '../views/dashboard/DashboardPage.vue';
 import DocumentEditor from '../views/document-composer/DocumentEditor.vue';
 
@@ -14,18 +15,24 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomePage,
-    },
-    {
-      path: '/dashboard',
-      name: 'dashboard',
-      component: DashboardPage,
-    },
-    {
-      path: '/compose/:id',
-      name: 'composer',
-      component: DocumentEditor,
+      component: AppLayout,
+      children: [
+        {
+          path: '/',
+          name: 'home',
+          component: HomePage,
+        },
+        {
+          path: '/dashboard',
+          name: 'dashboard',
+          component: DashboardPage,
+        },
+        {
+          path: '/compose/:id',
+          name: 'composer',
+          component: DocumentEditor,
+        },
+      ],
     },
     {
       path: '/about',

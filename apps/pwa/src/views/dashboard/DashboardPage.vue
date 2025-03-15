@@ -3,22 +3,7 @@ import { inject, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import type { ComposedDocument } from '@hai/service-web';
 import { UiCore } from '@hai/ui-core';
-import { DocumentBrowser, Navigation } from '@hai/ui-library';
-
-const navItems = [
-  {
-    text: 'HAI',
-    link: '/',
-  },
-  {
-    text: 'Dashboard',
-    link: '/dashboard',
-  },
-  {
-    text: 'Composer',
-    link: '/composer',
-  },
-];
+import { DocumentBrowser } from '@hai/ui-library';
 
 const core = inject('core') as UiCore;
 const documentService = core.getDocumentService();
@@ -57,7 +42,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <Navigation :items="navItems" />
   <DocumentBrowser
     :documents="docs"
     @view-doc="viewDoc"
