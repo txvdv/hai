@@ -44,6 +44,9 @@
   ],
   "references": [
     {
+      "path": "../../ui-core/tsconfig.lib.json"
+    },
+    {
       "path": "../../../service/adapter/service-web/tsconfig.lib.json"
     }
   ]

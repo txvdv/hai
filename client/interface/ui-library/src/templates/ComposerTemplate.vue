@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 import Navigation from '../organisms/navigation/Navigation.vue';
 import DocumentEditor from '../organisms/document-editor/DocumentEditor.vue';
-import { ref } from 'vue';
+import DocumentBrowser from '../organisms/document-browser/DocumentBrowser.vue';
 
 const navItems = [
   {
@@ -19,19 +20,15 @@ const navItems = [
 ];
 
 const doc = ref('');
+const documents = ref([]);
 </script>
 
 <template>
   <div class="h-screen">
     <Navigation :items="navItems" />
-    <main class="grid grid-cols-2 gap-4 h-dvh">
-      <div class="w-auto border">
-        <div>browser</div>
-      </div>
-      <div class="w-auto h-full border">
-        <div>editor</div>
-        <DocumentEditor :model-value="doc" />
-      </div>
+    <main class="grid grid-cols-2 gap-4">
+      <DocumentBrowser :documents="documents" />
+      <DocumentEditor :model-value="doc" />
     </main>
   </div>
 </template>

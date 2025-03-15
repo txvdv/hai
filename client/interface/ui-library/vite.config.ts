@@ -36,8 +36,14 @@ export default defineConfig(() => ({
       formats: ['es' as const],
     },
     rollupOptions: {
-      // External packages that should not be bundled into your library.
-      external: ['vue', 'vue-router', 'primevue'],
+      // External packages that should not be bundled into the library.
+      external: [
+        'vue',
+        'vue-router',
+        'primevue',
+        '@hai/service-web',
+        '@hai/ui-core',
+      ],
     },
   },
   test: {
