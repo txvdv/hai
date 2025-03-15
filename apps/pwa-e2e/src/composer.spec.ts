@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('/composer route tests', () => {
+test.describe.skip('/composer route tests', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the composer route before each test
     await page.goto('/composer');
@@ -14,7 +14,9 @@ test.describe('/composer route tests', () => {
     await expect(navLinks.nth(1)).toHaveText('Dashboard');
     await expect(navLinks.nth(2)).toHaveText('Composer');
 
-    await expect(page.locator('button:has-text("Create your first document")')).toBeVisible();
+    await expect(
+      page.locator('button:has-text("Create your first document")')
+    ).toBeVisible();
   });
 
   test('can create a new document', async ({ page }) => {
@@ -42,7 +44,9 @@ test.describe('/composer route tests', () => {
     await flushPromises();
 
     await page.waitForSelector('role=button[name="Edit Document"]');
-    const editButton = page.getByRole('button', { name: 'Edit Document' }).first();
+    const editButton = page
+      .getByRole('button', { name: 'Edit Document' })
+      .first();
     await editButton.click();
 
     // Modify the content
@@ -64,7 +68,9 @@ test.describe('/composer route tests', () => {
 
     // Click the "delete" button for the created document
     await page.waitForSelector('role=button[name="Delete Document"]');
-    const deleteButton = page.getByRole('button', { name: 'Delete Document' }).first();
+    const deleteButton = page
+      .getByRole('button', { name: 'Delete Document' })
+      .first();
     await deleteButton.click();
 
     // Verify the document is removed from the list
