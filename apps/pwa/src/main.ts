@@ -1,7 +1,7 @@
 import './styles.css';
 import router from './router';
 import { createApp } from 'vue';
-import App from './app/App.vue';
+import App from './App.vue';
 import { PrimeVueConfig, DefaultTheme } from '@hai/ui-library';
 import { UiCore } from '@hai/ui-core';
 import './sw-registration';
