@@ -6,6 +6,7 @@ import {
 } from '@hai/ui-library';
 // import DocumentsView from '../views/DocumentsView.vue';
 import DocumentsViewWithModel from '../views/DocumentsViewWithModel.vue';
+import DocumentEditor from '../views/document-composer/DocumentEditor.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,6 +25,11 @@ const router = createRouter({
       path: '/composer',
       name: 'composer',
       component: DocumentsViewWithModel,
+    },
+    {
+      path: '/docs/:id',
+      name: 'document-composer',
+      component: DocumentEditor,
     },
     {
       path: '/about',
