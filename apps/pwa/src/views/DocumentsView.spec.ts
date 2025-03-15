@@ -3,8 +3,7 @@ import { mount, VueWrapper, ComponentMountingOptions } from '@vue/test-utils';
 import { flushPromises } from '@hai/common-utils';
 import DocumentsView from './DocumentsView.vue';
 import { MockProxy, mock } from 'vitest-mock-extended';
-import type { MockDocumentService } from '@hai/ui-core';
-import { createMockDocumentService } from '@hai/ui-core';
+import { DocumentService } from '@hai/ui-core';
 
 // Set up the initial state
 let mockDocuments = [
@@ -21,7 +20,7 @@ let mockDocuments = [
 describe('DocumentsView', () => {
   let mockServiceWorkerController: MockProxy<ServiceWorker>;
   let mockServiceWorker: MockProxy<ServiceWorkerContainer>;
-  let mockDocService: MockDocumentService;
+  let mockDocService: MockProxy<DocumentService>;
   let wrapper: VueWrapper<typeof DocumentsView>;
   let mountOptions: ComponentMountingOptions<typeof DocumentsView>;
 
@@ -32,7 +31,13 @@ describe('DocumentsView', () => {
   };
 
   beforeEach(async () => {
-    mockDocService = createMockDocumentService();
+    mockDocService = mock<DocumentService>();
+    mockDocService.getDocuments.mockResolvedValue({
+      status: 'success',
+      payload: {
+        documents: [],
+      },
+    });
 
     mockServiceWorkerController = mock<ServiceWorker>();
     mockServiceWorker = mock<ServiceWorkerContainer>();

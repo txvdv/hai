@@ -24,8 +24,5 @@ export class UiCore {
 }
 
 export { DocumentService };
-export { createMockDocumentService } from './service/document-service.mock.js';
-export type { MockDocumentService } from './service/document-service.mock.js';
-
 export { DocumentBrowserViewModel };
 export type { DocumentBrowserViewState } from './document-browser/view-model.js';
