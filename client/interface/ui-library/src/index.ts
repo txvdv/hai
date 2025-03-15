@@ -3,6 +3,7 @@ export { DefaultTheme, PrimeVueConfig } from './styles/primevue';
 
 export { default as ProblemDetails } from './molecules/problem-details/ProblemDetails.vue';
 
+export { default as DocumentBrowser } from './organisms/document-browser/DocumentBrowser.vue';
 export { default as DocumentSaveIndicator } from './organisms/document-editor/DocumentSaveIndicator.vue';
 export { default as DocumentTextarea } from './organisms/document-editor/DocumentTextarea.vue';
 export { default as Footer } from './organisms/footer/Footer.vue';
