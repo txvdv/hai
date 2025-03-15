@@ -6,24 +6,9 @@ import { PrimeVueConfig, DefaultTheme } from '@hai/ui-library';
 import { UiCore } from '@hai/ui-core';
 import './sw-registration';
 
-import { AppService } from './service/app-service';
-import { DocumentService } from './service/document-service';
-
-export interface ClientCore {
-  appService: AppService;
-  documentService: DocumentService;
-}
-
 navigator.serviceWorker.ready.then(() => {
   console.log('Service Worker ready. Initializing app...');
-
-  // const core: ClientCore = {
-  //   appService: new AppService(),
-  //   documentService: new DocumentService(),
-  // };
-
   const core = new UiCore();
-
   const app = createApp(App);
   app.use(router);
   app.use(PrimeVueConfig, {
