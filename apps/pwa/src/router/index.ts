@@ -1,11 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import {
   HomePage,
-  DashboardPage,
+  // DashboardPage,
   // ComposerPage
 } from '@hai/ui-library';
 // import DocumentsView from '../views/DocumentsView.vue';
 import DocumentsViewWithModel from '../views/DocumentsViewWithModel.vue';
+import DashboardPage from '../views/dashboard/DashboardPage.vue';
 import DocumentEditor from '../views/document-composer/DocumentEditor.vue';
 
 const router = createRouter({

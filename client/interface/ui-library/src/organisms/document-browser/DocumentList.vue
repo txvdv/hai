@@ -1,10 +1,10 @@
 <!--suppress CssUnusedSymbol -->
 <script setup lang="ts">
-import type { DocumentListItem as DocumentListItemType } from './DocumentBrowser.state';
+import type { ComposedDocument } from '@hai/service-web';
 import DocumentListItem from './DocumentListItem.vue';
 
 interface DocumentListProps {
-  documents: DocumentListItemType[];
+  documents: ComposedDocument[];
 }
 
 interface DocumentListEvents {

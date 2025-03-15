@@ -2,13 +2,13 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { DocumentListItem as DocumentListItemType } from './DocumentBrowser.state';
+import type { ComposedDocument } from '@hai/service-web';
 import DocumentListItemCreate from './DocumentListItemCreate.vue';
 import DocumentListItemLoading from './DocumentListItemLoading.vue';
 import DocumentList from './DocumentList.vue';
 
 interface DocumentBrowserProps {
-  documents: DocumentListItemType[];
+  documents: ComposedDocument[];
   loading?: boolean;
 }
 

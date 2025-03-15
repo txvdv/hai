@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import PrimeButton from 'primevue/button';
-import type { DocumentListItem } from './DocumentBrowser.state';
+import type { ComposedDocument } from '@hai/service-web';
 
 interface DocumentListItemProps {
-  document: DocumentListItem;
+  document: ComposedDocument;
 }
 
 interface DocumentListItemEvents {
