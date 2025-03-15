@@ -6,6 +6,9 @@ import {
   DocumentDeleteMessage,
   DocumentDeleteResponseMessage,
   DocumentDeleteResponsePayload,
+  DocumentGetMessage,
+  DocumentGetResponseMessage,
+  DocumentGetResponsePayload,
   DocumentListMessage,
   DocumentListResponseMessage,
   DocumentListResponsePayload,
@@ -48,6 +51,21 @@ export class DocumentService {
     const res = await this.client.sendAndWait<
       DocumentDeleteMessage,
       DocumentDeleteResponseMessage
+    >(req);
+    return asSimpleResponseMessage(res);
+  }
+
+  async getDocument(
+    id: string
+  ): Promise<SimpleMessageResponse<DocumentGetResponsePayload>> {
+    const req: DocumentGetMessage = buildMessage('Document.Get', {
+      payload: {
+        id,
+      },
+    });
+    const res = await this.client.sendAndWait<
+      DocumentGetMessage,
+      DocumentGetResponseMessage
     >(req);
     return asSimpleResponseMessage(res);
   }
