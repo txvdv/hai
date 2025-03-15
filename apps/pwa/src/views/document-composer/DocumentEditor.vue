@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import { inject, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import type { ProblemDetails } from '@hai/service-web';
-import { UiCore } from '@hai/ui-core';
 import { DocumentSaveIndicator, DocumentTextarea } from '@hai/ui-library';
+import { useDocumentService } from '../../service/use-document-service';
 
-const core = inject('core') as UiCore;
-const documentService = core.getDocumentService();
-
+const { documentService } = useDocumentService();
 const route = useRoute();
 const id = Array.isArray(route.params.id)
   ? route.params.id[0]
