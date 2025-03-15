@@ -4,7 +4,7 @@ import { UiCore } from '@hai/ui-core';
 import Dialog from './Dialog.vue';
 import { computed, inject, onMounted, ref, nextTick } from 'vue';
 // import { ClientCore } from '../main';
-import { waitForServiceWorkerController } from '../service/app-service';
+import { waitForServiceWorkerController } from '../../service/app-service';
 
 const navItems = [
   {

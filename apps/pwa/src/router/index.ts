@@ -1,11 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import {
-  HomePage,
-  // DashboardPage,
-  // ComposerPage
-} from '@hai/ui-library';
-// import DocumentsView from '../views/DocumentsView.vue';
-// import DocumentsViewWithModel from '../views/DocumentsViewWithModel.vue';
+import { HomePage } from '@hai/ui-library';
 import AppLayout from '../layout/AppLayout.vue';
 import DashboardPage from '../views/dashboard/DashboardPage.vue';
 import DocumentEditor from '../views/document-composer/DocumentEditor.vue';
@@ -40,7 +34,7 @@ const router = createRouter({
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue'),
+      component: () => import('../views/about/AboutView.vue'),
     },
   ],
 });
