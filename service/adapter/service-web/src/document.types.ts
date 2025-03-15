@@ -62,3 +62,18 @@ export type DocumentDeleteResponseMessage =
 export type DocumentDeleteResponsePayload = {
   id: string;
 };
+
+export type DocumentGetMessage = MessageEnvelope<DocumentGetPayload> & {
+  type: 'Document.Get';
+};
+
+export type DocumentGetPayload = {
+  id: string;
+};
+
+export type DocumentGetResponseMessage =
+  MessageResponse<DocumentGetResponsePayload> & {
+    type: 'Document.Get.Response';
+  };
+
+export type DocumentGetResponsePayload = ComposedDocument;

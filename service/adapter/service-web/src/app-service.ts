@@ -1,6 +1,10 @@
 import { buildMessageResponse } from './app-messaging.js';
 import { MessageEnvelope, MessageResponse } from './app-messaging.js';
-import { DxDatabase, DxDocumentRepository, UnitOfWork } from '@hai/service-infra';
+import {
+  DxDatabase,
+  DxDocumentRepository,
+  UnitOfWork,
+} from '@hai/service-infra';
 import { DocumentService } from '@hai/core-service';
 
 export function getAppService(): AppService {
@@ -36,7 +40,7 @@ class AppServiceImpl implements AppService {
     this.repo = new DxDocumentRepository(this.db);
     this.documentService = new DocumentService({
       documentRepository: this.repo,
-      uow: this.uow
+      uow: this.uow,
     });
   }
 
@@ -53,72 +57,67 @@ class AppServiceImpl implements AppService {
     }
   }
 
-  async handleMessageAsync(msg: MessageEnvelope): Promise<MessageResponse<any>> {
+  async handleMessageAsync(
+    msg: MessageEnvelope
+  ): Promise<MessageResponse<any>> {
     if (!this.started) {
       throw new Error('AppService not started.');
     }
 
-    const {correlationId} = msg.metadata;
+    const { correlationId } = msg.metadata;
     if (!correlationId) {
       throw new Error('correlationId must be provided.');
     }
 
-    let res: MessageResponse<any>
+    let res: MessageResponse<any>;
 
     if (msg.type === 'App.Ping') {
-      res = buildMessageResponse(
-        'App.Pong', 'success', {
-          payload: 'pong',
-          correlationId
-        }
-      )
+      res = buildMessageResponse('App.Pong', 'success', {
+        payload: 'pong',
+        correlationId,
+      });
     } else if (msg.type === 'Document.List') {
       const documents = await this.documentService.getDocuments();
-      res = buildMessageResponse(
-        'Document.List.Response', 'success', {
-          payload: { documents },
-          correlationId
-        }
-      );
+      res = buildMessageResponse('Document.List.Response', 'success', {
+        payload: { documents },
+        correlationId,
+      });
+    } else if (msg.type === 'Document.Get') {
+      const { id } = msg.payload;
+      const document = await this.documentService.getDocument(id);
+      res = buildMessageResponse('Document.Get.Response', 'success', {
+        payload: document,
+        correlationId,
+      });
     } else if (msg.type === 'Document.Create') {
-      const {content} = msg.payload;
+      const { content } = msg.payload;
       const document = await this.documentService.createDocument(content);
-      res = buildMessageResponse(
-        'Document.Create.Response', 'success', {
-          payload: document,
-          correlationId
-        }
-      )
+      res = buildMessageResponse('Document.Create.Response', 'success', {
+        payload: document,
+        correlationId,
+      });
     } else if (msg.type === 'Document.Update') {
-      const {id, content} = msg.payload;
+      const { id, content } = msg.payload;
       await this.documentService.updateDocument(id, content);
-      const {correlationId} = msg.metadata;
-      res = buildMessageResponse(
-        'Document.Update.Response', 'success', {
-          payload: { id, content },
-          correlationId
-        }
-      )
-    }
-
-    else if (msg.type === 'Document.Delete') {
-      const {id} = msg.payload;
+      const { correlationId } = msg.metadata;
+      res = buildMessageResponse('Document.Update.Response', 'success', {
+        payload: { id, content },
+        correlationId,
+      });
+    } else if (msg.type === 'Document.Delete') {
+      const { id } = msg.payload;
       await this.documentService.deleteDocument(id);
-      res = buildMessageResponse(
-        "Document.Delete.Response", "success", {
-          payload: { id },
-          correlationId
-        }
-      )
+      res = buildMessageResponse('Document.Delete.Response', 'success', {
+        payload: { id },
+        correlationId,
+      });
     } else {
-      res = buildMessageResponse(
-        'App.Error', 'error', {
-          payload: {
-            type: 'App.UnknownMessageTypeError',
-            title: `Unknown message type: ${msg.type}`,
-          },
-        }
-      )
+      res = buildMessageResponse('App.Error', 'error', {
+        payload: {
+          type: 'App.UnknownMessageTypeError',
+          title: `Unknown message type: ${msg.type}`,
+        },
+      });
     }
 
     return res;
@@ -143,8 +142,8 @@ class AppServiceImpl implements AppService {
  */
 export type PingMessage = MessageEnvelope<string> & {
   type: 'App.Ping';
-}
+};
 
 export type PingResponseMessage = MessageResponse<string> & {
   type: 'App.Pong';
-}
+};
