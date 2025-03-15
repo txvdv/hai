@@ -37,8 +37,18 @@ function getDocuments() {
   });
 }
 
+function createAndOpenDocument() {
+  documentService.createDocument('').then((response) => {
+    if (response.status === 'error') {
+      throw response.payload;
+    } else {
+      viewDoc(response.payload.id);
+    }
+  });
+}
+
 function viewDoc(id: string) {
-  router.push(`/docs/${id}`);
+  router.push(`/compose/${id}`);
 }
 
 onMounted(() => {
@@ -48,5 +58,9 @@ onMounted(() => {
 
 <template>
   <Navigation :items="navItems" />
-  <DocumentBrowser :documents="docs" @view-doc="viewDoc" />
+  <DocumentBrowser
+    :documents="docs"
+    @view-doc="viewDoc"
+    @new-doc="createAndOpenDocument"
+  />
 </template>

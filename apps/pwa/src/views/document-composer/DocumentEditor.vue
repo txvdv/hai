@@ -22,10 +22,6 @@ const navItems = [
     text: 'Composer',
     link: '/composer',
   },
-  {
-    text: 'Composer',
-    link: '/docs',
-  },
 ];
 
 const core = inject('core') as UiCore;
