@@ -41,5 +41,10 @@
     "src/**/*.ts",
     "src/**/*.tsx",
     "src/**/*.vue"
+  ],
+  "references": [
+    {
+      "path": "../../../service/adapter/service-web/tsconfig.lib.json"
+    }
   ]
 }
