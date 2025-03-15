@@ -3,7 +3,7 @@ import { Navigation } from '@hai/ui-library';
 import { DocumentBrowserViewState, UiCore } from '@hai/ui-core';
 import Dialog from './Dialog.vue';
 import { computed, inject, onMounted, ref, nextTick, onUnmounted } from 'vue';
-import { waitForServiceWorkerController } from '../../service/app-service';
+import { waitForServiceWorkerController } from '../../service/service-worker-utils';
 
 const navItems = [
   {
