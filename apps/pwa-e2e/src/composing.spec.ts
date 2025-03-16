@@ -38,4 +38,21 @@ test.describe('composing documents', () => {
     await page.goto('/dashboard');
     await expect(page.getByText('This is an updated document.')).toBeVisible();
   });
+
+  test('empty documents are deleted', async ({ page }) => {
+    await page.locator('button:has-text("Create your first document")').click();
+    await page.waitForURL('**/compose/**');
+    const textarea = page.locator('textarea');
+    await textarea.fill('');
+    await page.waitForTimeout(501);
+
+    // doesn't work because that causes a page destruction
+    // onUnMounted is never called
+    // await page.goto('/dashboard');
+    await page.getByText('Dashboard').click();
+
+    await expect(
+      page.locator('button:has-text("Create your first document")')
+    ).toBeVisible();
+  });
 });
