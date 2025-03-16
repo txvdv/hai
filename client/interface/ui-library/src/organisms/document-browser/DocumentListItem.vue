@@ -29,4 +29,8 @@ const viewDoc = () => {
 
 <style>
 @reference '../../styles/style.css';
+
+.document__content {
+  @apply px-2 pt-2;
+}
 </style>
