@@ -10,6 +10,10 @@ const navItems = [
     text: 'Dashboard',
     link: '/dashboard',
   },
+  {
+    text: 'About',
+    link: '/about',
+  },
 ];
 </script>
 

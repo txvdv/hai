@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, reactive } from 'vue';
-import Button from 'primevue/button';
+import PvButton from 'primevue/button';
 
 const layoutConfig = reactive({
-  darkTheme: false
+  darkTheme: false,
 });
 
 const toggleDarkMode = () => {
@@ -25,17 +25,17 @@ const toggleIcon = computed(() => {
   } else {
     return 'pi pi-sun';
   }
-})
-
+});
 </script>
 
 <template>
   <div class="flex">
-    <Button :icon="toggleIcon"
-            rounded
-            variant="outlined"
-            aria-label="Toggle theme"
-            @click="toggleDarkMode"
+    <PvButton
+      :icon="toggleIcon"
+      rounded
+      variant="text"
+      aria-label="Toggle theme"
+      @click="toggleDarkMode"
     />
   </div>
 </template>
