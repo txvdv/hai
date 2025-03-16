@@ -1,6 +1,7 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
+import { given, then } from './hai.steps';
 
 test('has title', async ({ page }) => {
-  await page.goto('/');
-  expect(await page.locator('h1').innerText()).toContain('Human Accepted Interaction');
+  await given.userIsOnHomePage(page);
+  await then.titleIsVisible(page, 'Human Accepted Interaction');
 });
