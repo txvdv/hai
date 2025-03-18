@@ -1,5 +1,5 @@
 import { Entity } from 'dexie';
-import { Document, DocumentRepository } from '@hai/core-service';
+import type { ComposedDocument, DocumentRepository } from '@hai/core-service';
 import { DxDatabase } from './database.js';
 
 export class DocumentEntity extends Entity<DxDatabase> {
@@ -8,21 +8,20 @@ export class DocumentEntity extends Entity<DxDatabase> {
 }
 
 export class DxDocumentRepository implements DocumentRepository {
-  constructor(
-    private db: DxDatabase) {
-  }
+  constructor(private db: DxDatabase) {}
 
-  async getDocument(id: string): Promise<Document | null> {
+  async getDocument(id: string): Promise<ComposedDocument | null> {
     const doc = await this.db.documents.get(id);
     if (!doc) return null;
-    return doc
+    return asDocument(doc);
   }
 
-  async getDocuments(): Promise<Document[]> {
-    return this.db.documents.toArray();
+  async getDocuments(): Promise<ComposedDocument[]> {
+    const docs = await this.db.documents.toArray();
+    return docs.map(asDocument);
   }
 
-  save(doc: Document): void {
+  save(doc: ComposedDocument): void {
     this.db.addOperation(this.db.documents, async () => {
       await this.db.documents.put(mapToDocumentEntity(doc));
     });
@@ -35,6 +34,13 @@ export class DxDocumentRepository implements DocumentRepository {
   }
 }
 
-function mapToDocumentEntity(doc: Document): DocumentEntity {
+function mapToDocumentEntity(doc: ComposedDocument): DocumentEntity {
   return doc as unknown as DocumentEntity;
+}
+
+function asDocument(entity: DocumentEntity): ComposedDocument {
+  return {
+    id: entity.id,
+    content: entity.content,
+  };
 }
