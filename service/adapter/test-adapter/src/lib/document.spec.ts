@@ -16,8 +16,9 @@ describe('Document Service', () => {
     console.log('createRes', createRes);
 
     const getRes = await appTest.sendAndWait(GetDocument, {
-      id: createRes.id,
+      id: createRes.value.id,
     });
     console.log('getRes', getRes);
+    expect(getRes.isSuccess).toBeTruthy;
   });
 });
