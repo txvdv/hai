@@ -29,6 +29,9 @@
     },
     {
       "path": "./client/ui-core"
+    },
+    {
+      "path": "./service/adapter/test-adapter"
     }
   ],
   "ts-node": {

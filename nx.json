@@ -31,7 +31,7 @@
           "watchDepsName": "watch-deps"
         }
       },
-      "exclude": ["client/ui-core/*"]
+      "exclude": ["client/ui-core/*", "service/adapter/test-adapter/*"]
     },
     {
       "plugin": "@nx/vite/plugin",
@@ -76,7 +76,7 @@
     },
     {
       "plugin": "@nx/js/typescript",
-      "include": ["client/ui-core/*"],
+      "include": ["client/ui-core/*", "service/adapter/test-adapter/*"],
       "options": {
         "typecheck": {
           "targetName": "typecheck"
@@ -86,7 +86,7 @@
   ],
   "targetDefaults": {
     "test": {
-      "dependsOn": ["^build", "^build", "^build"]
+      "dependsOn": ["^build", "^build", "^build", "^build"]
     },
     "e2e-ci--**/*": {
       "dependsOn": ["^build"]
