@@ -84,21 +84,24 @@ class AppServiceImpl implements AppService {
       });
     } else if (msg.type === 'Document.Get') {
       const { id } = msg.payload;
-      const document = await this.documentService.getDocument(id);
+      const document = await this.documentService.getDocument({ id });
       res = buildMessageResponse('Document.Get.Response', 'success', {
         payload: document,
         correlationId,
       });
     } else if (msg.type === 'Document.Create') {
       const { content } = msg.payload;
-      const document = await this.documentService.createDocument(content);
+      const document = await this.documentService.createDocument({ content });
       res = buildMessageResponse('Document.Create.Response', 'success', {
         payload: document,
         correlationId,
       });
     } else if (msg.type === 'Document.Update') {
       const { id, content } = msg.payload;
-      await this.documentService.updateDocument(id, content);
+      await this.documentService.updateDocument({
+        id,
+        content,
+      });
       const { correlationId } = msg.metadata;
       res = buildMessageResponse('Document.Update.Response', 'success', {
         payload: { id, content },
@@ -106,7 +109,7 @@ class AppServiceImpl implements AppService {
       });
     } else if (msg.type === 'Document.Delete') {
       const { id } = msg.payload;
-      await this.documentService.deleteDocument(id);
+      await this.documentService.deleteDocument({ id });
       res = buildMessageResponse('Document.Delete.Response', 'success', {
         payload: { id },
         correlationId,
