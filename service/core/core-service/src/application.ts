@@ -2,6 +2,12 @@ import { MessageBus } from './message-bus.js';
 import { UnitOfWork } from './app.types.js';
 import { DocumentService } from './document-service/document-service.js';
 import { DocumentRepository } from './document-service/document-repository.js';
+import {
+  CreateDocument,
+  CreateDocumentPayload,
+  GetDocument,
+  GetDocumentPayload,
+} from './document-service/document.types.js';
 
 interface ApplicationDependencies {
   messageBus: MessageBus;
@@ -30,15 +36,15 @@ export class Application {
 
   private registerDocumentHandlers() {
     this.messageBus.registerCommand(
-      'CREATE_DOCUMENT',
-      async (cmd: { content: string }) => {
+      CreateDocument,
+      async (cmd: CreateDocumentPayload) => {
         return this.documentService.createDocument(cmd);
       }
     );
 
     this.messageBus.registerQuery(
-      'GET_DOCUMENT',
-      async (qry: { id: string }) => {
+      GetDocument,
+      async (qry: GetDocumentPayload) => {
         return this.documentService.getDocument(qry);
       }
     );

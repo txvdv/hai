@@ -2,6 +2,7 @@ import { createUUID } from '@hai/common-utils';
 import { UnitOfWork } from '../app.types.js';
 import { DocumentRepository } from './document-repository.js';
 import {
+  ComposedDocument,
   CreateDocumentPayload,
   DeleteDocumentPayload,
   GetDocumentPayload,
@@ -25,15 +26,15 @@ export class DocumentService {
     this.uow = deps.uow;
   }
 
-  async getDocument(qry: GetDocumentPayload) {
+  async getDocument(qry: GetDocumentPayload): Promise<ComposedDocument | null> {
     return this.documentRepository.getDocument(qry.id);
   }
 
-  async getDocuments() {
+  async getDocuments(): Promise<ComposedDocument[]> {
     return this.documentRepository.getDocuments();
   }
 
-  async createDocument(cmd: CreateDocumentPayload) {
+  async createDocument(cmd: CreateDocumentPayload): Promise<ComposedDocument> {
     this.uow.start();
     const document = {
       id: createUUID(),
@@ -44,7 +45,7 @@ export class DocumentService {
     return document;
   }
 
-  async updateDocument(cmd: UpdateDocumentPayload) {
+  async updateDocument(cmd: UpdateDocumentPayload): Promise<void> {
     const document = await this.documentRepository.getDocument(cmd.id);
     if (document) {
       this.uow.start();
@@ -54,7 +55,7 @@ export class DocumentService {
     }
   }
 
-  async deleteDocument(cmd: DeleteDocumentPayload) {
+  async deleteDocument(cmd: DeleteDocumentPayload): Promise<void> {
     this.uow.start();
     this.documentRepository.deleteDocument(cmd.id);
     await this.uow.commit();

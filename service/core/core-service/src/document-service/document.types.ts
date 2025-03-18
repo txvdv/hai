@@ -1,20 +1,25 @@
-export type CreateDocument = 'Document.Create';
+export const CreateDocument = 'Document.Create';
 export type CreateDocumentPayload = {
   content: string;
 };
 
-export type DeleteDocument = 'Document.Delete';
+export const DeleteDocument = 'Document.Delete';
 export type DeleteDocumentPayload = {
   id: string;
 };
 
-export type GetDocument = 'Document.Get';
+export const GetDocument = 'Document.Get';
 export type GetDocumentPayload = {
   id: string;
 };
 
-export type UpdateDocument = 'Document.Update';
+export const UpdateDocument = 'Document.Update';
 export type UpdateDocumentPayload = {
+  id: string;
+  content: string;
+};
+
+export type ComposedDocument = {
   id: string;
   content: string;
 };
