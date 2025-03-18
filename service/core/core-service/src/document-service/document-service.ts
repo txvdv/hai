@@ -1,6 +1,12 @@
 import { createUUID } from '@hai/common-utils';
 import { UnitOfWork } from '../app.types.js';
 import { DocumentRepository } from './document-repository.js';
+import {
+  CreateDocumentPayload,
+  DeleteDocumentPayload,
+  GetDocumentPayload,
+  UpdateDocumentPayload,
+} from './document.types.js';
 
 export type Document = {
   id: string;
@@ -19,38 +25,38 @@ export class DocumentService {
     this.uow = deps.uow;
   }
 
-  async getDocument(id: string) {
-    return this.documentRepository.getDocument(id);
+  async getDocument(qry: GetDocumentPayload) {
+    return this.documentRepository.getDocument(qry.id);
   }
 
   async getDocuments() {
     return this.documentRepository.getDocuments();
   }
 
-  async createDocument(content: string) {
+  async createDocument(cmd: CreateDocumentPayload) {
     this.uow.start();
     const document = {
       id: createUUID(),
-      content,
+      content: cmd.content,
     };
     this.documentRepository.save(document);
     await this.uow.commit();
     return document;
   }
 
-  async updateDocument(id: string, content: string) {
-    const document = await this.documentRepository.getDocument(id);
+  async updateDocument(cmd: UpdateDocumentPayload) {
+    const document = await this.documentRepository.getDocument(cmd.id);
     if (document) {
       this.uow.start();
-      document.content = content;
+      document.content = cmd.content;
       this.documentRepository.save(document);
       await this.uow.commit();
     }
   }
 
-  async deleteDocument(id: string) {
+  async deleteDocument(cmd: DeleteDocumentPayload) {
     this.uow.start();
-    this.documentRepository.deleteDocument(id);
+    this.documentRepository.deleteDocument(cmd.id);
     await this.uow.commit();
   }
 }

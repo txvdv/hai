@@ -31,13 +31,16 @@ export class Application {
   private registerDocumentHandlers() {
     this.messageBus.registerCommand(
       'CREATE_DOCUMENT',
-      async (content: string) => {
-        return this.documentService.createDocument(content);
+      async (cmd: { content: string }) => {
+        return this.documentService.createDocument(cmd);
       }
     );
 
-    this.messageBus.registerQuery('GET_DOCUMENT', async (id: string) => {
-      return this.documentService.getDocument(id);
-    });
+    this.messageBus.registerQuery(
+      'GET_DOCUMENT',
+      async (qry: { id: string }) => {
+        return this.documentService.getDocument(qry);
+      }
+    );
   }
 }

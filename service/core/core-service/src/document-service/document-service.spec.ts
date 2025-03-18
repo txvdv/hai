@@ -19,14 +19,18 @@ describe('DocumentService', () => {
 
   describe('getDocument', () => {
     it('should return a document by its ID', async () => {
-      const document = await service.createDocument('Sample Document');
-      const fetchedDocument = await service.getDocument(document.id);
+      const document = await service.createDocument({
+        content: 'Sample Document',
+      });
+      const fetchedDocument = await service.getDocument({ id: document.id });
 
       expect(fetchedDocument).toEqual(document);
     });
 
     it('should return undefined if document does not exist', async () => {
-      const fetchedDocument = await service.getDocument('non-existent-id');
+      const fetchedDocument = await service.getDocument({
+        id: 'non-existent-id',
+      });
 
       expect(fetchedDocument).toBeNull();
     });
@@ -34,8 +38,8 @@ describe('DocumentService', () => {
 
   describe('getDocuments', () => {
     it('should return all documents', async () => {
-      const doc1 = await service.createDocument('Content 1');
-      const doc2 = await service.createDocument('Content 2');
+      const doc1 = await service.createDocument({ content: 'Content 1' });
+      const doc2 = await service.createDocument({ content: 'Content 2' });
 
       const documents = await service.getDocuments();
 
@@ -52,7 +56,7 @@ describe('DocumentService', () => {
   describe('createDocument', () => {
     it('should create and return a new document', async () => {
       const content = 'New Document Content';
-      const document = await service.createDocument(content);
+      const document = await service.createDocument({ content });
 
       expect(document).toEqual(
         expect.objectContaining({
@@ -65,16 +69,24 @@ describe('DocumentService', () => {
 
   describe('updateDocument', () => {
     it('should update the content of an existing document', async () => {
-      const document = await service.createDocument('Initial Content');
-      await service.updateDocument(document.id, 'Updated Content');
+      const document = await service.createDocument({
+        content: 'Initial Content',
+      });
+      await service.updateDocument({
+        id: document.id,
+        content: 'Updated Content',
+      });
 
-      const updatedDocument = await service.getDocument(document.id);
+      const updatedDocument = await service.getDocument({ id: document.id });
 
       expect(updatedDocument?.content).toBe('Updated Content');
     });
 
     it('should do nothing if the document does not exist', async () => {
-      await service.updateDocument('non-existent-id', 'New Content');
+      await service.updateDocument({
+        id: 'non-existent-id',
+        content: 'New Content',
+      });
 
       const documents = await service.getDocuments();
       expect(documents).toEqual([]);
@@ -83,10 +95,12 @@ describe('DocumentService', () => {
 
   describe('deleteDocument', () => {
     it('should delete a document by its ID', async () => {
-      const document = await service.createDocument('Content to delete');
-      await service.deleteDocument(document.id);
+      const document = await service.createDocument({
+        content: 'Content to delete',
+      });
+      await service.deleteDocument({ id: document.id });
 
-      const deletedDocument = await service.getDocument(document.id);
+      const deletedDocument = await service.getDocument({ id: document.id });
       expect(deletedDocument).toBeNull();
 
       const documents = await service.getDocuments();
@@ -94,8 +108,8 @@ describe('DocumentService', () => {
     });
 
     it('should do nothing if the document does not exist', async () => {
-      const doc1 = await service.createDocument('Existing Doc');
-      await service.deleteDocument('non-existent-id');
+      const doc1 = await service.createDocument({ content: 'Existing Doc' });
+      await service.deleteDocument({ id: 'non-existent-id' });
 
       const documents = await service.getDocuments();
       expect(documents).toEqual([doc1]);
