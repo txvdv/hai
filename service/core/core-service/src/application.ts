@@ -1,9 +1,7 @@
 import { MessageBus } from './message-bus.js';
 import { UnitOfWork } from './app.types.js';
-import {
-  DocumentRepository,
-  DocumentService,
-} from './document-service/document-service.js';
+import { DocumentService } from './document-service/document-service.js';
+import { DocumentRepository } from './document-service/document-repository.js';
 
 interface ApplicationDependencies {
   messageBus: MessageBus;
@@ -27,20 +25,19 @@ export class Application {
       uow: this.unitOfWork,
     });
 
-    // Register message handlers for application-level use cases
-    this.registerHandlers();
+    this.registerDocumentHandlers();
   }
 
-  private registerHandlers() {
+  private registerDocumentHandlers() {
     this.messageBus.registerCommand(
       'CREATE_DOCUMENT',
       async (content: string) => {
-        return this.createDocument(content);
+        return this.documentService.createDocument(content);
       }
     );
-  }
 
-  private async createDocument(content: string) {
-    return this.documentService.createDocument(content);
+    this.messageBus.registerQuery('GET_DOCUMENT', async (id: string) => {
+      return this.documentService.getDocument(id);
+    });
   }
 }

@@ -1,9 +1,10 @@
-import { InMemoryDocumentRepository, DocumentService } from './document-service.js';
+import { DocumentService } from './document-service.js';
+import { InMemoryDocumentRepository } from './in-memory-document-repository.js';
 
 const uow = {
   start: jest.fn(),
   commit: jest.fn().mockResolvedValueOnce(undefined),
-}
+};
 
 describe('DocumentService', () => {
   let service: DocumentService;
@@ -12,7 +13,7 @@ describe('DocumentService', () => {
     const documentRepository = new InMemoryDocumentRepository();
     service = new DocumentService({
       documentRepository,
-      uow
+      uow,
     });
   });
 
@@ -53,10 +54,12 @@ describe('DocumentService', () => {
       const content = 'New Document Content';
       const document = await service.createDocument(content);
 
-      expect(document).toEqual(expect.objectContaining({
-        id: expect.any(String),
-        content
-      }));
+      expect(document).toEqual(
+        expect.objectContaining({
+          id: expect.any(String),
+          content,
+        })
+      );
     });
   });
 
@@ -99,4 +102,3 @@ describe('DocumentService', () => {
     });
   });
 });
-
