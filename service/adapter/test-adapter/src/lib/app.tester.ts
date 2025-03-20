@@ -3,7 +3,12 @@ import {
   DxDocumentRepository,
   UnitOfWork,
 } from '@hai/service-infra';
-import { Application, InMemoryMessageBus, MessageBus } from '@hai/core-service';
+import {
+  Application,
+  InMemoryMessageBus,
+  MessageBus,
+  Result,
+} from '@hai/core-service';
 
 export class AppTester {
   private readonly db: DxDatabase;
@@ -24,7 +29,7 @@ export class AppTester {
     });
   }
 
-  async sendAndWait(type: string, payload: any): Promise<any> {
+  async sendAndWait(type: string, payload: any): Promise<Result<any, any>> {
     return this.messageBus.sendAndWait(type, payload);
   }
 }

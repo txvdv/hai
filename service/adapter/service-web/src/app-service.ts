@@ -6,6 +6,8 @@ import {
   UnitOfWork,
 } from '@hai/service-infra';
 import { DocumentService } from '@hai/core-service';
+import { Application, InMemoryMessageBus, MessageBus } from '@hai/core-service';
+import { DocumentController } from './document.controller.js';
 
 export function getAppService(): AppService {
   return AppServiceImpl.getInstance();
@@ -31,16 +33,25 @@ class AppServiceImpl implements AppService {
 
   private readonly db: DxDatabase;
   private readonly uow: UnitOfWork;
-  private readonly repo: DxDocumentRepository;
+  private readonly documentController: DocumentController;
+  private readonly documentRepository: DxDocumentRepository;
   private readonly documentService: DocumentService;
+  private readonly messageBus: MessageBus;
 
   private constructor(config: AppServiceConfig = {}) {
     this.db = new DxDatabase();
     this.uow = new UnitOfWork(this.db);
-    this.repo = new DxDocumentRepository(this.db);
+    this.documentRepository = new DxDocumentRepository(this.db);
     this.documentService = new DocumentService({
-      documentRepository: this.repo,
+      documentRepository: this.documentRepository,
       uow: this.uow,
+    });
+    this.documentController = new DocumentController(this.documentService);
+    this.messageBus = new InMemoryMessageBus();
+    new Application({
+      documentRepository: this.documentRepository,
+      messageBus: this.messageBus,
+      unitOfWork: this.uow,
     });
   }
 
@@ -54,6 +65,77 @@ class AppServiceImpl implements AppService {
   handleMessage(msg: MessageEnvelope): void {
     if (!this.started) {
       throw new Error('AppService not started.');
+    }
+  }
+
+  async handleMessageAsyncViaController(
+    msg: MessageEnvelope
+  ): Promise<MessageResponse<any>> {
+    if (!this.started) {
+      throw new Error('AppService not started.');
+    }
+
+    if (msg.type.startsWith('Document')) {
+      return await this.documentController.handle(msg);
+    }
+
+    return buildMessageResponse(`${msg.type}.Response`, 'error', {
+      payload: {
+        title: 'Unhandled Type',
+        detail: 'No controller found for this type.',
+      },
+      correlationId: msg.metadata.correlationId,
+    });
+  }
+
+  async handleMessageAsync_(
+    msg: MessageEnvelope
+  ): Promise<MessageResponse<any>> {
+    if (!this.started) {
+      throw new Error('AppService not started.');
+    }
+
+    const { correlationId } = msg.metadata;
+    if (!correlationId) {
+      throw new Error('correlationId must be provided.');
+    }
+
+    try {
+      const { type, payload } = msg;
+      /**
+       * if type starts with 'Document'
+       * return documentController.handle(msg)
+       */
+      /**
+       * Normally:
+       * 1. validate incoming message
+       * 2. map to command/query payload
+       * 3. issue command/query
+       * 4. map to response
+       */
+      const result = await this.messageBus.sendAndWait(type, payload);
+      if (result.success) {
+        return buildMessageResponse('Document.List.Response', 'success', {
+          payload: { documents: result.value },
+          correlationId,
+        });
+      } else {
+        return buildMessageResponse('Document.List.Response', 'error', {
+          payload: {
+            title: 'Error',
+            detail: result.error,
+          },
+          correlationId,
+        });
+      }
+    } catch (e) {
+      return buildMessageResponse('Document.List.Response', 'error', {
+        payload: {
+          title: 'Error',
+          detail: 'Something went wrong.',
+        },
+        correlationId,
+      });
     }
   }
 

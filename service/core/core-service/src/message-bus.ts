@@ -1,12 +1,17 @@
-export enum MessageType {
-  CREATE_DOCUMENT = 'CREATE_DOCUMENT',
-}
+import { Result } from './app.types.js';
 
 // MessageBus interface
 export interface MessageBus {
-  sendAndWait<T>(type: string, payload: any): Promise<T>; // Send sync commands (request-response)
-  registerCommand<T>(type: string, handler: (payload: any) => Promise<T>): void;
-  registerQuery<T>(type: string, handler: (payload: any) => Promise<T>): void;
+  sendAndWait<T>(type: string, payload: any): Promise<Result<T, any>>; // Send sync commands (request-response)
+  registerCommand<T>(
+    type: string,
+    handler: (payload: any) => Promise<Result<T, any>>
+  ): void;
+
+  registerQuery<T>(
+    type: string,
+    handler: (payload: any) => Promise<Result<T, any>>
+  ): void;
 }
 
 export class InMemoryMessageBus implements MessageBus {
@@ -14,16 +19,19 @@ export class InMemoryMessageBus implements MessageBus {
 
   registerCommand<T>(
     type: string,
-    handler: (payload: any) => Promise<T>
+    handler: (payload: any) => Promise<Result<T, any>>
   ): void {
     this.syncHandlers.set(type, handler);
   }
 
-  registerQuery<T>(type: string, handler: (payload: any) => Promise<T>): void {
+  registerQuery<T>(
+    type: string,
+    handler: (payload: any) => Promise<Result<T, any>>
+  ): void {
     this.syncHandlers.set(type, handler);
   }
 
-  sendAndWait<T>(type: string, payload: any): Promise<T> {
+  sendAndWait<T>(type: string, payload: any): Promise<Result<T, any>> {
     const handler = this.syncHandlers.get(type);
     if (!handler) throw new Error(`No handler for ${type}`);
     return handler(payload);
