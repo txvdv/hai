@@ -36,7 +36,7 @@ export class LocalUserAccountService {
     this.localUserAccountRepository.save(user);
     await this.uow.commit();
 
-    return success({ userId });
+    return success({ id: userId });
   }
 
   async deleteAccount(): Promise<Result<void, EntityNotFoundError>> {
@@ -55,7 +55,15 @@ export class LocalUserAccountService {
     return success(undefined);
   }
 
-  async getAccount() {
+  async getAccount(): Promise<Result<LocalUserAccount, EntityNotFoundError>> {
+    const existingAccount =
+      await this.localUserAccountRepository.hasLocalUser();
+    if (!existingAccount) {
+      return failure(
+        new EntityNotFoundError('LocalUserAccount does not exist')
+      );
+    }
+
     const user = await this.localUserAccountRepository.getLocalUser();
     return success(user);
   }

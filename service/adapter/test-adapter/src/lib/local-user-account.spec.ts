@@ -21,20 +21,14 @@ describe('Local User Account', () => {
   });
 
   describe('CreateLocalUserAccount', () => {
-    test('Creating a user', async () => {
-      const createRes = await appTest.sendAndWait(
-        CreateLocalUserAccount,
-        undefined
-      );
+    test('should return Ok with the created accountId', async () => {
+      const createRes = await appTest.sendAndWait(CreateLocalUserAccount);
       assert(createRes.success);
-      console.log(createRes.data);
-
-      const getRes = await appTest.sendAndWait(GetLocalUserAccount, undefined);
-      expect(getRes.success).toBeTruthy;
+      expect(createRes.data.id).toBeDefined();
     });
 
-    test('should return an error when an account is already present', async () => {
-      await appTest.sendAndWait(CreateLocalUserAccount, undefined);
+    test('should return LocalUserAccountAlreadyExists when an account already exists', async () => {
+      await appTest.sendAndWait(CreateLocalUserAccount);
 
       const createRes = await appTest.sendAndWait(
         CreateLocalUserAccount,
@@ -49,26 +43,34 @@ describe('Local User Account', () => {
 
   describe('DeleteLocalUserAccount', () => {
     test('should delete the account', async () => {
-      const createRes = await appTest.sendAndWait(
-        CreateLocalUserAccount,
-        undefined
-      );
+      const createRes = await appTest.sendAndWait(CreateLocalUserAccount);
       assert(createRes.success);
 
-      const delRes = await appTest.sendAndWait(
-        DeleteLocalUserAccount,
-        undefined
-      );
+      const delRes = await appTest.sendAndWait(DeleteLocalUserAccount);
       assert(delRes.success);
     });
 
-    test('should return an error when no account exists', async () => {
-      const delRes = await appTest.sendAndWait(
-        DeleteLocalUserAccount,
-        undefined
-      );
+    test('should return EntityNotFound when no account exists', async () => {
+      const delRes = await appTest.sendAndWait(DeleteLocalUserAccount);
       assert(!delRes.success);
       expect(delRes.error.name).toBe(EntityNotFoundError.name);
+    });
+  });
+
+  describe('GetLocalUserAccount', () => {
+    test('should return Ok with the LocalUserAccount', async () => {
+      const createRes = await appTest.sendAndWait(CreateLocalUserAccount);
+      assert(createRes.success);
+
+      const getRes = await appTest.sendAndWait(GetLocalUserAccount);
+      assert(getRes.success);
+      expect(getRes.data.id).toEqual(createRes.data.id);
+    });
+
+    test('should return EntityNotFound when no account exists', async () => {
+      const getRes = await appTest.sendAndWait(GetLocalUserAccount);
+      assert(!getRes.success);
+      expect(getRes.error.name).toBe(EntityNotFoundError.name);
     });
   });
 });
