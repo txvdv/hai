@@ -64,7 +64,7 @@ export class DocumentController {
       const result = await this.documentService.createDocument(payload);
       if (result.success) {
         return buildMessageResponse('Document.Create.Response', 'success', {
-          payload: result.value,
+          payload: result.data,
           correlationId,
         });
       } else {
@@ -138,7 +138,7 @@ export class DocumentController {
       const result = await this.documentService.getDocument({ id });
       if (result.success) {
         return buildMessageResponse('Document.Get.Response', 'success', {
-          payload: result.value,
+          payload: result.data,
           correlationId,
         });
       } else {
@@ -175,7 +175,7 @@ export class DocumentController {
       const result = await this.documentService.getDocuments();
       if (result.success) {
         return buildMessageResponse('Document.List.Response', 'success', {
-          payload: { documents: result.value },
+          payload: { documents: result.data },
           correlationId,
         });
       } else {

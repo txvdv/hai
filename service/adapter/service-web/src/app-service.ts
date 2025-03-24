@@ -3,9 +3,10 @@ import { MessageEnvelope, MessageResponse } from './app-messaging.js';
 import {
   DxDatabase,
   DxDocumentRepository,
+  DxLocalUserAccountRepository,
   UnitOfWork,
 } from '@hai/service-infra';
-import { DocumentService } from '@hai/core-service';
+import { DocumentService, LocalUserAccountRepository } from '@hai/core-service';
 import { Application, InMemoryMessageBus, MessageBus } from '@hai/core-service';
 import { DocumentController } from './document.controller.js';
 
@@ -36,20 +37,24 @@ class AppServiceImpl implements AppService {
   private readonly documentController: DocumentController;
   private readonly documentRepository: DxDocumentRepository;
   private readonly documentService: DocumentService;
+  private readonly localUserAccountRepository: LocalUserAccountRepository;
   private readonly messageBus: MessageBus;
 
   private constructor(config: AppServiceConfig = {}) {
     this.db = new DxDatabase();
     this.uow = new UnitOfWork(this.db);
     this.documentRepository = new DxDocumentRepository(this.db);
+    this.documentRepository = new DxDocumentRepository(this.db);
     this.documentService = new DocumentService({
       documentRepository: this.documentRepository,
       uow: this.uow,
     });
     this.documentController = new DocumentController(this.documentService);
+    this.localUserAccountRepository = new DxLocalUserAccountRepository(this.db);
     this.messageBus = new InMemoryMessageBus();
     new Application({
       documentRepository: this.documentRepository,
+      localUserAccountRepository: this.localUserAccountRepository,
       messageBus: this.messageBus,
       unitOfWork: this.uow,
     });
@@ -116,7 +121,7 @@ class AppServiceImpl implements AppService {
       const result = await this.messageBus.sendAndWait(type, payload);
       if (result.success) {
         return buildMessageResponse('Document.List.Response', 'success', {
-          payload: { documents: result.value },
+          payload: { documents: result.data },
           correlationId,
         });
       } else {
@@ -162,7 +167,7 @@ class AppServiceImpl implements AppService {
       const result = await this.documentService.getDocuments();
       if (result.success) {
         response = buildMessageResponse('Document.List.Response', 'success', {
-          payload: { documents: result.value },
+          payload: { documents: result.data },
           correlationId,
         });
       } else {
@@ -179,7 +184,7 @@ class AppServiceImpl implements AppService {
       const result = await this.documentService.getDocument({ id });
       if (result.success) {
         response = buildMessageResponse('Document.Get.Response', 'success', {
-          payload: result.value,
+          payload: result.data,
           correlationId,
         });
       } else {
@@ -197,7 +202,7 @@ class AppServiceImpl implements AppService {
       const result = await this.documentService.createDocument({ content });
       if (result.success) {
         response = buildMessageResponse('Document.Create.Response', 'success', {
-          payload: result.value,
+          payload: result.data,
           correlationId,
         });
       } else {
