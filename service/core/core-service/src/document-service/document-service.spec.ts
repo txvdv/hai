@@ -1,5 +1,6 @@
 import { DocumentService } from './document-service.js';
 import { InMemoryDocumentRepository } from './in-memory-document-repository.js';
+import assert from 'assert';
 
 const uow = {
   start: jest.fn(),
@@ -19,10 +20,13 @@ describe('DocumentService', () => {
 
   describe('getDocument', () => {
     it('should return a document by its ID', async () => {
-      const document = await service.createDocument({
+      const createRes = await service.createDocument({
         content: 'Sample Document',
       });
-      const fetchedDocument = await service.getDocument({ id: document.id });
+      assert(createRes.success);
+      const fetchedDocument = await service.getDocument({
+        id: createRes.data.id,
+      });
 
       expect(fetchedDocument).toEqual(document);
     });
@@ -69,17 +73,18 @@ describe('DocumentService', () => {
 
   describe('updateDocument', () => {
     it('should update the content of an existing document', async () => {
-      const document = await service.createDocument({
+      const createRes = await service.createDocument({
         content: 'Initial Content',
       });
+      assert(createRes.success);
       await service.updateDocument({
-        id: document.id,
+        id: createRes.data.id,
         content: 'Updated Content',
       });
 
-      const updatedDocument = await service.getDocument({ id: document.id });
-
-      expect(updatedDocument?.content).toBe('Updated Content');
+      const updateRes = await service.getDocument({ id: createRes.data.id });
+      assert(updateRes.success);
+      expect(updateRes.data.content).toBe('Updated Content');
     });
 
     it('should do nothing if the document does not exist', async () => {
@@ -95,12 +100,15 @@ describe('DocumentService', () => {
 
   describe('deleteDocument', () => {
     it('should delete a document by its ID', async () => {
-      const document = await service.createDocument({
+      const createRes = await service.createDocument({
         content: 'Content to delete',
       });
-      await service.deleteDocument({ id: document.id });
+      assert(createRes.success);
+      await service.deleteDocument({ id: createRes.data.id });
 
-      const deletedDocument = await service.getDocument({ id: document.id });
+      const deletedDocument = await service.getDocument({
+        id: createRes.data.id,
+      });
       expect(deletedDocument).toBeNull();
 
       const documents = await service.getDocuments();

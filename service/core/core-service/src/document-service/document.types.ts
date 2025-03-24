@@ -13,6 +13,8 @@ export type GetDocumentPayload = {
   id: string;
 };
 
+export const ListDocuments = 'Document.List';
+
 export const UpdateDocument = 'Document.Update';
 export type UpdateDocumentPayload = {
   id: string;
