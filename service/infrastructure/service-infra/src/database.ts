@@ -1,8 +1,10 @@
 import Dexie, { EntityTable } from 'dexie';
 import { DocumentEntity } from './document-repository.js';
+import { LocalUserAccountEntity } from './local-user-account-repository.js';
 
 export class DxDatabase extends Dexie {
   documents!: EntityTable<DocumentEntity, 'id'>;
+  localUserAccounts!: EntityTable<LocalUserAccountEntity, 'id'>;
 
   // A queue to store pending operations for transactional processing
   operationQueue: Array<{
@@ -13,9 +15,11 @@ export class DxDatabase extends Dexie {
   constructor() {
     super('HaiDB');
     this.version(1).stores({
-      documents: '++id,content'
+      documents: '++id,content',
+      localUserAccounts: '++id',
     });
     this.documents.mapToClass(DocumentEntity);
+    this.localUserAccounts.mapToClass(LocalUserAccountEntity);
   }
 
   // Add an operation to the queue
@@ -25,7 +29,7 @@ export class DxDatabase extends Dexie {
   ): void {
     this.operationQueue.push({
       table,
-      operation
+      operation,
     });
   }
 
