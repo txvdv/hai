@@ -1,4 +1,4 @@
-import { DocumentService } from './document-service.js';
+import { DocumentService } from './document.service.js';
 import { InMemoryDocumentRepository } from './in-memory-document-repository.js';
 import assert from 'assert';
 

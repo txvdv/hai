@@ -1,13 +1,13 @@
 import { createUUID } from '@hai/common-utils';
 import { failure, Result, success, UnitOfWork } from '../app.types.js';
-import { DocumentRepository } from './document-repository.js';
+import { DocumentRepository } from './document.repository.js';
 import {
   ComposedDocument,
   CreateDocumentPayload,
   DeleteDocumentPayload,
   GetDocumentPayload,
   UpdateDocumentPayload,
-} from './document.types.js';
+} from './document.api.js';
 
 export type Document = {
   id: string;

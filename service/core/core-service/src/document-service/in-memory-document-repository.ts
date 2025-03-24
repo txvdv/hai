@@ -1,5 +1,5 @@
-import { DocumentRepository } from './document-repository.js';
-import { Document } from './document-service.js';
+import { DocumentRepository } from './document.repository.js';
+import { Document } from './document.service.js';
 
 export class InMemoryDocumentRepository implements DocumentRepository {
   documents: Document[] = [];

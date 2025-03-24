@@ -1,7 +1,7 @@
 import { MessageBus } from './message-bus.js';
 import { UnitOfWork } from './app.types.js';
-import { DocumentService } from './document-service/document-service.js';
-import { DocumentRepository } from './document-service/document-repository.js';
+import { DocumentService } from './document-service/document.service.js';
+import { DocumentRepository } from './document-service/document.repository.js';
 import {
   CreateDocument,
   CreateDocumentPayload,
@@ -10,7 +10,7 @@ import {
   GetDocument,
   GetDocumentPayload,
   ListDocuments,
-} from './document-service/document.types.js';
+} from './document-service/document.api.js';
 import { LocalUserAccountRepository } from './local-user-account/local-user-account.repository.js';
 import { LocalUserAccountService } from './local-user-account/local-user-account.service.js';
 import {

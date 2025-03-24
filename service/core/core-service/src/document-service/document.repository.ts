@@ -1,4 +1,4 @@
-import { Document } from './document-service.js';
+import { Document } from './document.service.js';
 
 export interface DocumentRepository {
   getDocument(id: string): Promise<Document | null>;
