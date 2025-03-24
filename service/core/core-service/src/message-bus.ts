@@ -1,18 +1,36 @@
 import { Result } from './app.types.js';
 
-// MessageBus interface
+/**
+ * Interface representing a MessageBus for registering and handling commands and queries.
+ * It facilitates the dispatch and processing of commands and queries with an associated handler.
+ */
 export interface MessageBus {
   registerCommand<T>(
     type: string,
     handler: (payload?: any) => Promise<Result<T, any>>
   ): void;
 
+  /**
+   * Registers a query handler for a specific query type.
+   *
+   * @param {string} type - The unique identifier for the query type.
+   * @param {(payload?: any) => Promise<Result<T, any>>} handler - A function that handles the query.
+   *        The function receives an optional payload and returns a promise resolving to a `Result` object.
+   * @return {void} Does not return a value.
+   */
   registerQuery<T>(
     type: string,
     handler: (payload?: any) => Promise<Result<T, any>>
   ): void;
 
-  sendAndWait<T>(type: string, payload?: any): Promise<Result<T, any>>; // Send sync commands (request-response)
+  /**
+   * Sends a message of the specified type along with an optional payload and waits for a response.
+   *
+   * @param {string} type - The type of message to send.
+   * @param {any} [payload] - An optional payload to send along with the message.
+   * @return {Promise<Result<T, any>>} A promise that resolves to a `Result` containing the response of type `T` or an error.
+   */
+  sendAndWait<T>(type: string, payload?: any): Promise<Result<T, any>>;
 }
 
 export class InMemoryMessageBus implements MessageBus {
