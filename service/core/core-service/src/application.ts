@@ -1,5 +1,5 @@
-import { MessageBus } from './message-bus.js';
-import { UnitOfWork } from './app.types.js';
+import { MessageBus } from './shared/messaging.js';
+import { UnitOfWork } from './shared/unit-of-work.js';
 import { DocumentService } from './document-service/document.service.js';
 import { DocumentRepository } from './document-service/document.repository.js';
 import {

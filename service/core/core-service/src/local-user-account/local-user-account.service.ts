@@ -1,12 +1,13 @@
 import { createUUID } from '@hai/common-utils';
 import { LocalUserAccount } from './local-user-account.js';
 import { LocalUserAccountRepository } from './local-user-account.repository.js';
-import { failure, Result, success, UnitOfWork } from '../app.types.js';
+import { UnitOfWork } from '../shared/unit-of-work.js';
 import {
   CreateLocalUserAccountResult,
   LocalUserAccountAlreadyExistsError,
 } from './local-user-account.api.js';
-import { EntityNotFoundError } from '../shared/entity-not-found-error.js';
+import { EntityNotFoundError } from '../shared/errors.js';
+import { failure, Result, success } from '../shared/messaging.js';
 
 export class LocalUserAccountService {
   private readonly localUserAccountRepository: LocalUserAccountRepository;

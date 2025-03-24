@@ -1,5 +1,3 @@
-import { Result } from './app.types.js';
-
 /**
  * Interface representing a MessageBus for registering and handling commands and queries.
  * It facilitates the dispatch and processing of commands and queries with an associated handler.
@@ -56,4 +54,26 @@ export class InMemoryMessageBus implements MessageBus {
     if (!handler) throw new Error(`No handler for ${type}`);
     return handler(payload);
   }
+}
+
+export type Result<T, E = undefined> = Ok<T> | Fail<E>;
+
+export class Ok<T> {
+  readonly success = true;
+
+  constructor(public readonly data: T) {}
+}
+
+export class Fail<E> {
+  readonly success = false;
+
+  constructor(public readonly error: E) {}
+}
+
+export function success<T>(data: T): Ok<T> {
+  return new Ok(data);
+}
+
+export function failure<E>(error: E): Fail<E> {
+  return new Fail(error);
 }
