@@ -35,4 +35,4 @@ export {
   LocalUserAccountAlreadyExistsError,
 } from './local-user-account/local-user-account.api.js';
 
-export { EntityNotFoundError } from './shared/EntityNotFoundError.js';
+export { EntityNotFoundError } from './shared/entity-not-found-error.js';

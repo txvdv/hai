@@ -6,7 +6,7 @@ import {
   CreateLocalUserAccountResult,
   LocalUserAccountAlreadyExistsError,
 } from './local-user-account.api.js';
-import { EntityNotFoundError } from '../shared/EntityNotFoundError.js';
+import { EntityNotFoundError } from '../shared/entity-not-found-error.js';
 
 export class LocalUserAccountService {
   private readonly localUserAccountRepository: LocalUserAccountRepository;

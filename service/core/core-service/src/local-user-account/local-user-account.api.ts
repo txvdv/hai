@@ -1,4 +1,4 @@
-import { ClientError } from '../shared/ClientError.js';
+import { ClientError } from '../shared/client-error.js';
 
 export const CreateLocalUserAccount = 'LocalUserAccount.Create';
 export type CreateLocalUserAccountResult = {

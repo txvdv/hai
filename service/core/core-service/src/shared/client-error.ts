@@ -1,4 +1,4 @@
-import { AppError } from './AppError.js';
+import { AppError } from './app-error.js';
 
 /**
  * When inheriting from AppError, take into account that
