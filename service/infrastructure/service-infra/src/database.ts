@@ -38,6 +38,10 @@ export class DxDatabase extends Dexie {
     this.operationQueue = [];
   }
 
+  deleteDb() {
+    this.delete();
+  }
+
   // Retrieve the current operation queue
   getOperationQueue(): Array<{
     table: Dexie.Table<any, any>;
