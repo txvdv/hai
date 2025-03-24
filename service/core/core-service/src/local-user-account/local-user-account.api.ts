@@ -7,6 +7,11 @@ export type CreateLocalUserAccountResult = {
 
 export const DeleteLocalUserAccount = 'LocalUserAccount.Delete';
 
+export const GetLocalUserAccount = 'LocalUserAccount.Get';
+export type GetDocumentPayload = {
+  id: string;
+};
+
 export const UpdateLocalUserAccount = 'LocalUserAccount.Update';
 export type UpdateLocalUserAccountPayload = {
   id: string;

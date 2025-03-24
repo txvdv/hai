@@ -18,9 +18,9 @@ export { DocumentService } from './document-service/document-service.js';
 export {
   CreateLocalUserAccount,
   DeleteLocalUserAccount,
+  GetLocalUserAccount,
   UpdateLocalUserAccount,
   LocalUserAccountAlreadyExistsError,
-} from './local-user-account/command.types.js';
-export { GetLocalUserAccount } from './local-user-account/query.types.js';
+} from './local-user-account/local-user-account.api.js';
 
 export { EntityNotFoundError } from './shared/EntityNotFoundError.js';

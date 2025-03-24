@@ -16,8 +16,8 @@ import { LocalUserAccountService } from './local-user-account/local-user-account
 import {
   CreateLocalUserAccount,
   DeleteLocalUserAccount,
-} from './local-user-account/command.types.js';
-import { GetLocalUserAccount } from './local-user-account/query.types.js';
+  GetLocalUserAccount,
+} from './local-user-account/local-user-account.api.js';
 
 interface ApplicationDependencies {
   messageBus: MessageBus;

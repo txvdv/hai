@@ -5,7 +5,7 @@ import { failure, Result, success, UnitOfWork } from '../app.types.js';
 import {
   CreateLocalUserAccountResult,
   LocalUserAccountAlreadyExistsError,
-} from './command.types.js';
+} from './local-user-account.api.js';
 import { EntityNotFoundError } from '../shared/EntityNotFoundError.js';
 
 export class LocalUserAccountService {
