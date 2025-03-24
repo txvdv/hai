@@ -33,6 +33,10 @@ export class AppTester {
     });
   }
 
+  teardown() {
+    this.db.deleteDb();
+  }
+
   async sendAndWait(type: string, payload: any): Promise<Result<any, any>> {
     return this.messageBus.sendAndWait(type, payload);
   }
