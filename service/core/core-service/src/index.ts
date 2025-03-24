@@ -3,7 +3,6 @@ export * from './app.types.js';
 
 // Driven ports
 export type { DocumentRepository } from './document-service/document.repository.js';
-export { InMemoryDocumentRepository } from './document-service/in-memory-document-repository.js';
 export { LocalUserAccount } from './local-user-account/local-user-account.js';
 export type { LocalUserAccountRepository } from './local-user-account/local-user-account.repository.js';
 

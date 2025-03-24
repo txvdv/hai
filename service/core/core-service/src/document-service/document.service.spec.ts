@@ -1,5 +1,5 @@
 import { DocumentService } from './document.service.js';
-import { InMemoryDocumentRepository } from './in-memory-document-repository.js';
+import { InMemoryDocumentRepository } from './document.repository.js';
 import assert from 'assert';
 
 const uow = {
