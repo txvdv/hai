@@ -1,12 +1,19 @@
-export * from './application.js';
+export { Application } from './application.js';
 export * from './app.types.js';
-export * from './message-bus.js';
-export * from './document-service/document-service.js';
-export * from './document-service/document.types.js';
+
+// Driven ports
 export type { DocumentRepository } from './document-service/document-repository.js';
 export { InMemoryDocumentRepository } from './document-service/in-memory-document-repository.js';
+export { LocalUserAccount } from './local-user-account/local-user-account.js';
+export type { LocalUserAccountRepository } from './local-user-account/local-user-account.repository.js';
 
-export { EntityNotFoundError } from './shared/EntityNotFoundError.js';
+// Driver ports
+export type { MessageBus } from './message-bus.js';
+export { InMemoryMessageBus } from './message-bus.js';
+
+export * from './document-service/document.types.js';
+export type { Document } from './document-service/document-service.js';
+export { DocumentService } from './document-service/document-service.js';
 
 export {
   CreateLocalUserAccount,
@@ -15,5 +22,5 @@ export {
   LocalUserAccountAlreadyExistsError,
 } from './local-user-account/command.types.js';
 export { GetLocalUserAccount } from './local-user-account/query.types.js';
-export { LocalUserAccount } from './local-user-account/local-user-account.js';
-export type { LocalUserAccountRepository } from './local-user-account/local-user-account.repository.js';
+
+export { EntityNotFoundError } from './shared/EntityNotFoundError.js';
