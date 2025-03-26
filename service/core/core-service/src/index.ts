@@ -7,7 +7,7 @@ export { LocalUserAccount } from './local-user-account/local-user-account.js';
 export type { LocalUserAccountRepository } from './local-user-account/local-user-account.repository.js';
 
 // Driver ports
-export type { MessageBus } from './shared/messaging.js';
+export type { MessageBus, Result, Command, Query } from './shared/messaging.js';
 export { InMemoryMessageBus } from './shared/messaging.js';
 
 export {
@@ -32,6 +32,11 @@ export {
   GetLocalUserAccount,
   UpdateLocalUserAccount,
   LocalUserAccountAlreadyExistsError,
+} from './local-user-account/local-user-account.api.js';
+export type {
+  CreateLocalUserAccountResult,
+  DeleteLocalUserAccountResult,
+  GetLocalUserAccountResult,
 } from './local-user-account/local-user-account.api.js';
 
 export { EntityNotFoundError } from './shared/errors.js';

@@ -10,6 +10,8 @@ import {
   GetDocument,
   GetDocumentPayload,
   ListDocuments,
+  UpdateDocument,
+  UpdateDocumentPayload,
 } from './document-service/document.api.js';
 import { LocalUserAccountRepository } from './local-user-account/local-user-account.repository.js';
 import { LocalUserAccountService } from './local-user-account/local-user-account.service.js';
@@ -69,6 +71,13 @@ export class Application {
       }
     );
 
+    this.messageBus.registerCommand(
+      UpdateDocument,
+      async (cmd: UpdateDocumentPayload) => {
+        return this.documentService.updateDocument(cmd);
+      }
+    );
+
     this.messageBus.registerQuery(
       GetDocument,
       async (qry: GetDocumentPayload) => {
@@ -82,15 +91,21 @@ export class Application {
   }
 
   private registerLocalUserAccountHandlers() {
-    this.messageBus.registerCommand(CreateLocalUserAccount, async () => {
-      return this.localUserAccountService.createAccount();
-    });
+    this.messageBus.registerCommandHandler(
+      CreateLocalUserAccount.type,
+      async () => {
+        return this.localUserAccountService.createAccount();
+      }
+    );
 
-    this.messageBus.registerCommand(DeleteLocalUserAccount, async () => {
-      return this.localUserAccountService.deleteAccount();
-    });
+    this.messageBus.registerCommandHandler(
+      DeleteLocalUserAccount.type,
+      async () => {
+        return this.localUserAccountService.deleteAccount();
+      }
+    );
 
-    this.messageBus.registerQuery(GetLocalUserAccount, async () => {
+    this.messageBus.registerQueryHandler(GetLocalUserAccount.type, async () => {
       return this.localUserAccountService.getAccount();
     });
   }

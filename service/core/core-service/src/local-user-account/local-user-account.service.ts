@@ -4,10 +4,12 @@ import { LocalUserAccountRepository } from './local-user-account.repository.js';
 import { UnitOfWork } from '../shared/unit-of-work.js';
 import {
   CreateLocalUserAccountResult,
+  DeleteLocalUserAccountResult,
+  GetLocalUserAccountResult,
   LocalUserAccountAlreadyExistsError,
 } from './local-user-account.api.js';
 import { EntityNotFoundError } from '../shared/errors.js';
-import { failure, Result, success } from '../shared/messaging.js';
+import { failure, success } from '../shared/messaging.js';
 
 export class LocalUserAccountService {
   private readonly localUserAccountRepository: LocalUserAccountRepository;
@@ -21,9 +23,7 @@ export class LocalUserAccountService {
     this.uow = deps.uow;
   }
 
-  async createAccount(): Promise<
-    Result<CreateLocalUserAccountResult, LocalUserAccountAlreadyExistsError>
-  > {
+  async createAccount(): Promise<CreateLocalUserAccountResult> {
     const existingAccount =
       await this.localUserAccountRepository.hasLocalUser();
     if (existingAccount) {
@@ -40,7 +40,7 @@ export class LocalUserAccountService {
     return success({ id: userId });
   }
 
-  async deleteAccount(): Promise<Result<void, EntityNotFoundError>> {
+  async deleteAccount(): Promise<DeleteLocalUserAccountResult> {
     const existingAccount =
       await this.localUserAccountRepository.hasLocalUser();
     if (!existingAccount) {
@@ -56,7 +56,7 @@ export class LocalUserAccountService {
     return success(undefined);
   }
 
-  async getAccount(): Promise<Result<LocalUserAccount, EntityNotFoundError>> {
+  async getAccount(): Promise<GetLocalUserAccountResult> {
     const existingAccount =
       await this.localUserAccountRepository.hasLocalUser();
     if (!existingAccount) {

@@ -1,18 +1,50 @@
-import { ClientError } from '../shared/errors.js';
+import { ClientError, EntityNotFoundError } from '../shared/errors.js';
+import { Command, Query, Result } from '../shared/messaging.js';
+import { LocalUserAccount } from './local-user-account.js';
 
-export const CreateLocalUserAccount = 'LocalUserAccount.Create';
-export type CreateLocalUserAccountResult = {
-  id: string;
-};
+export class CreateLocalUserAccount extends Command {
+  public static override readonly type = 'CreateLocalUserAccount';
+  constructor() {
+    super(undefined, undefined);
+  }
+}
+export type CreateLocalUserAccountResult = Result<
+  {
+    id: string;
+  },
+  LocalUserAccountAlreadyExistsError
+>;
 
-export const DeleteLocalUserAccount = 'LocalUserAccount.Delete';
+export class DeleteLocalUserAccount extends Command {
+  public static override readonly type = 'DeleteLocalUserAccount';
+  constructor() {
+    super(undefined, undefined);
+  }
+}
+export type DeleteLocalUserAccountResult = Result<void, EntityNotFoundError>;
 
-export const GetLocalUserAccount = 'LocalUserAccount.Get';
-export type GetDocumentPayload = {
-  id: string;
-};
+export class GetLocalUserAccount extends Query {
+  public static override readonly type = 'GetLocalUserAccount';
+  constructor() {
+    super(undefined, undefined);
+  }
+}
+export type GetLocalUserAccountResult = Result<
+  LocalUserAccount,
+  EntityNotFoundError
+>;
 
-export const UpdateLocalUserAccount = 'LocalUserAccount.Update';
+export class UpdateLocalUserAccount extends Command {
+  public static override readonly type = 'UpdateLocalUserAccount';
+  constructor(
+    public override readonly payload: {
+      id: string;
+    }
+  ) {
+    super(payload, undefined);
+  }
+}
+
 export type UpdateLocalUserAccountPayload = {
   id: string;
 };

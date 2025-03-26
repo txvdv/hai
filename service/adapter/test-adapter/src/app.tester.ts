@@ -8,6 +8,8 @@ import {
   Application,
   InMemoryMessageBus,
   MessageBus,
+  Command,
+  Query,
   Result,
 } from '@hai/core-service';
 
@@ -39,5 +41,13 @@ export class AppTester {
 
   async sendAndWait(type: string, payload?: any): Promise<Result<any, any>> {
     return this.messageBus.sendAndWait(type, payload);
+  }
+
+  async sendCommand<T>(cmd: Command): Promise<T> {
+    return this.messageBus.commandAndWait<T>(cmd);
+  }
+
+  async sendQuery<T>(qry: Query): Promise<T> {
+    return this.messageBus.queryAndWait<T>(qry);
   }
 }

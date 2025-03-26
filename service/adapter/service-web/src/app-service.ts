@@ -9,6 +9,7 @@ import {
 import { DocumentService, LocalUserAccountRepository } from '@hai/core-service';
 import { Application, InMemoryMessageBus, MessageBus } from '@hai/core-service';
 import { DocumentController } from './document.controller.js';
+import { DocumentMessageController } from './document.message.controller.js';
 
 export function getAppService(): AppService {
   return AppServiceImpl.getInstance();
@@ -35,6 +36,7 @@ class AppServiceImpl implements AppService {
   private readonly db: DxDatabase;
   private readonly uow: UnitOfWork;
   private readonly documentController: DocumentController;
+  private readonly documentMessageController: DocumentMessageController;
   private readonly documentRepository: DxDocumentRepository;
   private readonly documentService: DocumentService;
   private readonly localUserAccountRepository: LocalUserAccountRepository;
@@ -52,6 +54,9 @@ class AppServiceImpl implements AppService {
     this.documentController = new DocumentController(this.documentService);
     this.localUserAccountRepository = new DxLocalUserAccountRepository(this.db);
     this.messageBus = new InMemoryMessageBus();
+    this.documentMessageController = new DocumentMessageController(
+      this.messageBus
+    );
     new Application({
       documentRepository: this.documentRepository,
       localUserAccountRepository: this.localUserAccountRepository,
@@ -73,7 +78,7 @@ class AppServiceImpl implements AppService {
     }
   }
 
-  async handleMessageAsyncViaController(
+  async handleMessageAsync(
     msg: MessageEnvelope
   ): Promise<MessageResponse<any>> {
     if (!this.started) {
@@ -81,7 +86,7 @@ class AppServiceImpl implements AppService {
     }
 
     if (msg.type.startsWith('Document')) {
-      return await this.documentController.handle(msg);
+      return await this.documentMessageController.handle(msg);
     }
 
     return buildMessageResponse(`${msg.type}.Response`, 'error', {
@@ -144,7 +149,7 @@ class AppServiceImpl implements AppService {
     }
   }
 
-  async handleMessageAsync(
+  async handleMessageAsync__(
     msg: MessageEnvelope
   ): Promise<MessageResponse<any>> {
     if (!this.started) {
