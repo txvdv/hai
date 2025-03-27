@@ -3,10 +3,10 @@ import { UnitOfWork } from '../shared/unit-of-work.js';
 import { DocumentRepository } from './document.repository.js';
 import {
   ComposedDocument,
-  CreateDocumentPayload,
-  DeleteDocumentPayload,
-  GetDocumentPayload,
-  UpdateDocumentPayload,
+  CreateDocument,
+  DeleteDocument,
+  GetDocument,
+  UpdateDocument,
 } from './document.api.js';
 import { failure, Result, success } from '../shared/messaging.js';
 
@@ -27,12 +27,28 @@ export class DocumentService {
     this.uow = deps.uow;
   }
 
-  async getDocument(
-    qry: GetDocumentPayload
-  ): Promise<Result<Document, string>> {
-    const doc = await this.documentRepository.getDocument(qry.id);
+  async createDocument(cmd: CreateDocument): Promise<Result<ComposedDocument>> {
+    this.uow.start();
+    const document = {
+      id: createUUID(),
+      content: cmd.payload.content,
+    };
+    this.documentRepository.save(document);
+    await this.uow.commit();
+    return success(document);
+  }
+
+  async deleteDocument(cmd: DeleteDocument): Promise<Result<void>> {
+    this.uow.start();
+    this.documentRepository.deleteDocument(cmd.payload.id);
+    await this.uow.commit();
+    return success(undefined);
+  }
+
+  async getDocument(qry: GetDocument): Promise<Result<Document, string>> {
+    const doc = await this.documentRepository.getDocument(qry.payload.id);
     if (!doc) {
-      return failure(`Document with id ${qry.id} does not exist`);
+      return failure(`Document with id ${qry.payload.id} does not exist`);
     }
     return success(doc);
   }
@@ -42,34 +58,14 @@ export class DocumentService {
     return success(docs);
   }
 
-  async createDocument(
-    cmd: CreateDocumentPayload
-  ): Promise<Result<ComposedDocument>> {
-    this.uow.start();
-    const document = {
-      id: createUUID(),
-      content: cmd.content,
-    };
-    this.documentRepository.save(document);
-    await this.uow.commit();
-    return success(document);
-  }
-
-  async updateDocument(cmd: UpdateDocumentPayload): Promise<Result<void>> {
-    const document = await this.documentRepository.getDocument(cmd.id);
+  async updateDocument(cmd: UpdateDocument): Promise<Result<void>> {
+    const document = await this.documentRepository.getDocument(cmd.payload.id);
     if (document) {
       this.uow.start();
-      document.content = cmd.content;
+      document.content = cmd.payload.content;
       this.documentRepository.save(document);
       await this.uow.commit();
     }
-    return success(undefined);
-  }
-
-  async deleteDocument(cmd: DeleteDocumentPayload): Promise<Result<void>> {
-    this.uow.start();
-    this.documentRepository.deleteDocument(cmd.id);
-    await this.uow.commit();
     return success(undefined);
   }
 }

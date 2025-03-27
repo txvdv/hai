@@ -7,36 +7,40 @@ export { LocalUserAccount } from './local-user-account/local-user-account.js';
 export type { LocalUserAccountRepository } from './local-user-account/local-user-account.repository.js';
 
 // Driver ports
-export type { MessageBus, Result, Command, Query } from './shared/messaging.js';
+export type {
+  MessageBus,
+  Result,
+  CQMessage,
+  Command,
+  Query,
+} from './shared/messaging.js';
 export { InMemoryMessageBus } from './shared/messaging.js';
 
-export {
-  CreateDocument,
-  DeleteDocument,
-  GetDocument,
-  ListDocuments,
-  UpdateDocument,
-} from './document-service/document.api.js';
 export type {
-  CreateDocumentPayload,
-  DeleteDocumentPayload,
-  UpdateDocumentPayload,
+  CreateDocument,
+  CreateDocumentResult,
+  DeleteDocument,
+  DeleteDocumentResult,
+  GetDocument,
+  GetDocumentResult,
+  ListDocuments,
+  ListDocumentsResult,
+  UpdateDocument,
+  UpdateDocumentResult,
   ComposedDocument,
 } from './document-service/document.api.js';
 export type { Document } from './document-service/document.service.js';
 export { DocumentService } from './document-service/document.service.js';
 
-export {
-  CreateLocalUserAccount,
-  DeleteLocalUserAccount,
-  GetLocalUserAccount,
-  UpdateLocalUserAccount,
-  LocalUserAccountAlreadyExistsError,
-} from './local-user-account/local-user-account.api.js';
 export type {
+  CreateLocalUserAccount,
   CreateLocalUserAccountResult,
+  DeleteLocalUserAccount,
   DeleteLocalUserAccountResult,
+  GetLocalUserAccount,
   GetLocalUserAccountResult,
+  UpdateLocalUserAccount,
 } from './local-user-account/local-user-account.api.js';
+export { LocalUserAccountAlreadyExistsError } from './local-user-account/local-user-account.api.js';
 
 export { EntityNotFoundError } from './shared/errors.js';

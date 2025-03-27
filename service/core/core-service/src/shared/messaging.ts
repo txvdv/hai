@@ -8,9 +8,9 @@ export interface MessageBus {
     handler: (payload?: any, context?: any) => Promise<Result<T, any>>
   ): void;
 
-  registerCommandHandler<T>(
+  registerCommandHandler<C extends Command, R>(
     type: string,
-    handler: (cmd?: Command) => Promise<Result<T, any>>
+    handler: (cmd: C) => Promise<R>
   ): void;
 
   /**
@@ -28,7 +28,7 @@ export interface MessageBus {
 
   registerQueryHandler<T>(
     type: string,
-    handler: (qry?: Query) => Promise<Result<T, any>>
+    handler: (qry: Query) => Promise<Result<T, any>>
   ): void;
 
   /**
@@ -45,6 +45,10 @@ export interface MessageBus {
     context?: any
   ): Promise<Result<T, any>>;
 
+  sendAndAwait<T extends CQMessage, R>(msg: T): Promise<R>;
+
+  registerSaw<T, R>(cmdType: string, handler: (cmd: T) => Promise<R>): void;
+
   commandAndWait<T>(cmd: Command): Promise<T>;
 
   queryAndWait<T>(qry: Query): Promise<T>;
@@ -55,9 +59,9 @@ export class InMemoryMessageBus implements MessageBus {
     string,
     (payload?: any, context?: any) => Promise<any>
   > = new Map();
-  private commandHandlers: Map<string, (cmd?: Command) => Promise<any>> =
-    new Map();
-  private queryHandlers: Map<string, (qry?: Query) => Promise<any>> = new Map();
+  private cHandlers: Map<string, (cmd: any) => Promise<any>> = new Map();
+  private commandHandlers: Map<string, (cmd: any) => Promise<any>> = new Map();
+  private queryHandlers: Map<string, (qry: Query) => Promise<any>> = new Map();
 
   registerCommand<T>(
     type: string,
@@ -66,9 +70,9 @@ export class InMemoryMessageBus implements MessageBus {
     this.syncHandlers.set(type, handler);
   }
 
-  registerCommandHandler<T>(
+  registerCommandHandler<C extends Command, R>(
     type: string,
-    handler: (cmd?: Command) => Promise<Result<T, any>>
+    handler: (cmd: C) => Promise<R>
   ): void {
     this.commandHandlers.set(type, handler);
   }
@@ -82,7 +86,7 @@ export class InMemoryMessageBus implements MessageBus {
 
   registerQueryHandler<T>(
     type: string,
-    handler: (qry?: Query) => Promise<Result<T, any>>
+    handler: (qry: Query) => Promise<Result<T, any>>
   ): void {
     this.queryHandlers.set(type, handler);
   }
@@ -95,6 +99,16 @@ export class InMemoryMessageBus implements MessageBus {
     const handler = this.syncHandlers.get(type);
     if (!handler) throw new Error(`No handler for ${type}`);
     return handler(payload);
+  }
+
+  registerSaw<T, R>(cmdType: string, handler: (cmd: T) => Promise<R>): void {
+    this.cHandlers.set(cmdType, handler);
+  }
+
+  sendAndAwait<T extends CQMessage, R>(msg: T): Promise<R> {
+    const handler = this.cHandlers.get(msg.type);
+    if (!handler) throw new Error(`No handler for ${msg.type}`);
+    return handler(msg);
   }
 
   commandAndWait<T>(cmd: Command): Promise<T> {
@@ -110,6 +124,10 @@ export class InMemoryMessageBus implements MessageBus {
     if (!handler) throw new Error(`No handler for ${type}`);
     return handler(qry);
   }
+}
+
+export interface CQMessage {
+  type: string;
 }
 
 /**

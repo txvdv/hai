@@ -8,9 +8,9 @@ import {
   Application,
   InMemoryMessageBus,
   MessageBus,
+  CQMessage,
   Command,
   Query,
-  Result,
 } from '@hai/core-service';
 
 export class AppTester {
@@ -39,8 +39,8 @@ export class AppTester {
     this.db.deleteDb();
   }
 
-  async sendAndWait(type: string, payload?: any): Promise<Result<any, any>> {
-    return this.messageBus.sendAndWait(type, payload);
+  async sendAndAwait<T extends CQMessage, R>(msg: T): Promise<R> {
+    return this.messageBus.sendAndAwait(msg);
   }
 
   async sendCommand<T>(cmd: Command): Promise<T> {

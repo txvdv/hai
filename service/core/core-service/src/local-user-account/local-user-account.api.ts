@@ -1,12 +1,9 @@
 import { ClientError, EntityNotFoundError } from '../shared/errors.js';
-import { Command, Query, Result } from '../shared/messaging.js';
+import { CQMessage, Result } from '../shared/messaging.js';
 import { LocalUserAccount } from './local-user-account.js';
 
-export class CreateLocalUserAccount extends Command {
-  public static override readonly type = 'CreateLocalUserAccount';
-  constructor() {
-    super(undefined, undefined);
-  }
+export interface CreateLocalUserAccount extends CQMessage {
+  type: 'CreateLocalUserAccount';
 }
 export type CreateLocalUserAccountResult = Result<
   {
@@ -15,34 +12,24 @@ export type CreateLocalUserAccountResult = Result<
   LocalUserAccountAlreadyExistsError
 >;
 
-export class DeleteLocalUserAccount extends Command {
-  public static override readonly type = 'DeleteLocalUserAccount';
-  constructor() {
-    super(undefined, undefined);
-  }
+export interface DeleteLocalUserAccount extends CQMessage {
+  type: 'DeleteLocalUserAccount';
 }
 export type DeleteLocalUserAccountResult = Result<void, EntityNotFoundError>;
 
-export class GetLocalUserAccount extends Query {
-  public static override readonly type = 'GetLocalUserAccount';
-  constructor() {
-    super(undefined, undefined);
-  }
+export interface GetLocalUserAccount extends CQMessage {
+  type: 'GetLocalUserAccount';
 }
 export type GetLocalUserAccountResult = Result<
   LocalUserAccount,
   EntityNotFoundError
 >;
 
-export class UpdateLocalUserAccount extends Command {
-  public static override readonly type = 'UpdateLocalUserAccount';
-  constructor(
-    public override readonly payload: {
-      id: string;
-    }
-  ) {
-    super(payload, undefined);
-  }
+export interface UpdateLocalUserAccount extends CQMessage {
+  type: 'UpdateLocalUserAccount';
+  payload: {
+    id: string;
+  };
 }
 
 export type UpdateLocalUserAccountPayload = {

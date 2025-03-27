@@ -4,21 +4,25 @@ import { DocumentService } from './document-service/document.service.js';
 import { DocumentRepository } from './document-service/document.repository.js';
 import {
   CreateDocument,
-  CreateDocumentPayload,
+  CreateDocumentResult,
   DeleteDocument,
-  DeleteDocumentPayload,
+  DeleteDocumentResult,
   GetDocument,
-  GetDocumentPayload,
+  GetDocumentResult,
   ListDocuments,
+  ListDocumentsResult,
   UpdateDocument,
-  UpdateDocumentPayload,
+  UpdateDocumentResult,
 } from './document-service/document.api.js';
 import { LocalUserAccountRepository } from './local-user-account/local-user-account.repository.js';
 import { LocalUserAccountService } from './local-user-account/local-user-account.service.js';
 import {
   CreateLocalUserAccount,
+  CreateLocalUserAccountResult,
   DeleteLocalUserAccount,
+  DeleteLocalUserAccountResult,
   GetLocalUserAccount,
+  GetLocalUserAccountResult,
 } from './local-user-account/local-user-account.api.js';
 
 interface ApplicationDependencies {
@@ -57,56 +61,62 @@ export class Application {
   }
 
   private registerDocumentHandlers() {
-    this.messageBus.registerCommand(
-      CreateDocument,
-      async (cmd: CreateDocumentPayload) => {
+    this.messageBus.registerSaw<CreateDocument, CreateDocumentResult>(
+      'CreateDocumentCommand',
+      async (cmd: CreateDocument) => {
         return this.documentService.createDocument(cmd);
       }
     );
 
-    this.messageBus.registerCommand(
-      DeleteDocument,
-      async (cmd: DeleteDocumentPayload) => {
+    this.messageBus.registerSaw<DeleteDocument, DeleteDocumentResult>(
+      'DeleteDocumentCommand',
+      async (cmd: DeleteDocument) => {
         return this.documentService.deleteDocument(cmd);
       }
     );
 
-    this.messageBus.registerCommand(
-      UpdateDocument,
-      async (cmd: UpdateDocumentPayload) => {
+    this.messageBus.registerSaw<UpdateDocument, UpdateDocumentResult>(
+      'UpdateDocumentCommand',
+      async (cmd: UpdateDocument) => {
         return this.documentService.updateDocument(cmd);
       }
     );
 
-    this.messageBus.registerQuery(
-      GetDocument,
-      async (qry: GetDocumentPayload) => {
+    this.messageBus.registerSaw<GetDocument, GetDocumentResult>(
+      'GetDocumentQuery',
+      async (qry: GetDocument) => {
         return this.documentService.getDocument(qry);
       }
     );
 
-    this.messageBus.registerQuery(ListDocuments, async () => {
-      return this.documentService.getDocuments();
-    });
+    this.messageBus.registerSaw<ListDocuments, ListDocumentsResult>(
+      'ListDocumentsQuery',
+      async () => {
+        return this.documentService.getDocuments();
+      }
+    );
   }
 
   private registerLocalUserAccountHandlers() {
-    this.messageBus.registerCommandHandler(
-      CreateLocalUserAccount.type,
-      async () => {
-        return this.localUserAccountService.createAccount();
-      }
-    );
-
-    this.messageBus.registerCommandHandler(
-      DeleteLocalUserAccount.type,
-      async () => {
-        return this.localUserAccountService.deleteAccount();
-      }
-    );
-
-    this.messageBus.registerQueryHandler(GetLocalUserAccount.type, async () => {
-      return this.localUserAccountService.getAccount();
+    this.messageBus.registerSaw<
+      CreateLocalUserAccount,
+      CreateLocalUserAccountResult
+    >('CreateLocalUserAccount', async () => {
+      return this.localUserAccountService.createAccount();
     });
+
+    this.messageBus.registerSaw<
+      DeleteLocalUserAccount,
+      DeleteLocalUserAccountResult
+    >('DeleteLocalUserAccount', async () => {
+      return this.localUserAccountService.deleteAccount();
+    });
+
+    this.messageBus.registerSaw<GetLocalUserAccount, GetLocalUserAccountResult>(
+      'GetLocalUserAccount',
+      async () => {
+        return this.localUserAccountService.getAccount();
+      }
+    );
   }
 }
