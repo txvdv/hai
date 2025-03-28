@@ -18,7 +18,7 @@ describe('Document Service', () => {
   });
 
   test('Creating a document', async () => {
-    const res = await appTest.sendAndAwait<
+    const result = await appTest.sendAndAwait<
       CreateDocument,
       CreateDocumentResult
     >({
@@ -27,12 +27,12 @@ describe('Document Service', () => {
         content: 'test content',
       },
     });
-    assert(res.success);
-    console.log(res.data.id);
+    assert(result.success);
+    console.log(result.data.id);
   });
 
   test('Deleting a document', async () => {
-    const createRes = await appTest.sendAndAwait<
+    const createResult = await appTest.sendAndAwait<
       CreateDocument,
       CreateDocumentResult
     >({
@@ -41,34 +41,34 @@ describe('Document Service', () => {
         content: 'test content',
       },
     });
-    assert(createRes.success);
+    assert(createResult.success);
 
-    const listRes = await appTest.sendAndAwait<
+    const listResult = await appTest.sendAndAwait<
       ListDocuments,
       ListDocumentsResult
     >({
       type: 'ListDocumentsQuery',
     });
-    expect(listRes.success).toBeTruthy;
+    expect(listResult.success).toBeTruthy;
 
-    const delRes = await appTest.sendAndAwait<
+    const delResult = await appTest.sendAndAwait<
       DeleteDocument,
       DeleteDocumentResult
     >({
       type: 'DeleteDocumentCommand',
       payload: {
-        id: createRes.data.id,
+        id: createResult.data.id,
       },
     });
 
-    expect(delRes.success).toBeTruthy;
+    expect(delResult.success).toBeTruthy;
 
-    const listResAfterDel = await appTest.sendAndAwait<
+    const listResultAfterDel = await appTest.sendAndAwait<
       ListDocuments,
       ListDocumentsResult
     >({
       type: 'ListDocumentsQuery',
     });
-    expect(listResAfterDel.success).toBeTruthy;
+    expect(listResultAfterDel.success).toBeTruthy;
   });
 });
