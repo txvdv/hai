@@ -34,7 +34,7 @@ class AppServiceImpl implements AppService {
 
   private readonly db: DxDatabase;
   private readonly uow: UnitOfWork;
-  private readonly documentMessageController: DocumentController;
+  private readonly documentController: DocumentController;
   private readonly documentRepository: DxDocumentRepository;
   private readonly localUserAccountRepository: LocalUserAccountRepository;
   private readonly messageBus: MessageBus;
@@ -43,10 +43,9 @@ class AppServiceImpl implements AppService {
     this.db = new DxDatabase();
     this.uow = new UnitOfWork(this.db);
     this.documentRepository = new DxDocumentRepository(this.db);
-    this.documentRepository = new DxDocumentRepository(this.db);
     this.localUserAccountRepository = new DxLocalUserAccountRepository(this.db);
     this.messageBus = new InMemoryMessageBus();
-    this.documentMessageController = new DocumentController(this.messageBus);
+    this.documentController = new DocumentController(this.messageBus);
     new Application({
       documentRepository: this.documentRepository,
       localUserAccountRepository: this.localUserAccountRepository,
@@ -76,7 +75,7 @@ class AppServiceImpl implements AppService {
     }
 
     if (msg.type.startsWith('Document')) {
-      return await this.documentMessageController.handle(msg);
+      return await this.documentController.handle(msg);
     }
 
     return buildMessageResponse(`${msg.type}.Response`, 'error', {
@@ -96,7 +95,6 @@ class AppServiceImpl implements AppService {
   async teardown(): Promise<void> {
     this.started = false;
 
-    // Reset singleton instance to allow new configuration
     AppServiceImpl.instance = null;
     console.log('Service has been torn down and instance reset.');
   }
