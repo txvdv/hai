@@ -6,10 +6,9 @@ import {
   DxLocalUserAccountRepository,
   UnitOfWork,
 } from '@hai/service-infra';
-import { DocumentService, LocalUserAccountRepository } from '@hai/core-service';
+import { LocalUserAccountRepository } from '@hai/core-service';
 import { Application, InMemoryMessageBus, MessageBus } from '@hai/core-service';
 import { DocumentController } from './document.controller.js';
-import { DocumentMessageController } from './document.message.controller.js';
 
 export function getAppService(): AppService {
   return AppServiceImpl.getInstance();
@@ -35,10 +34,8 @@ class AppServiceImpl implements AppService {
 
   private readonly db: DxDatabase;
   private readonly uow: UnitOfWork;
-  private readonly documentController: DocumentController;
-  private readonly documentMessageController: DocumentMessageController;
+  private readonly documentMessageController: DocumentController;
   private readonly documentRepository: DxDocumentRepository;
-  private readonly documentService: DocumentService;
   private readonly localUserAccountRepository: LocalUserAccountRepository;
   private readonly messageBus: MessageBus;
 
@@ -47,16 +44,9 @@ class AppServiceImpl implements AppService {
     this.uow = new UnitOfWork(this.db);
     this.documentRepository = new DxDocumentRepository(this.db);
     this.documentRepository = new DxDocumentRepository(this.db);
-    this.documentService = new DocumentService({
-      documentRepository: this.documentRepository,
-      uow: this.uow,
-    });
-    this.documentController = new DocumentController(this.documentService);
     this.localUserAccountRepository = new DxLocalUserAccountRepository(this.db);
     this.messageBus = new InMemoryMessageBus();
-    this.documentMessageController = new DocumentMessageController(
-      this.messageBus
-    );
+    this.documentMessageController = new DocumentController(this.messageBus);
     new Application({
       documentRepository: this.documentRepository,
       localUserAccountRepository: this.localUserAccountRepository,
@@ -96,180 +86,6 @@ class AppServiceImpl implements AppService {
       },
       correlationId: msg.metadata.correlationId,
     });
-  }
-
-  async handleMessageAsync_(
-    msg: MessageEnvelope
-  ): Promise<MessageResponse<any>> {
-    if (!this.started) {
-      throw new Error('AppService not started.');
-    }
-
-    const { correlationId } = msg.metadata;
-    if (!correlationId) {
-      throw new Error('correlationId must be provided.');
-    }
-
-    try {
-      const { type, payload } = msg;
-      /**
-       * if type starts with 'Document'
-       * return documentController.handle(msg)
-       */
-      /**
-       * Normally:
-       * 1. validate incoming message
-       * 2. map to command/query payload
-       * 3. issue command/query
-       * 4. map to response
-       */
-      const result = await this.messageBus.sendAndWait(type, payload);
-      if (result.success) {
-        return buildMessageResponse('Document.List.Response', 'success', {
-          payload: { documents: result.data },
-          correlationId,
-        });
-      } else {
-        return buildMessageResponse('Document.List.Response', 'error', {
-          payload: {
-            title: 'Error',
-            detail: result.error,
-          },
-          correlationId,
-        });
-      }
-    } catch (e) {
-      return buildMessageResponse('Document.List.Response', 'error', {
-        payload: {
-          title: 'Error',
-          detail: 'Something went wrong.',
-        },
-        correlationId,
-      });
-    }
-  }
-
-  async handleMessageAsync__(
-    msg: MessageEnvelope
-  ): Promise<MessageResponse<any>> {
-    if (!this.started) {
-      throw new Error('AppService not started.');
-    }
-
-    const { correlationId } = msg.metadata;
-    if (!correlationId) {
-      throw new Error('correlationId must be provided.');
-    }
-
-    let response: MessageResponse<any>;
-
-    if (msg.type === 'App.Ping') {
-      response = buildMessageResponse('App.Pong', 'success', {
-        payload: 'pong',
-        correlationId,
-      });
-    } else if (msg.type === 'Document.List') {
-      const result = await this.documentService.getDocuments();
-      if (result.success) {
-        response = buildMessageResponse('Document.List.Response', 'success', {
-          payload: { documents: result.data },
-          correlationId,
-        });
-      } else {
-        response = buildMessageResponse('Document.List.Response', 'error', {
-          payload: {
-            title: 'Error',
-            detail: result.error,
-          },
-          correlationId,
-        });
-      }
-    } else if (msg.type === 'Document.Get') {
-      const { id } = msg.payload;
-      const result = await this.documentService.getDocument({ id });
-      if (result.success) {
-        response = buildMessageResponse('Document.Get.Response', 'success', {
-          payload: result.data,
-          correlationId,
-        });
-      } else {
-        response = buildMessageResponse('Document.Get.Response', 'error', {
-          payload: {
-            title: 'Error',
-            detail:
-              result.error || 'Something went wrong getting the document.',
-          },
-          correlationId,
-        });
-      }
-    } else if (msg.type === 'Document.Create') {
-      const { content } = msg.payload;
-      const result = await this.documentService.createDocument({ content });
-      if (result.success) {
-        response = buildMessageResponse('Document.Create.Response', 'success', {
-          payload: result.data,
-          correlationId,
-        });
-      } else {
-        response = buildMessageResponse('Document.Create.Response', 'error', {
-          payload: {
-            title: 'Error',
-            detail:
-              result.error || 'Something went wrong creating the document.',
-          },
-          correlationId,
-        });
-      }
-    } else if (msg.type === 'Document.Update') {
-      const { id, content } = msg.payload;
-      const result = await this.documentService.updateDocument({
-        id,
-        content,
-      });
-      const { correlationId } = msg.metadata;
-      if (result.success) {
-        response = buildMessageResponse('Document.Update.Response', 'success', {
-          payload: { id, content },
-          correlationId,
-        });
-      } else {
-        response = buildMessageResponse('Document.Update.Response', 'error', {
-          payload: {
-            title: 'Error',
-            detail:
-              result.error || 'Something went wrong updating the document.',
-          },
-          correlationId,
-        });
-      }
-    } else if (msg.type === 'Document.Delete') {
-      const { id } = msg.payload;
-      const result = await this.documentService.deleteDocument({ id });
-      if (result.success) {
-        response = buildMessageResponse('Document.Delete.Response', 'success', {
-          payload: { id },
-          correlationId,
-        });
-      } else {
-        response = buildMessageResponse('Document.Delete.Response', 'error', {
-          payload: {
-            title: 'Error',
-            detail:
-              result.error || 'Something went wrong deleting the document.',
-          },
-          correlationId,
-        });
-      }
-    } else {
-      response = buildMessageResponse('App.Error', 'error', {
-        payload: {
-          type: 'App.UnknownMessageTypeError',
-          title: `Unknown message type: ${msg.type}`,
-        },
-      });
-    }
-
-    return response;
   }
 
   async startup(): Promise<void> {

@@ -1,4 +1,16 @@
-import { DocumentService } from '@hai/core-service';
+import {
+  CreateDocument,
+  CreateDocumentResult,
+  DeleteDocument,
+  DeleteDocumentResult,
+  GetDocument,
+  GetDocumentResult,
+  ListDocuments,
+  ListDocumentsResult,
+  MessageBus,
+  UpdateDocument,
+  UpdateDocumentResult,
+} from '@hai/core-service';
 import {
   buildMessageResponse,
   MessageEnvelope,
@@ -6,10 +18,10 @@ import {
 } from './app-messaging.js';
 
 export class DocumentController {
-  private readonly documentService: DocumentService;
+  private readonly msgBus: MessageBus;
 
-  constructor(documentService: DocumentService) {
-    this.documentService = documentService;
+  constructor(msgBus: MessageBus) {
+    this.msgBus = msgBus;
   }
 
   async handle(msg: MessageEnvelope): Promise<MessageResponse<any>> {
@@ -61,7 +73,14 @@ export class DocumentController {
     const { correlationId } = metadata;
 
     try {
-      const result = await this.documentService.createDocument(payload);
+      const result = await this.msgBus.sendAndAwait<
+        CreateDocument,
+        CreateDocumentResult
+      >({
+        type: 'CreateDocumentCommand',
+        payload,
+      });
+
       if (result.success) {
         return buildMessageResponse('Document.Create.Response', 'success', {
           payload: result.data,
@@ -98,7 +117,15 @@ export class DocumentController {
     const { correlationId } = metadata;
 
     try {
-      const result = await this.documentService.deleteDocument(payload.id);
+      const result = await this.msgBus.sendAndAwait<
+        DeleteDocument,
+        DeleteDocumentResult
+      >({
+        type: 'DeleteDocumentCommand',
+        payload: {
+          id: payload.id,
+        },
+      });
       if (result.success) {
         return buildMessageResponse('Document.Delete.Response', 'success', {
           payload: { id: payload.id },
@@ -131,11 +158,18 @@ export class DocumentController {
     msg: MessageEnvelope
   ): Promise<MessageResponse<any>> {
     const { metadata, payload } = msg;
-    const { id } = payload;
     const { correlationId } = metadata;
 
     try {
-      const result = await this.documentService.getDocument({ id });
+      const result = await this.msgBus.sendAndAwait<
+        GetDocument,
+        GetDocumentResult
+      >({
+        type: 'GetDocumentQuery',
+        payload: {
+          id: payload.id,
+        },
+      });
       if (result.success) {
         return buildMessageResponse('Document.Get.Response', 'success', {
           payload: result.data,
@@ -172,7 +206,12 @@ export class DocumentController {
     const { correlationId } = metadata;
 
     try {
-      const result = await this.documentService.getDocuments();
+      const result = await this.msgBus.sendAndAwait<
+        ListDocuments,
+        ListDocumentsResult
+      >({
+        type: 'ListDocumentsQuery',
+      });
       if (result.success) {
         return buildMessageResponse('Document.List.Response', 'success', {
           payload: { documents: result.data },
@@ -209,9 +248,12 @@ export class DocumentController {
     const { correlationId } = metadata;
 
     try {
-      const result = await this.documentService.updateDocument({
-        id,
-        content,
+      const result = await this.msgBus.sendAndAwait<
+        UpdateDocument,
+        UpdateDocumentResult
+      >({
+        type: 'UpdateDocumentCommand',
+        payload,
       });
       if (result.success) {
         return buildMessageResponse('Document.Update.Response', 'success', {
