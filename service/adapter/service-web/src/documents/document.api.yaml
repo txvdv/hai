@@ -1,0 +1,339 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Simple API
+  description: A simple API to illustrate OpenAPI concepts
+
+servers:
+  - url: https://example.io/v1
+
+paths:
+  /documents:
+    get:
+      parameters:
+        - name: X-Message-ID
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: X-Message-Type
+          in: header
+          required: true
+          description: Document query message types.
+          schema:
+            type: string
+            enum: [
+              GetDocument,
+              GetDocuments
+            ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/GetDocument'
+                - $ref: '#/components/schemas/GetDocuments'
+
+      responses:
+        '200':
+          description: Message processed successfully. If a specific response will be returned for a given message, it will be defined.
+          headers:
+            X-Correlation-ID:
+              required: true
+              schema:
+                type: string
+                format: uuid
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/GetDocumentResponse'
+                  - $ref: '#/components/schemas/GetDocumentsResponse'
+        default:
+          description: An error occurred (covers any error status codes).
+          headers:
+            X-Correlation-ID:
+              required: true
+              schema:
+                type: string
+                format: uuid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      parameters:
+        - name: X-Message-ID
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: X-Message-Type
+          in: header
+          required: true
+          description: Document command message types.
+          schema:
+            type: string
+            enum: [
+              CreateDocument,
+              DeleteDocument,
+              UpdateDocument
+            ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/CreateDocument'
+                - $ref: '#/components/schemas/DeleteDocument'
+                - $ref: '#/components/schemas/UpdateDocument'
+
+      responses:
+        '200':
+          description: Message processed successfully. If a specific response will be returned for a given message, it will be defined.
+          headers:
+            X-Correlation-ID:
+              required: true
+              schema:
+                type: string
+                format: uuid
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/CreateDocumentResponse'
+        default:
+          description: An error occurred (covers any error status codes).
+          headers:
+            X-Correlation-ID:
+              required: true
+              schema:
+                type: string
+                format: uuid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+
+  /artists:
+    get:
+      description: Returns a list of artists
+      parameters:
+        - $ref: '#/components/parameters/PageLimit'
+        - $ref: '#/components/parameters/PageOffset'
+
+      responses:
+        '200':
+          description: Successfully returned a list of artists
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Artist'
+        '400':
+          $ref: '#/components/responses/400Error'
+
+    post:
+      description: Lets a user post a new artist
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Artist'
+      responses:
+        '200':
+          description: Successfully created a new artist
+        '400':
+          $ref: '#/components/responses/400Error'
+
+  /artists/{username}:
+    get:
+      description: Obtain information about an artist from his or her unique username
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: Successfully returned an artist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  artist_name:
+                    type: string
+                  artist_genre:
+                    type: string
+                  albums_recorded:
+                    type: integer
+
+        '400':
+          $ref: '#/components/responses/400Error'
+
+components:
+  schemas:
+    CreateDocument:
+      type: object
+      properties:
+        content:
+          type: string
+      required:
+        - content
+
+    CreateDocumentResponse:
+      type: object
+      properties:
+        id:
+          type: string
+      required:
+        - id
+
+    DeleteDocument:
+      type: object
+      properties:
+        id:
+          type: string
+      required:
+        - id
+
+    GetDocument:
+      type: object
+      properties:
+        id:
+          type: string
+      required:
+        - id
+
+    GetDocumentResponse:
+      allOf:
+        - $ref: '#/components/schemas/Document'
+
+    GetDocuments:
+      type: object
+      properties:
+        orderBy:
+          type: string
+          enum: [
+            date,
+            title
+          ]
+        orderDirection:
+          type: string
+          enum: [
+            asc,
+            desc
+          ]
+
+    GetDocumentsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/Document'
+
+    UpdateDocument:
+      type: object
+      properties:
+        id:
+          type: string
+        content:
+          type: string
+      required:
+        - id
+        - content
+
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: "Invalid request"
+      required:
+        - code
+        - message
+
+    Artist:
+      type: object
+      required:
+        - username
+      properties:
+        artist_name:
+          type: string
+        artist_genre:
+          type: string
+        albums_recorded:
+          type: integer
+        username:
+          type: string
+          
+    Document:
+      type: object
+      properties:
+        id:
+          type: string
+        content:
+          type: string
+      required:
+        - id
+        - content
+
+    Problem:
+      description: |
+        A Problem Details object (RFC 9457).  
+        Additional properties specific to the problem type may be present.
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: An absolute URI that identifies the problem type
+          default: about:blank  # kept for backwards-compatibility, type will be mandatory in problem-v2
+        title:
+          type: string
+          description: A short summary of the problem type. Written in English and readable for engineers (usually not suited for non technical stakeholders and not localized).
+          example: Service Unavailable
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem
+      example:
+        type: urn:problem-type:exampleOrganization:exampleProblem # "exampleOrganization" should be a short identifier for the organization that defines the problem type. "belgif" is used for problem types standardized in the Belgif REST guide
+        title: Description of the type of problem that occurred
+        detail: Description of specific occurrence of the problem
+
+  parameters:
+    PageLimit:
+      name: limit
+      in: query
+      description: Limits the number of items on a page
+      schema:
+        type: integer
+
+    PageOffset:
+      name: offset
+      in: query
+      description: Specifies the page number of the artists to be displayed
+      schema:
+        type: integer
+
+  responses:
+    400Error:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string

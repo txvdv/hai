@@ -62,7 +62,6 @@ self.addEventListener('message', async (event: ExtendableMessageEvent) => {
   if (appService && serviceRoot) {
     console.log('Service Worker serviceRoot detected. Handling message...');
     try {
-      // return await appService.handleMessageAsync(event.data);
       return await serviceRoot.handleMessage(event);
     } catch (error) {
       console.error(error);
@@ -73,10 +72,6 @@ self.addEventListener('message', async (event: ExtendableMessageEvent) => {
 });
 
 async function startServiceRoot() {
-  // TODO: fake Initialize domain classes, repositories, and other dependencies
-  // const db = await initializeDatabase(); // e.g., lovefield or custom IndexedDB abstraction
-  // const repository = new MyRepository(db);
-  // const service = new MyBackendService(repository); // Backend service depends on repository
   return {
     handleMessage: createBackendMessageHandler(),
   };
@@ -98,7 +93,7 @@ function createBackendMessageHandler() {
 
     const msg = event.data;
     console.log('Message:', msg);
-    const resMsg = await appService.handleMessageAsync(msg);
+    let resMsg = await appService.handleMessageAsync(msg);
     console.log('Message Response:', resMsg);
     event.source.postMessage(resMsg);
   };

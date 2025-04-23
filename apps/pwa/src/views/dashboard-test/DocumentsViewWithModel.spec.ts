@@ -32,10 +32,8 @@ describe('DocumentsView', () => {
   beforeEach(async () => {
     mockDocService = mock<DocumentService>();
     mockDocService.getDocuments.mockResolvedValue({
-      status: 'success',
-      payload: {
-        documents: [],
-      },
+      ok: true,
+      data: [],
     });
     documentBrowserViewModel = new DocumentBrowserViewModel({
       documentService: mockDocService,
@@ -92,14 +90,12 @@ describe('DocumentsView', () => {
 
   it('saves new content', async () => {
     mockDocService.createDocument.mockResolvedValue({
-      status: 'success',
-      payload: { id: '123', content: 'whatever' },
+      ok: true,
+      data: { id: '123' },
     });
     mockDocService.getDocuments.mockResolvedValue({
-      status: 'success',
-      payload: {
-        documents: mockDocuments,
-      },
+      ok: true,
+      data: mockDocuments,
     });
     await doMount();
     const createBtn = wrapper.find('button[aria-label="Create Document"]');
@@ -107,20 +103,20 @@ describe('DocumentsView', () => {
     await wrapper.find('textarea').setValue('New Document');
     const saveBtn = wrapper.find('button[aria-label="Save Document"]');
     await saveBtn.trigger('click');
-    expect(mockDocService.createDocument).toHaveBeenCalledWith('New Document');
+    expect(mockDocService.createDocument).toHaveBeenCalledWith({
+      content: 'New Document',
+    });
     expect(mockDocService.getDocuments).toHaveBeenCalled();
   });
 
   it('updates a document', async () => {
     mockDocService.getDocuments.mockResolvedValue({
-      status: 'success',
-      payload: {
-        documents: mockDocuments,
-      },
+      ok: true,
+      data: mockDocuments,
     });
     mockDocService.updateDocument.mockResolvedValue({
-      status: 'success',
-      payload: { id: '123', content: 'whatever' },
+      ok: true,
+      data: undefined,
     });
 
     await doMount();
@@ -136,19 +132,17 @@ describe('DocumentsView', () => {
     const saveBtn = wrapper.find('button[aria-label="Save Document"]');
     await saveBtn.trigger('click');
 
-    expect(mockDocService.updateDocument).toHaveBeenCalledWith(
-      '123',
-      'Updated Document 123'
-    );
+    expect(mockDocService.updateDocument).toHaveBeenCalledWith({
+      id: '123',
+      content: 'Updated Document 123',
+    });
     expect(mockDocService.getDocuments).toHaveBeenCalled();
   });
 
   it('shows a message when updating a document and trying to create a new one', async () => {
     mockDocService.getDocuments.mockResolvedValue({
-      status: 'success',
-      payload: {
-        documents: mockDocuments,
-      },
+      ok: true,
+      data: mockDocuments,
     });
 
     await doMount();
@@ -171,15 +165,13 @@ describe('DocumentsView', () => {
 
   it('saves the document when user wants to save the changes', async () => {
     mockDocService.getDocuments.mockResolvedValue({
-      status: 'success',
-      payload: {
-        documents: mockDocuments,
-      },
+      ok: true,
+      data: mockDocuments,
     });
 
     mockDocService.updateDocument.mockResolvedValue({
-      status: 'success',
-      payload: { id: '123', content: 'whatever' },
+      ok: true,
+      data: undefined,
     });
 
     await doMount();
@@ -202,18 +194,16 @@ describe('DocumentsView', () => {
     const confirmBtn = wrapper.find('button[aria-label="Confirm Action"]');
     await confirmBtn.trigger('click');
 
-    expect(mockDocService.updateDocument).toHaveBeenCalledWith(
-      '123',
-      'Updated Document 123'
-    );
+    expect(mockDocService.updateDocument).toHaveBeenCalledWith({
+      id: '123',
+      content: 'Updated Document 123',
+    });
   });
 
   it('removes a document from the rendered list after deletion', async () => {
     mockDocService.getDocuments.mockResolvedValue({
-      status: 'success',
-      payload: {
-        documents: mockDocuments,
-      },
+      ok: true,
+      data: mockDocuments,
     });
 
     await doMount();
@@ -222,17 +212,13 @@ describe('DocumentsView', () => {
     expect(wrapper.text()).toContain('Document 2');
 
     mockDocService.deleteDocument.mockResolvedValue({
-      status: 'success',
-      payload: {
-        id: '',
-      },
+      ok: true,
+      data: undefined,
     });
 
     mockDocService.getDocuments.mockResolvedValue({
-      status: 'success',
-      payload: {
-        documents: [mockDocuments[0]],
-      },
+      ok: true,
+      data: [mockDocuments[0]],
     });
 
     const deleteBtn = wrapper
@@ -241,7 +227,7 @@ describe('DocumentsView', () => {
     if (!deleteBtn) throw new Error('Delete button not found');
     await deleteBtn.trigger('click');
 
-    expect(mockDocService.deleteDocument).toHaveBeenCalledWith('456');
+    expect(mockDocService.deleteDocument).toHaveBeenCalledWith({ id: '456' });
     expect(mockDocService.getDocuments).toHaveBeenCalledTimes(1);
     expect(wrapper.text()).not.toContain('Document 2');
     expect(wrapper.text()).toContain('Document 1');
@@ -249,10 +235,8 @@ describe('DocumentsView', () => {
 
   it('renders a list of documents', async () => {
     mockDocService.getDocuments.mockResolvedValue({
-      status: 'success',
-      payload: {
-        documents: mockDocuments,
-      },
+      ok: true,
+      data: mockDocuments,
     });
 
     await doMount();

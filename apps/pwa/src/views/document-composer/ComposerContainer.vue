@@ -16,33 +16,39 @@ const status = ref<'success' | 'error'>('success');
 const problems = ref<ProblemDetails | undefined>();
 
 function getDocument() {
-  documentService.getDocument(id).then((response) => {
-    status.value = response.status as 'success' | 'error';
-    if (response.status === 'error') {
-      problems.value = response.payload;
+  documentService.getDocument({ id }).then((res) => {
+    if (res.ok) {
+      status.value = 'success';
+      doc.value = res.data.content;
     } else {
-      doc.value = response.payload.content;
+      status.value = 'error';
+      problems.value = res.error;
     }
   });
 }
 
 function updatedDocument() {
-  documentService.updateDocument(id, doc.value).then((response) => {
-    status.value = response.status as 'success' | 'error';
-    if (response.status === 'error') {
-      problems.value = response.payload;
-    }
-  });
+  documentService
+    .updateDocument({
+      id,
+      content: doc.value,
+    })
+    .then((res) => {
+      if (!res.ok) {
+        status.value = 'error';
+        problems.value = res.error;
+      }
+    });
 }
 
 function updateOrDeleteDocument() {
   if (doc.value) {
     updatedDocument();
   } else {
-    documentService.deleteDocument(id).then((response) => {
-      status.value = response.status as 'success' | 'error';
-      if (response.status === 'error') {
-        problems.value = response.payload;
+    documentService.deleteDocument({ id }).then((res) => {
+      if (!res.ok) {
+        status.value = 'error';
+        problems.value = res.error;
       }
     });
   }
@@ -61,7 +67,7 @@ window.addEventListener(
   'beforeunload',
   () => {
     if (!doc.value) {
-      documentService.deleteDocument(id);
+      documentService.deleteDocument({ id });
     }
   },
   {

@@ -1,15 +1,12 @@
-import { Client } from './service/client.js';
-import { DocumentService } from './service/document-service.js';
 import { DocumentBrowserViewModel } from './document-browser/view-model.js';
-export * from './lib/ui-core.js';
+import { DocumentService } from './application/services/DocumentService.js';
+import { SwDocumentService } from './infrastructure/SwDocumentService.js';
 
 export class UiCore {
-  private readonly client: Client;
   private readonly documentService: DocumentService;
 
   constructor() {
-    this.client = new Client();
-    this.documentService = new DocumentService(this.client);
+    this.documentService = new SwDocumentService();
   }
 
   getDocumentService() {
@@ -23,6 +20,6 @@ export class UiCore {
   }
 }
 
-export { DocumentService };
+export type { DocumentService };
 export { DocumentBrowserViewModel };
 export type { DocumentBrowserViewState } from './document-browser/view-model.js';

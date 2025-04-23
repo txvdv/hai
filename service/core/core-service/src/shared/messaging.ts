@@ -1,6 +1,6 @@
 /**
  * Interface representing a MessageBus for registering and handling commands and queries.
- * It facilitates the dispatch and processing of commands and queries with an associated handler.
+ * It facilitates the sendAndWait and processing of commands and queries with an associated handler.
  */
 export interface MessageBus {
   registerCommand<T>(

@@ -1,37 +1,37 @@
+import 'fake-indexeddb/auto';
 import {
   DxDatabase,
   DxDocumentRepository,
-  DxLocalUserAccountRepository,
+  DxUserRepository,
   UnitOfWork,
 } from '@hai/service-infra';
 import {
   Application,
-  InMemoryMessageBus,
-  MessageBus,
-  CQMessage,
-  Command,
-  Query,
+  MessageDispatcher,
+  SimpleMessageDispatcher,
+  UserRepository,
+  DocumentRepository,
 } from '@hai/core-service';
 
 export class AppTester {
   private readonly db: DxDatabase;
-  private readonly documentRepository: DxDocumentRepository;
-  private readonly localUserAccountRepository: DxLocalUserAccountRepository;
-  private readonly messageBus: MessageBus;
+  private readonly documentRepository: DocumentRepository;
+  private readonly userRepository: UserRepository;
+  private readonly messageDispatcher: MessageDispatcher;
   private readonly uow: UnitOfWork;
 
   constructor() {
     this.db = new DxDatabase();
     this.uow = new UnitOfWork(this.db);
     this.documentRepository = new DxDocumentRepository(this.db);
-    this.localUserAccountRepository = new DxLocalUserAccountRepository(this.db);
-    this.messageBus = new InMemoryMessageBus();
+    this.userRepository = new DxUserRepository(this.db);
+    this.messageDispatcher = new SimpleMessageDispatcher();
 
     new Application({
       documentRepository: this.documentRepository,
-      localUserAccountRepository: this.localUserAccountRepository,
-      messageBus: this.messageBus,
+      messageDispatcher: this.messageDispatcher,
       unitOfWork: this.uow,
+      userRepository: this.userRepository,
     });
   }
 
@@ -39,15 +39,7 @@ export class AppTester {
     this.db.deleteDb();
   }
 
-  async sendAndAwait<T extends CQMessage, R>(msg: T): Promise<R> {
-    return this.messageBus.sendAndAwait(msg);
-  }
-
-  async sendCommand<T>(cmd: Command): Promise<T> {
-    return this.messageBus.commandAndWait<T>(cmd);
-  }
-
-  async sendQuery<T>(qry: Query): Promise<T> {
-    return this.messageBus.queryAndWait<T>(qry);
+  async sendAndWait(msg: any): Promise<any> {
+    return this.messageDispatcher.sendAndWait(msg);
   }
 }

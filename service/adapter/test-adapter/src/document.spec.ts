@@ -1,74 +1,46 @@
 import assert from 'assert';
-import 'fake-indexeddb/auto';
 import { AppTester } from './app.tester.js';
 import {
-  CreateDocument,
-  CreateDocumentResult,
-  DeleteDocument,
-  DeleteDocumentResult,
-  ListDocuments,
-  ListDocumentsResult,
+  CreateDocumentCommand,
+  DeleteDocumentCommand,
+  GetDocumentsQuery,
 } from '@hai/core-service';
 
-describe('Document Service', () => {
+describe('Document', () => {
   let appTest: AppTester;
 
   beforeEach(() => {
     appTest = new AppTester();
   });
 
+  afterEach(() => {
+    appTest.teardown();
+  });
+
   test('Creating a document', async () => {
-    const result = await appTest.sendAndAwait<
-      CreateDocument,
-      CreateDocumentResult
-    >({
-      type: 'CreateDocumentCommand',
-      payload: {
-        content: 'test content',
-      },
-    });
+    const result = await appTest.sendAndWait(
+      new CreateDocumentCommand('test content')
+    );
     assert(result.success);
-    console.log(result.data.id);
   });
 
   test('Deleting a document', async () => {
-    const createResult = await appTest.sendAndAwait<
-      CreateDocument,
-      CreateDocumentResult
-    >({
-      type: 'CreateDocumentCommand',
-      payload: {
-        content: 'test content',
-      },
-    });
+    const createResult = await appTest.sendAndWait(
+      new CreateDocumentCommand('test content')
+    );
     assert(createResult.success);
 
-    const listResult = await appTest.sendAndAwait<
-      ListDocuments,
-      ListDocumentsResult
-    >({
-      type: 'ListDocumentsQuery',
-    });
+    const listResult = await appTest.sendAndWait(new GetDocumentsQuery());
     expect(listResult.success).toBeTruthy;
 
-    const delResult = await appTest.sendAndAwait<
-      DeleteDocument,
-      DeleteDocumentResult
-    >({
-      type: 'DeleteDocumentCommand',
-      payload: {
-        id: createResult.data.id,
-      },
-    });
-
+    const delResult = await appTest.sendAndWait(
+      new DeleteDocumentCommand(createResult.data.id)
+    );
     expect(delResult.success).toBeTruthy;
 
-    const listResultAfterDel = await appTest.sendAndAwait<
-      ListDocuments,
-      ListDocumentsResult
-    >({
-      type: 'ListDocumentsQuery',
-    });
+    const listResultAfterDel = await appTest.sendAndWait(
+      new GetDocumentsQuery()
+    );
     expect(listResultAfterDel.success).toBeTruthy;
   });
 });

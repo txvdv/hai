@@ -1,12 +1,23 @@
 export { Application } from './application.js';
 export type { UnitOfWork } from './shared/unit-of-work.js';
 
+// -------------------------------------------------------------------------
 // Driven ports
-export type { DocumentRepository } from './document-service/document.repository.js';
-export { LocalUserAccount } from './local-user-account/local-user-account.js';
-export type { LocalUserAccountRepository } from './local-user-account/local-user-account.repository.js';
+// -------------------------------------------------------------------------
+// Document
+export type { DocumentRepository } from './domain/Document/DocumentRepository.js';
+export { Document } from './domain/Document/Document.js';
+export { DocumentID } from './domain/Document/DocumentID.js';
 
+// User
+export { User } from './domain/User/User.js';
+export { UserID } from './domain/User/UserID.js';
+export type { UserRepository } from './domain/User/UserRepository.js';
+
+// -------------------------------------------------------------------------
 // Driver ports
+// -------------------------------------------------------------------------
+// Messaging
 export type {
   MessageBus,
   Result,
@@ -15,32 +26,20 @@ export type {
   Query,
 } from './shared/messaging.js';
 export { InMemoryMessageBus } from './shared/messaging.js';
+export type { MessageDispatcher } from './application/Messaging/messaging.interface.js';
+export { SimpleMessageDispatcher } from './infra/messaging/SimpleMessageDispatcher.js';
 
-export type {
-  CreateDocument,
-  CreateDocumentResult,
-  DeleteDocument,
-  DeleteDocumentResult,
-  GetDocument,
-  GetDocumentResult,
-  ListDocuments,
-  ListDocumentsResult,
-  UpdateDocument,
-  UpdateDocumentResult,
-  ComposedDocument,
-} from './document-service/document.api.js';
-export type { Document } from './document-service/document.service.js';
-export { DocumentService } from './document-service/document.service.js';
+// Document
+export { CreateDocumentCommand } from './application/Document/CreateDocumentCommand.js';
+export type { CreateDocumentResult } from './application/Document/CreateDocumentCommand.js';
+export type { DocumentDTO } from './application/Document/DocumentDTO.js';
+export { DeleteDocumentCommand } from './application/Document/DeleteDocumentCommand.js';
+export { GetDocumentQuery } from './application/Document/GetDocumentQuery.js';
+export { GetDocumentsQuery } from './application/Document/GetDocumentsQuery.js';
+export { UpdateDocumentCommand } from './application/Document/UpdateDocumentCommand.js';
 
-export type {
-  CreateLocalUserAccount,
-  CreateLocalUserAccountResult,
-  DeleteLocalUserAccount,
-  DeleteLocalUserAccountResult,
-  GetLocalUserAccount,
-  GetLocalUserAccountResult,
-  UpdateLocalUserAccount,
-} from './local-user-account/local-user-account.api.js';
-export { LocalUserAccountAlreadyExistsError } from './local-user-account/local-user-account.api.js';
+// User
+export { CreateUser } from './application/User/CreateUser.js';
 
+// Shared
 export { EntityNotFoundError } from './shared/errors.js';

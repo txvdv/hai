@@ -75,7 +75,7 @@ const createDocumentText = computed(() => {
 
 async function deleteDocument(id: string) {
   try {
-    await documentService.deleteDocument(id);
+    await documentService.deleteDocument({ id });
     if (doc.value.id === id) resetDocument();
     await getDocuments();
   } catch (error) {
@@ -95,8 +95,8 @@ async function editDocument(id: string) {
 async function getDocuments() {
   try {
     const composedDocs = await documentService.getDocuments();
-    if (composedDocs.status === 'success') {
-      docs.value = composedDocs.payload.documents;
+    if (composedDocs.ok) {
+      docs.value = composedDocs.data;
     }
   } catch (error) {
     console.error('Error fetching documents:', error);
@@ -106,9 +106,12 @@ async function getDocuments() {
 async function saveDocument() {
   const { id, content } = doc.value;
   if (id) {
-    await documentService.updateDocument(id, content);
+    await documentService.updateDocument({
+      id,
+      content,
+    });
   } else {
-    await documentService.createDocument(content);
+    await documentService.createDocument({ content });
   }
   hideTextarea();
   docCache = null;
@@ -125,7 +128,10 @@ function resetDocument() {
 
 async function onDialogConfirm() {
   const { id, content } = doc.value;
-  await documentService.updateDocument(id, content);
+  await documentService.updateDocument({
+    id,
+    content,
+  });
   await getDocuments();
   isDialogVisible.value = false;
   resetDocument();

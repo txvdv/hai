@@ -1,9 +1,12 @@
-import { ComposedDocument, ProblemDetails } from '@hai/service-web';
+import { ProblemDetails } from '@hai/service-web';
 import { Observable } from '../Observable.js';
-import { DocumentService } from '../service/document-service.js';
+import {
+  Document,
+  DocumentService,
+} from '../application/services/DocumentService.js';
 
 export type DocumentBrowserViewState = {
-  documents: ComposedDocument[];
+  documents: Document[];
   problem: ProblemDetails | null;
 };
 
@@ -21,35 +24,33 @@ export class DocumentBrowserViewModel extends Observable<DocumentBrowserViewStat
   }
 
   async createDocument(content: string) {
-    const req = await this.documentService.createDocument(content);
+    const res = await this.documentService.createDocument({ content });
 
-    if (req.status === 'success') {
-      this.setState({ documents: [...this.getState().documents, req.payload] });
-    } else {
-      this.setState({ problem: req.payload });
+    if (!res.ok) {
+      this.setState({ problem: res.error });
     }
   }
 
   async deleteDocument(id: string) {
-    const req = await this.documentService.deleteDocument(id);
+    const res = await this.documentService.deleteDocument({ id });
 
-    if (req.status === 'success') {
+    if (res.ok) {
       const documents = this.getState().documents.filter(
         (doc) => doc.id !== id
       );
       this.setState({ documents });
     } else {
-      this.setState({ problem: req.payload });
+      this.setState({ problem: res.error });
     }
   }
 
   async loadDocuments() {
-    const req = await this.documentService.getDocuments();
+    const res = await this.documentService.getDocuments();
 
-    if (req.status === 'success') {
-      this.setState({ documents: req.payload.documents });
+    if (res.ok) {
+      this.setState({ documents: res.data });
     } else {
-      this.setState({ problem: req.payload });
+      this.setState({ problem: res.error });
     }
   }
 
@@ -58,12 +59,15 @@ export class DocumentBrowserViewModel extends Observable<DocumentBrowserViewStat
       return this.createDocument(content);
     }
 
-    const req = await this.documentService.updateDocument(id, content);
+    const res = await this.documentService.updateDocument({
+      id,
+      content,
+    });
 
-    if (req.status === 'success') {
+    if (res.ok) {
       await this.loadDocuments();
     } else {
-      this.setState({ problem: req.payload });
+      this.setState({ problem: res.error });
     }
   }
 }

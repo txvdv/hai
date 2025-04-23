@@ -1,10 +1,11 @@
-import Dexie, { EntityTable } from 'dexie';
-import { DocumentEntity } from './document-repository.js';
-import { LocalUserAccountEntity } from './local-user-account-repository.js';
+import Dexie from 'dexie';
+import { type Table } from 'dexie';
+import { UserEntityRecord } from './DxUserRepository.js';
+import { DocumentRecord } from './DxDocumentRepository.js';
 
 export class DxDatabase extends Dexie {
-  documents!: EntityTable<DocumentEntity, 'id'>;
-  localUserAccounts!: EntityTable<LocalUserAccountEntity, 'id'>;
+  documents!: Table<DocumentRecord, string>;
+  users!: Table<UserEntityRecord, string>;
 
   // A queue to store pending operations for transactional processing
   operationQueue: Array<{
@@ -15,11 +16,9 @@ export class DxDatabase extends Dexie {
   constructor() {
     super('HaiDB');
     this.version(1).stores({
-      documents: '++id,content',
-      localUserAccounts: '++id',
+      documents: 'id,content',
+      users: 'id,preferences',
     });
-    this.documents.mapToClass(DocumentEntity);
-    this.localUserAccounts.mapToClass(LocalUserAccountEntity);
   }
 
   // Add an operation to the queue

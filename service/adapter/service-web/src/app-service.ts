@@ -1,23 +1,29 @@
-import { buildMessageResponse } from './app-messaging.js';
-import { MessageEnvelope, MessageResponse } from './app-messaging.js';
 import {
   DxDatabase,
   DxDocumentRepository,
-  DxLocalUserAccountRepository,
+  DxUserRepository,
   UnitOfWork,
 } from '@hai/service-infra';
-import { LocalUserAccountRepository } from '@hai/core-service';
-import { Application, InMemoryMessageBus, MessageBus } from '@hai/core-service';
-import { DocumentController } from './document.controller.js';
+import {
+  DocumentRepository,
+  MessageDispatcher,
+  SimpleMessageDispatcher,
+  UserRepository,
+} from '@hai/core-service';
+import { Application } from '@hai/core-service';
+import { DocumentsController } from './documents/document.controller.js';
+import {
+  createResponseMessage,
+  RequestMessageEnvelope,
+  ResponseMessageEnvelope,
+} from './messaging-infra/index.js';
 
 export function getAppService(): AppService {
   return AppServiceImpl.getInstance();
 }
 
 export interface AppService {
-  handleMessage(msg: MessageEnvelope): void;
-
-  handleMessageAsync(msg: MessageEnvelope): Promise<any>;
+  handleMessageAsync(msg: RequestMessageEnvelope<any>): Promise<any>;
 
   startup(): Promise<void>;
 
@@ -34,24 +40,27 @@ class AppServiceImpl implements AppService {
 
   private readonly db: DxDatabase;
   private readonly uow: UnitOfWork;
-  private readonly documentController: DocumentController;
-  private readonly documentRepository: DxDocumentRepository;
-  private readonly localUserAccountRepository: LocalUserAccountRepository;
-  private readonly messageBus: MessageBus;
+  private readonly documentsController: DocumentsController;
+  private readonly documentRepository: DocumentRepository;
+  private readonly userRepository: UserRepository;
+  private readonly messageDispatcher: MessageDispatcher;
 
   private constructor(config: AppServiceConfig = {}) {
     this.db = new DxDatabase();
     this.uow = new UnitOfWork(this.db);
     this.documentRepository = new DxDocumentRepository(this.db);
-    this.localUserAccountRepository = new DxLocalUserAccountRepository(this.db);
-    this.messageBus = new InMemoryMessageBus();
-    this.documentController = new DocumentController(this.messageBus);
+    this.userRepository = new DxUserRepository(this.db);
+
+    this.messageDispatcher = new SimpleMessageDispatcher();
+
     new Application({
       documentRepository: this.documentRepository,
-      localUserAccountRepository: this.localUserAccountRepository,
-      messageBus: this.messageBus,
+      userRepository: this.userRepository,
+      messageDispatcher: this.messageDispatcher,
       unitOfWork: this.uow,
     });
+
+    this.documentsController = new DocumentsController(this.messageDispatcher);
   }
 
   public static getInstance(config: AppServiceConfig = {}): AppServiceImpl {
@@ -61,29 +70,21 @@ class AppServiceImpl implements AppService {
     return this.instance;
   }
 
-  handleMessage(msg: MessageEnvelope): void {
-    if (!this.started) {
-      throw new Error('AppService not started.');
-    }
-  }
-
   async handleMessageAsync(
-    msg: MessageEnvelope
-  ): Promise<MessageResponse<any>> {
+    msg: RequestMessageEnvelope<any>
+  ): Promise<ResponseMessageEnvelope> {
     if (!this.started) {
       throw new Error('AppService not started.');
     }
 
-    if (msg.type.startsWith('Document')) {
-      return await this.documentController.handle(msg);
+    if (msg.metadata.messagePath && msg.metadata.messagePath === '/documents') {
+      return this.documentsController.handle(msg);
     }
 
-    return buildMessageResponse(`${msg.type}.Response`, 'error', {
-      payload: {
-        title: 'Unhandled Type',
-        detail: 'No controller found for this type.',
-      },
-      correlationId: msg.metadata.correlationId,
+    return createResponseMessage(msg, 'error', {
+      type: '/errors/unknown-message',
+      title: 'Unknown Message',
+      detail: 'Unknown Message',
     });
   }
 
@@ -99,14 +100,3 @@ class AppServiceImpl implements AppService {
     console.log('Service has been torn down and instance reset.');
   }
 }
-
-/**
- * Ping Pong
- */
-export type PingMessage = MessageEnvelope<string> & {
-  type: 'App.Ping';
-};
-
-export type PingResponseMessage = MessageResponse<string> & {
-  type: 'App.Pong';
-};
