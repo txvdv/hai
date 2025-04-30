@@ -1,0 +1,9 @@
+{
+  "name": "@hai/idb-dx",
+  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/service/infra/persistence/idb-dx/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project @hai/idb-dx --web",
+  "targets": {}
+}

@@ -31,7 +31,14 @@
           "watchDepsName": "watch-deps"
         }
       },
-      "exclude": ["client/ui-core/*", "service/adapter/test-adapter/*"]
+      "exclude": [
+        "client/ui-core/*",
+        "service/adapter/test-adapter/*",
+        "packages/service/core/*",
+        "packages/service/infra/persistence/idb-dx/*",
+        "packages/service/infra/service-test/*",
+        "packages/service/infra/service-worker/web/*"
+      ]
     },
     {
       "plugin": "@nx/vite/plugin",
@@ -76,7 +83,14 @@
     },
     {
       "plugin": "@nx/js/typescript",
-      "include": ["client/ui-core/*", "service/adapter/test-adapter/*"],
+      "include": [
+        "client/ui-core/*",
+        "service/adapter/test-adapter/*",
+        "packages/service/core/*",
+        "packages/service/infra/persistence/idb-dx/*",
+        "packages/service/infra/service-test/*",
+        "packages/service/infra/service-worker/web/*"
+      ],
       "options": {
         "typecheck": {
           "targetName": "typecheck"
@@ -86,7 +100,7 @@
   ],
   "targetDefaults": {
     "test": {
-      "dependsOn": ["^build", "^build", "^build", "^build"]
+      "dependsOn": ["^build"]
     },
     "e2e-ci--**/*": {
       "dependsOn": ["^build"]

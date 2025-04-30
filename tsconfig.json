@@ -32,6 +32,18 @@
     },
     {
       "path": "./service/adapter/test-adapter"
+    },
+    {
+      "path": "./packages/service/core"
+    },
+    {
+      "path": "./packages/service/infra/persistence/idb-dx"
+    },
+    {
+      "path": "./packages/service/infra/service-test"
+    },
+    {
+      "path": "./packages/service/infra/service-worker/web"
     }
   ],
   "ts-node": {

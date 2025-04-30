@@ -16,7 +16,11 @@
     "service/core/*",
     "service/infrastructure/*",
     "shared/*",
-    "client/*"
+    "client/*",
+    "packages/service/*",
+    "packages/service/infra/persistence/*",
+    "packages/service/infra/*",
+    "packages/service/infra/service-worker/*"
   ],
   "devDependencies": {
     "@eslint/js": "^9.8.0",
