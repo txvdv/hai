@@ -1,10 +1,11 @@
-import type { paths, components } from './schema.js';
 import {
   createResponseMessage,
+  DocumentComponents,
+  DocumentsPaths,
   ProblemDetails,
   RequestMessageEnvelope,
   ResponseMessageEnvelope,
-} from '../messaging-infra/index.js';
+} from '@hai/api-messaging';
 import {
   CreateDocumentCommand,
   CreateDocumentResult,
@@ -15,28 +16,30 @@ import {
   UpdateDocumentCommand,
 } from '@hai/service-core';
 
-export const DocumentsPath: keyof paths = '/documents';
+export const DocumentsPath: keyof DocumentsPaths = '/documents';
 
 // -----------------------------------------------------------------------------
 // Message Types
 // -----------------------------------------------------------------------------
 type CommandMessage =
-  paths['/documents']['post']['parameters']['header']['X-Message-Type'];
+  DocumentsPaths['/documents']['post']['parameters']['header']['X-Message-Type'];
 type QueryMessage =
-  paths['/documents']['get']['parameters']['header']['X-Message-Type'];
+  DocumentsPaths['/documents']['get']['parameters']['header']['X-Message-Type'];
 const CreateDocument: CommandMessage = 'CreateDocument';
-type CreateDocumentPayload = components['schemas']['CreateDocument'];
-type CreateDocumentResponse = components['schemas']['CreateDocumentResponse'];
+type CreateDocumentPayload = DocumentComponents['schemas']['CreateDocument'];
+type CreateDocumentResponse =
+  DocumentComponents['schemas']['CreateDocumentResponse'];
 const DeleteDocument: CommandMessage = 'DeleteDocument';
-type DeleteDocumentPayload = components['schemas']['DeleteDocument'];
+type DeleteDocumentPayload = DocumentComponents['schemas']['DeleteDocument'];
 const GetDocument: QueryMessage = 'GetDocument';
-type GetDocumentPayload = components['schemas']['GetDocument'];
-type GetDocumentResponse = components['schemas']['GetDocumentResponse'];
+type GetDocumentPayload = DocumentComponents['schemas']['GetDocument'];
+type GetDocumentResponse = DocumentComponents['schemas']['GetDocumentResponse'];
 const GetDocuments: QueryMessage = 'GetDocuments';
-type GetDocumentsPayload = components['schemas']['GetDocuments'];
-type GetDocumentsResponse = components['schemas']['GetDocumentsResponse'];
+type GetDocumentsPayload = DocumentComponents['schemas']['GetDocuments'];
+type GetDocumentsResponse =
+  DocumentComponents['schemas']['GetDocumentsResponse'];
 const UpdateDocument: CommandMessage = 'UpdateDocument';
-type UpdateDocumentPayload = components['schemas']['UpdateDocument'];
+type UpdateDocumentPayload = DocumentComponents['schemas']['UpdateDocument'];
 
 // -----------------------------------------------------------------------------
 // Message Controller

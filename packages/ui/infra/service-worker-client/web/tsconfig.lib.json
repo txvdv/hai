@@ -12,16 +12,13 @@
   "include": ["src/**/*.ts"],
   "references": [
     {
-      "path": "../../../../../shared/common-utils/tsconfig.lib.json"
+      "path": "../../../core/tsconfig.lib.json"
     },
     {
       "path": "../../../../shared/api-messaging/tsconfig.lib.json"
     },
     {
-      "path": "../../../core/tsconfig.lib.json"
-    },
-    {
-      "path": "../../persistence/idb-dx/tsconfig.lib.json"
+      "path": "../../../../../shared/common-utils/tsconfig.lib.json"
     }
   ],
   "exclude": [

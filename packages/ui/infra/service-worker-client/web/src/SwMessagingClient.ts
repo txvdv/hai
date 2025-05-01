@@ -2,7 +2,7 @@ import { createUUID } from '@hai/common-utils';
 import {
   RequestMessageEnvelope,
   ResponseMessageEnvelope,
-} from '@hai/service-web';
+} from '@hai/api-messaging';
 
 export class SwMessagingClient {
   async sendAndWait<ReqType = any, ResType = any>(

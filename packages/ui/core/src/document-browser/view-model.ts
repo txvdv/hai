@@ -1,4 +1,4 @@
-import { ProblemDetails } from '@hai/service-web';
+import { ProblemDetails } from '@hai/api-messaging';
 import { Observable } from '../Observable.js';
 import {
   Document,

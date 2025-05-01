@@ -4,16 +4,13 @@
   "include": [],
   "references": [
     {
-      "path": "../../../../../shared/common-utils"
+      "path": "../../../core"
     },
     {
       "path": "../../../../shared/api-messaging"
     },
     {
-      "path": "../../../core"
-    },
-    {
-      "path": "../../persistence/idb-dx"
+      "path": "../../../../../shared/common-utils"
     },
     {
       "path": "./tsconfig.lib.json"

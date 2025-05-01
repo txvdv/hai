@@ -1,0 +1,9 @@
+{
+  "name": "@hai/sw-web-client",
+  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/ui/infra/service-worker-client/web/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project @hai/sw-web-client --web",
+  "targets": {}
+}

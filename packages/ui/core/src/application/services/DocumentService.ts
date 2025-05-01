@@ -1,4 +1,4 @@
-import type { DocumentComponents } from '@hai/service-web';
+import type { DocumentComponents } from '@hai/api-messaging';
 import { Result } from './Result.js';
 
 export type Document = DocumentComponents['schemas']['Document'];

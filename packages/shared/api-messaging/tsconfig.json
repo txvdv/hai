@@ -7,9 +7,6 @@
       "path": "../../../shared/common-utils"
     },
     {
-      "path": "../../shared/api-messaging"
-    },
-    {
       "path": "./tsconfig.lib.json"
     },
     {

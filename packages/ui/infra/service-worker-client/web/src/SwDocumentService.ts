@@ -2,23 +2,20 @@ import { createUUID } from '@hai/common-utils';
 import {
   RequestMessageEnvelope,
   ResponseMessageEnvelope,
-} from '@hai/service-web';
-import type { DocumentComponents } from '@hai/service-web';
-import {
-  Document,
-  DocumentService,
-  CreateDocumentPayload,
-  DeleteDocumentPayload,
-  GetDocumentPayload,
-  UpdateDocumentPayload,
-} from '../application/services/DocumentService.js';
-import { err, ok, Result } from '../application/services/Result.js';
+} from '@hai/api-messaging';
+import type { DocumentComponents } from '@hai/api-messaging';
+import { err, ok, Result, DocumentService } from '@hai/ui-core-new';
 
+type Document = DocumentComponents['schemas']['Document'];
+type CreateDocumentPayload = DocumentComponents['schemas']['CreateDocument'];
 type CreateDocumentResponse =
   DocumentComponents['schemas']['CreateDocumentResponse'];
+type DeleteDocumentPayload = DocumentComponents['schemas']['DeleteDocument'];
+type GetDocumentPayload = DocumentComponents['schemas']['GetDocument'];
 type GetDocumentResponse = DocumentComponents['schemas']['GetDocumentResponse'];
 type GetDocumentsResponse =
   DocumentComponents['schemas']['GetDocumentsResponse'];
+type UpdateDocumentPayload = DocumentComponents['schemas']['UpdateDocument'];
 
 export class SwDocumentService implements DocumentService {
   async createDocument(

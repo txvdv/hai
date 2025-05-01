@@ -1,12 +1,11 @@
 import { DocumentBrowserViewModel } from './document-browser/view-model.js';
 import { DocumentService } from './application/services/DocumentService.js';
-import { SwDocumentService } from './infrastructure/SwDocumentService.js';
 
 export class UiCore {
   private readonly documentService: DocumentService;
 
-  constructor() {
-    this.documentService = new SwDocumentService();
+  constructor(deps: { documentService: DocumentService }) {
+    this.documentService = deps.documentService;
   }
 
   getDocumentService() {
@@ -19,6 +18,9 @@ export class UiCore {
     });
   }
 }
+
+export { err, ok } from './application/services/Result.js';
+export type { Result } from './application/services/Result.js';
 
 export type { DocumentService };
 export { DocumentBrowserViewModel };

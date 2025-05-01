@@ -1,7 +1,7 @@
 import { mock, MockProxy } from 'vitest-mock-extended';
-import { createRequestMessage } from '../messaging-infra/index.js';
-import { DocumentsController } from './document.controller.js';
+import { createRequestMessage } from '@hai/api-messaging';
 import { MessageDispatcher } from '@hai/service-core';
+import { DocumentsController } from './document.controller.js';
 
 // Message types
 const CreateDocument = 'CreateDocument';

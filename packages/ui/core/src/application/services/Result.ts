@@ -1,4 +1,4 @@
-import { ProblemDetails } from '@hai/service-web';
+import { ProblemDetails } from '@hai/api-messaging';
 
 export type Result<T> = Ok<T> | Err<ProblemDetails>;
 

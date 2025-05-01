@@ -15,7 +15,7 @@
       "path": "../../../shared/common-utils/tsconfig.lib.json"
     },
     {
-      "path": "../../../service/adapter/service-web/tsconfig.lib.json"
+      "path": "../../shared/api-messaging/tsconfig.lib.json"
     }
   ],
   "exclude": [

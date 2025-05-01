@@ -38,7 +38,9 @@
         "packages/service/infra/persistence/idb-dx/*",
         "packages/service/infra/service-test/*",
         "packages/service/infra/service-worker/web/*",
-        "packages/ui/core/*"
+        "packages/ui/core/*",
+        "packages/shared/api-messaging/*",
+        "packages/ui/infra/service-worker-client/web/*"
       ]
     },
     {
@@ -91,7 +93,9 @@
         "packages/service/infra/persistence/idb-dx/*",
         "packages/service/infra/service-test/*",
         "packages/service/infra/service-worker/web/*",
-        "packages/ui/core/*"
+        "packages/ui/core/*",
+        "packages/shared/api-messaging/*",
+        "packages/ui/infra/service-worker-client/web/*"
       ],
       "options": {
         "typecheck": {

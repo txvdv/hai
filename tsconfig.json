@@ -47,6 +47,12 @@
     },
     {
       "path": "./packages/ui/core"
+    },
+    {
+      "path": "./packages/shared/api-messaging"
+    },
+    {
+      "path": "./packages/ui/infra/service-worker-client/web"
     }
   ],
   "ts-node": {
