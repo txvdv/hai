@@ -1,6 +1,6 @@
 import assert from 'assert';
 import { AppTester } from './app.tester.js';
-import { CreateUser } from '@hai/core-service';
+import { CreateUser } from '@hai/service-core';
 
 describe('User', () => {
   let appTest: AppTester;

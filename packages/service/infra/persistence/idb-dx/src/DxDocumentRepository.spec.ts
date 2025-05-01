@@ -1,5 +1,5 @@
 import 'fake-indexeddb/auto';
-import { Document, DocumentID } from '@hai/core-service';
+import { Document, DocumentID } from '@hai/service-core';
 import { DxDatabase } from './database.js';
 import { DxDocumentRepository } from './DxDocumentRepository.js';
 import { UnitOfWork } from './unit-of-work.js';

@@ -3,14 +3,14 @@ import {
   DxDocumentRepository,
   DxUserRepository,
   UnitOfWork,
-} from '@hai/service-infra';
+} from '@hai/idb-dx';
 import {
   DocumentRepository,
   MessageDispatcher,
   SimpleMessageDispatcher,
   UserRepository,
-} from '@hai/core-service';
-import { Application } from '@hai/core-service';
+} from '@hai/service-core';
+import { Application } from '@hai/service-core';
 import { DocumentsController } from './documents/document.controller.js';
 import {
   createResponseMessage,

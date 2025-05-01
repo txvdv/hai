@@ -1,13 +1,13 @@
 {
-  "extends": "../../../../tsconfig.base.json",
+  "extends": "../../../tsconfig.base.json",
   "files": [],
   "include": [],
   "references": [
     {
-      "path": "../persistence/idb-dx"
+      "path": "../../../shared/common-utils"
     },
     {
-      "path": "../../core"
+      "path": "../../../service/adapter/service-web"
     },
     {
       "path": "./tsconfig.lib.json"

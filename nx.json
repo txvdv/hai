@@ -37,7 +37,8 @@
         "packages/service/core/*",
         "packages/service/infra/persistence/idb-dx/*",
         "packages/service/infra/service-test/*",
-        "packages/service/infra/service-worker/web/*"
+        "packages/service/infra/service-worker/web/*",
+        "packages/ui/core/*"
       ]
     },
     {
@@ -89,7 +90,8 @@
         "packages/service/core/*",
         "packages/service/infra/persistence/idb-dx/*",
         "packages/service/infra/service-test/*",
-        "packages/service/infra/service-worker/web/*"
+        "packages/service/infra/service-worker/web/*",
+        "packages/ui/core/*"
       ],
       "options": {
         "typecheck": {

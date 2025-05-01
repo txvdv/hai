@@ -15,10 +15,10 @@
       "path": "../../../../../shared/common-utils/tsconfig.lib.json"
     },
     {
-      "path": "../../../../../service/core/core-service/tsconfig.lib.json"
+      "path": "../../../core/tsconfig.lib.json"
     },
     {
-      "path": "../../../../../service/infrastructure/service-infra/tsconfig.lib.json"
+      "path": "../../persistence/idb-dx/tsconfig.lib.json"
     }
   ],
   "exclude": [

@@ -1,5 +1,5 @@
 {
-  "name": "@hai/idb-dx",
+  "name": "@hai/ui-core-new",
   "version": "0.0.1",
   "private": true,
   "type": "module",
@@ -13,10 +13,5 @@
     },
     "./package.json": "./package.json"
   },
-  "dependencies": {
-    "dexie": "4.0.11"
-  },
-  "devDependencies": {
-    "fake-indexeddb": "^6.0.0"
-  }
+  "dependencies": {}
 }

@@ -7,12 +7,13 @@
     "tsBuildInfoFile": "dist/tsconfig.lib.tsbuildinfo",
     "emitDeclarationOnly": true,
     "forceConsistentCasingInFileNames": true,
-    "types": ["node"]
+    "types": ["node"],
+    "module": "esnext"
   },
   "include": ["src/**/*.ts"],
   "references": [
     {
-      "path": "../../../../../service/core/core-service/tsconfig.lib.json"
+      "path": "../../../core/tsconfig.lib.json"
     }
   ],
   "exclude": [

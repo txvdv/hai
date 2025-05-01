@@ -13,7 +13,7 @@ import {
   GetDocumentsQuery,
   MessageDispatcher,
   UpdateDocumentCommand,
-} from '@hai/core-service';
+} from '@hai/service-core';
 
 export const DocumentsPath: keyof paths = '/documents';
 

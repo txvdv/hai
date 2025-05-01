@@ -4,7 +4,7 @@ import {
   CreateDocumentCommand,
   DeleteDocumentCommand,
   GetDocumentsQuery,
-} from '@hai/core-service';
+} from '@hai/service-core';
 
 describe('Document', () => {
   let appTest: AppTester;

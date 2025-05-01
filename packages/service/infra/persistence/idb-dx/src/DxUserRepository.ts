@@ -1,5 +1,5 @@
 import { DxDatabase } from './database.js';
-import { User, UserID, UserRepository } from '@hai/core-service';
+import { User, UserID, UserRepository } from '@hai/service-core';
 
 export interface UserEntityRecord {
   id: string;

@@ -4,14 +4,14 @@ import {
   DxDocumentRepository,
   DxUserRepository,
   UnitOfWork,
-} from '@hai/service-infra';
+} from '@hai/idb-dx';
 import {
   Application,
   MessageDispatcher,
   SimpleMessageDispatcher,
   UserRepository,
   DocumentRepository,
-} from '@hai/core-service';
+} from '@hai/service-core';
 
 export class AppTester {
   private readonly db: DxDatabase;

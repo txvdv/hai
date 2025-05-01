@@ -1,5 +1,5 @@
 import 'fake-indexeddb/auto';
-import { User } from '@hai/core-service';
+import { User } from '@hai/service-core';
 import { DxDatabase } from './database.js';
 import { DxUserRepository } from './DxUserRepository.js';
 import { UnitOfWork } from './unit-of-work.js';

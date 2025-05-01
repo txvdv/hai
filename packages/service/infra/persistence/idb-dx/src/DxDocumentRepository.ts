@@ -1,5 +1,5 @@
 import { DxDatabase } from './database.js';
-import { DocumentID, Document, DocumentRepository } from '@hai/core-service';
+import { DocumentID, Document, DocumentRepository } from '@hai/service-core';
 
 export interface DocumentRecord {
   id: string;

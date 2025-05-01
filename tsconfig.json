@@ -44,6 +44,9 @@
     },
     {
       "path": "./packages/service/infra/service-worker/web"
+    },
+    {
+      "path": "./packages/ui/core"
     }
   ],
   "ts-node": {
