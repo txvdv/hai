@@ -4,9 +4,6 @@
   "include": [],
   "references": [
     {
-      "path": "../../../shared/common-utils"
-    },
-    {
       "path": "../../shared/api-messaging"
     },
     {
