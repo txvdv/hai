@@ -53,6 +53,15 @@
     },
     {
       "path": "./packages/ui/infra/service-worker-client/web"
+    },
+    {
+      "path": "./packages/ui/infra/ui-vue"
+    },
+    {
+      "path": "./apps/hai-pwa-e2e"
+    },
+    {
+      "path": "./apps/hai-pwa"
     }
   ],
   "ts-node": {
