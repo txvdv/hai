@@ -1,8 +1,8 @@
 import { createApp as createVueApp } from 'vue';
 import App from './app/App.vue';
 import router from './router';
-import './styles.css';
-import { PrimeVueConfig, DefaultTheme } from './theme';
+import { PrimeVueConfig, DefaultTheme } from './styles/theme';
+import './styles/styles.css';
 
 export function createApp() {
   const app = createVueApp(App);
