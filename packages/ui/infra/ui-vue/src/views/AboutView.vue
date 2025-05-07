@@ -1,6 +1,15 @@
+<script setup lang="ts">
+import Button from 'primevue/button';
+
+const handleClick = () => {
+  console.log('Clicked');
+};
+</script>
+
 <template>
   <div class="about">
     <h1>This is an about page</h1>
+    <Button label="Click me" @click="handleClick" />
   </div>
 </template>
 
