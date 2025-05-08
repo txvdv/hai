@@ -1,0 +1,9 @@
+{
+  "name": "@hai/sw-crx",
+  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/service/infra/service-worker/crx/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project @hai/sw-crx --web",
+  "targets": {}
+}

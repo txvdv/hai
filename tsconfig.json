@@ -68,6 +68,9 @@
     },
     {
       "path": "./apps/hai-crx-unpacked"
+    },
+    {
+      "path": "./packages/service/infra/service-worker/crx"
     }
   ],
   "ts-node": {
