@@ -24,7 +24,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     // Send a more detailed response for our AboutView button
     sendResponse({
       status: 'success',
-      message: 'Message received by the background script!',
+      message: 'Message received by the background script module!',
       receivedData: message.data,
       timestamp: new Date().toISOString(),
       sender: sender.url || 'Unknown source',
