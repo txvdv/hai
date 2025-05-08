@@ -1,0 +1,10 @@
+{
+  "name": "@hai/hai-crx-unpacked-e2e",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "implicitDependencies": [
+      "@hai/hai-crx-unpacked"
+    ]
+  }
+}

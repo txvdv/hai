@@ -62,6 +62,12 @@
     },
     {
       "path": "./apps/hai-pwa"
+    },
+    {
+      "path": "./apps/hai-crx-unpacked-e2e"
+    },
+    {
+      "path": "./apps/hai-crx-unpacked"
     }
   ],
   "ts-node": {

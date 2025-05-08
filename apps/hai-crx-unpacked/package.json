@@ -1,0 +1,17 @@
+{
+  "name": "@hai/hai-crx-unpacked",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && npm run copy-extension-files",
+    "copy-extension-files": "node scripts/copy-extension-files.js",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.246"
+  }
+}
