@@ -25,14 +25,9 @@ export default defineConfig(() => ({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
-        'service-worker': resolve(__dirname, 'src/service-worker.ts'),
       },
       output: {
-        entryFileNames: (chunkInfo) => {
-          return chunkInfo.name === 'service-worker' 
-            ? '[name].js' 
-            : 'assets/[name]-[hash].js';
-        },
+        entryFileNames: 'assets/[name]-[hash].js',
       },
     },
   },
