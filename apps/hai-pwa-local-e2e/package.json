@@ -1,0 +1,10 @@
+{
+  "name": "@hai/hai-pwa-local-e2e",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "implicitDependencies": [
+      "@hai/hai-pwa-local"
+    ]
+  }
+}

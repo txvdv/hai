@@ -1,0 +1,13 @@
+{
+  "name": "@hai/hai-pwa-local",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "copy-extension-files": "node scripts/copy-extension-files.js",
+    "dev": "SW_DEV=true vite"
+  },
+  "devDependencies": {
+    "vite-plugin-pwa": "^0.21.1"
+  }
+}

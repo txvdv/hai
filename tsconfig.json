@@ -71,6 +71,15 @@
     },
     {
       "path": "./packages/service/infra/service-worker/crx"
+    },
+    {
+      "path": "./apps/hai-pwa-local-e2e"
+    },
+    {
+      "path": "./apps/hai-pwa-local"
+    },
+    {
+      "path": "./packages/service/infra/service-worker/pwa"
     }
   ],
   "ts-node": {
