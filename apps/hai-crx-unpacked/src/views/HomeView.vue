@@ -5,7 +5,7 @@ import { ref } from 'vue';
 const response = ref(null);
 
 // Methods
-function sendMessageToBackground() {
+function sendMessage() {
   // Send a message to the background script
   chrome.runtime.sendMessage(
     { action: 'hello', data: 'Hello from HomeView!' },
@@ -21,7 +21,7 @@ function sendMessageToBackground() {
 <template>
   <div>
     <h1>Home</h1>
-    <button @click="sendMessageToBackground" class="message-button">
+    <button @click="sendMessage" class="message-button">
       Send Message to Background
     </button>
     <div v-if="response" class="response-container">
