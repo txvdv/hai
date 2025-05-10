@@ -8,8 +8,11 @@ const value = ref('');
 
 <template>
   <main>
-    <p class="italic text-2xl text-red-500">tailwind</p>
-    <Button label="Click me" />
     <PvTextarea v-model="value" variant="filled" rows="10" cols="50" />
+    <br />
+    <Button label="Copy" />
+    <span class="italic text-sm text-gray-400">
+      This is a fake button. Copy doesn't do anything.
+    </span>
   </main>
 </template>
